@@ -1,2 +1,7 @@
-package com.example.rehab.models.enums;public class eventStatus {
+package com.example.rehab.models.enums;
+
+public enum EventStatus {
+
+    PLANNED, COMPLETED, CANCELLED
+
 }

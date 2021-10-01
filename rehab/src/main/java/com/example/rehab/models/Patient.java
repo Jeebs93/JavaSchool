@@ -2,6 +2,7 @@ package com.example.rehab.models;
 
 import com.example.rehab.models.enums.PatientStatus;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
@@ -30,4 +31,10 @@ public class Patient {
     @OneToMany
     private List<Event> eventList;
 
+    public Patient(String name, Long insuranceNumber, String doctor, PatientStatus patientStatus) {
+        this.insuranceNumber = insuranceNumber;
+        this.name = name;
+        this.doctor = doctor;
+        this.patientStatus = patientStatus;
+    }
 }

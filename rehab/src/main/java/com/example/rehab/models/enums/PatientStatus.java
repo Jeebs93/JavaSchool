@@ -1,6 +1,6 @@
 package com.example.rehab.models.enums;
 
-public enum Status {
+public enum PatientStatus {
 
     ON_TREATMENT, DISCHARGED
 
