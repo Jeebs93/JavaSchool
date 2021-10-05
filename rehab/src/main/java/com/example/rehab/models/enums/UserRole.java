@@ -1,7 +1,7 @@
 package com.example.rehab.models.enums;
 
-enum UserRole {
+public enum UserRole {
 
-  DOCTOR, NURSE
+  DOCTOR, NURSE, USER, ADMIN;
 
 }

@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class WorkingWithPatientsController {
 
-    @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    public WorkingWithPatientsController(PatientRepository patientRepository) {
+        this.patientRepository = patientRepository;
+    }
 
     @GetMapping("/working-with-patients")
     public String workingWithPatients(Model model) {
