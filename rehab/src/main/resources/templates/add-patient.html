@@ -27,11 +27,12 @@
     </header>
 </div>
 
-
+<!--
 <div th:each = "el:${patients}">
     <p th:text="${el.name}"/>
     <p th:text="${el.insuranceNumber}"/>
 </div>
+-->
 
 <div class="container px-10">
     <div class="row gx-5">
@@ -44,7 +45,7 @@
             <input type = "text" name = "doctor" placeholder = "Enter patient's doctor" class = "form-control"><br>
             <div class="col-md-3">
                 <button type = "submit" class="btn btn-primary me-2">Add patient</button>
-                <a class="btn btn-outline-primary" href = "/working-with-patients/" role="button">Back</a>
+                <a class="btn btn-outline-danger"  href = "/working-with-patients/" role="button">Back</a>
             </div>
         </form>
     </div>

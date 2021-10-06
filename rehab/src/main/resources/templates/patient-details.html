@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medical Rehabilitation Center</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-7 mb-7 border-bottom">
+        <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+            <img width="120" height="120" th:src="@{/images/start.jpg}"/>
+        </a>
+
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li style="font-size: 120%"><a href="/" class="nav-link px-14 link-secondary">Home</a></li>
+            <li style="font-size: 120%"><a href="/events" class="nav-link px-14 link-secondary">Events</a></li>
+            <li style="font-size: 120%"><a href="#" class="nav-link px-14 link-dark">About</a></li>
+        </ul>
+
+        <div class="col-md-3 text-end">
+            <a href = "/login"  class="btn btn-outline-primary me-2" role="button">Login</a>
+            <a href = "/registration"  class="btn btn-primary" role="button">Sign-up</a>
+        </div>
+    </header>
+</div>
+
+
+
+
+<div class="container px-10">
+    <div class="row gx-5">
+        <div class="col">
+            <div class="p-3 border bg-light">
+                <h4 th:text="${patient.name}"/>
+                <div class="text-end">
+                    <a  class="btn btn-outline-danger"  href = /working-with-patients/ role="button">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container overflow-hidden" th:each = "el:${patient}">
+        <div class="row gx-5 gy-18">
+            <div class="col">
+                <div class="p-3"><p class="fw-bold">Name:</p></div>
+            </div>
+            <div class="col">
+                <div class="p-3"><p th:text="${el.name}"/></div>
+            </div>
+        </div>
+
+        <div class="row gx-5">
+            <div class="col">
+                <div class="p-3"><p class="fw-bold">Insurance number:</p></div>
+            </div>
+            <div class="col">
+                <div class="p-3"><p th:text="${el.insuranceNumber}"/></div>
+            </div>
+        </div>
+
+        <div class="row gx-5">
+            <div class="col">
+                <div class="p-3"><p class="fw-bold">Doctor:</p></div>
+            </div>
+            <div class="col">
+                <div class="p-3"><p th:text="${el.doctor}"/></div>
+            </div>
+        </div>
+
+        <div class="row gx-5">
+            <div class="col">
+                <div class="p-3"><p class="fw-bold">Status:</p></div>
+            </div>
+            <div class="col">
+                <div class="p-3"><p th:text="${el.patientStatus}"/></div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+<div class="container px-10" th:each = "el:${patient}">
+    <div class="row gx-5">
+        <div class="col">
+            <div class="p-3 border bg-light">
+                <h4>Appointments</h4>
+                <div class="text-end">
+                    <a  class="btn btn-primary" th:href = " '/working-with-patients/' + ${el.id} + '/add-appointment'" role="button">Add appointment</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+</div>
+
+</body>
+</html>

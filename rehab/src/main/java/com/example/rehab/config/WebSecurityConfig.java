@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/working-with-patients").hasRole(String.valueOf(UserRole.DOCTOR))
+                    .antMatchers("/working-with-patients/**").hasRole(String.valueOf(UserRole.DOCTOR))
                     .antMatchers("/events").hasRole(String.valueOf(UserRole.NURSE))
                     .antMatchers("/images/**").permitAll()
                     .antMatchers("/","/registration").permitAll()
@@ -41,6 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .logout()
                     .permitAll();
+        http.csrf().disable();
     }
 
 

@@ -27,50 +27,28 @@
     </header>
 </div>
 
-
-
-
-<div class="container px-10">
-    <div class="row gx-5">
-        <div class="col">
-            <div class="p-3 border bg-light">
-                <h3>Patients</h3>
-                <div class="text-end">
-                    <a  class="btn btn-primary" href = /working-with-patients/add role="button">Add</a>
-                </div>
-            </div>
-        </div>
-    </div>
+<!--
+<div th:each = "el:${patients}">
+    <p th:text="${el.name}"/>
+    <p th:text="${el.insuranceNumber}"/>
 </div>
+-->
 
-<div class="container overflow-hidden" th:each = "el:${patients}">
-    <div class="row gx-5 gy-18">
-        <div class="col">
-            <div class="p-3"><p class="fw-bold">Name:</p></div>
-        </div>
-        <div class="col">
-            <div class="p-3"><p th:text="${el.name}"/></div>
-        </div>
-    </div>
-
+<div class="container px-10" th:each = "el:${patient}">
     <div class="row gx-5">
-        <div class="col">
-            <div class="p-3"><p class="fw-bold">Insurance number:</p></div>
+        <div class="col mb-5">
+            <div class="p-3 border bg-light"><h3>Add appointment</h3></div>
         </div>
-        <div class="col">
-            <div class="p-3"><p th:text="${el.insuranceNumber}"/></div>
-        </div>
+        <form method = "post">
+            <input type = "text" name = "name" placeholder = "Enter patient's name" class = "form-control"><br>
+            <input type = "text" name = "insurance_number" placeholder = "Enter patient's insurance number" class = "form-control"><br>
+            <input type = "text" name = "doctor" placeholder = "Enter patient's doctor" class = "form-control"><br>
+            <div class="col-md-3">
+                <button type = "submit" class="btn btn-primary me-2">Add appointment</button>
+                <a class="btn btn-outline-danger"  onclick=history.back(); role="button">Back</a>
+            </div>
+        </form>
     </div>
-
-    <div class="text-end p-3">
-        <a  class="btn btn-primary" th:href = " '/working-with-patients/' + ${el.id}" role="button">Details</a>
-    </div>
-
-
-    <hr/>
-
-
-
 </div>
 
 </body>
