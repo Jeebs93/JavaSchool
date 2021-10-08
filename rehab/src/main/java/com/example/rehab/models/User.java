@@ -4,6 +4,7 @@ package com.example.rehab.models;
 import com.example.rehab.models.enums.UserRole;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -11,7 +12,7 @@ import java.util.Set;
 @Data
 @RequiredArgsConstructor
 @Entity
-public class User {
+public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
