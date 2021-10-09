@@ -32,8 +32,8 @@ public class Patient {
     private List<Event> eventList;
 
     public Patient(String name, Long insuranceNumber, String doctor, PatientStatus patientStatus) {
-        this.insuranceNumber = insuranceNumber;
         this.name = name;
+        this.insuranceNumber = insuranceNumber;
         this.doctor = doctor;
         this.patientStatus = patientStatus;
     }

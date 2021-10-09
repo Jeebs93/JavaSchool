@@ -48,7 +48,7 @@ public class WorkingWithPatientsController {
     }
 
     @GetMapping("/working-with-patients/add")
-    public String workingWithPatientsAdd(Model model) {
+    public String workingWithPatientsAdd() {
         return "add-patient";
     }
 
@@ -57,23 +57,21 @@ public class WorkingWithPatientsController {
                                             @RequestParam Long insurance_number,
                                             @RequestParam String doctor,
                                             Model model) {
-        Patient patient = new Patient(name, insurance_number, doctor, PatientStatus.ON_TREATMENT);
-        patientRepository.save(patient);
+        PatientDTO patientDTO = new PatientDTO(name, insurance_number, doctor, PatientStatus.ON_TREATMENT);
+        patientService.createPatient(patientDTO);
         return "redirect:/working-with-patients";
     }
 
     @GetMapping("/working-with-patients/{id}")
     public String patientDetails(@PathVariable(value = "id") long id, Model model) {
-       Optional<Patient> patient = patientRepository.findById(id);
-       Patient result = patient.get();
-       model.addAttribute("patient", result);
+        PatientDTO result = patientService.getPatientDTObyID(id);
+        model.addAttribute("patient", result);
        return "patient-details";
     }
 
     @GetMapping("/working-with-patients/{id}/add-appointment")
     public String addAppointment(@PathVariable(value = "id") long id, Model model) {
-        Optional<Patient> patient = patientRepository.findById(id);
-        Patient result = patient.get();
+        PatientDTO result = patientService.getPatientDTObyID(id);
         model.addAttribute("patient", result);
         return "add-appointment";
     }
