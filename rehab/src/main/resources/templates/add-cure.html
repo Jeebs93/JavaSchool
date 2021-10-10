@@ -27,28 +27,17 @@
     </header>
 </div>
 
-<!--
-<div th:each = "el:${patients}">
-    <p th:text="${el.name}"/>
-    <p th:text="${el.insuranceNumber}"/>
-</div>
--->
-
-<div class="container px-10" th:each = "el:${patient}">
+<div class="container px-10" >
     <div class="row gx-5">
         <div class="col mb-5">
-            <div class="p-3 border bg-light"><h3>Add appointment</h3></div>
+            <div class="p-3 border bg-light"><h3>Add cure</h3></div>
         </div>
-        <form method = "post">
-            <input type = "text" name = "name" placeholder = "Enter patient's name" class = "form-control"><br>
-            <input type = "text" name = "insurance_number" placeholder = "Enter patient's insurance number" class = "form-control"><br>
-            <input type = "text" name = "doctor" placeholder = "Enter patient's doctor" class = "form-control"><br>
-            <div class="col-md-3">
-                <button type = "submit" class="btn btn-primary me-2">Add appointment</button>
-                <a class="btn btn-outline-danger"  onclick=history.back(); role="button">Back</a>
-            </div>
-        </form>
+        <select th:field="*{cures}">
+            <option th:each = "el:${cures}" th:value="${el.name}" th:text="${el.name}"></option>
+        </select>
     </div>
+
+
 </div>
 
 </body>

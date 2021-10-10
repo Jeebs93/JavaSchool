@@ -69,11 +69,6 @@ public class WorkingWithPatientsController {
        return "patient-details";
     }
 
-    @GetMapping("/working-with-patients/{id}/add-appointment")
-    public String addAppointment(@PathVariable(value = "id") long id, Model model) {
-        PatientDTO result = patientService.getPatientDTObyID(id);
-        model.addAttribute("patient", result);
-        return "add-appointment";
-    }
+
 
 }
