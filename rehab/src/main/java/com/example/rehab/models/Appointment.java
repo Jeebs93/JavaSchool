@@ -20,10 +20,12 @@ public class Appointment {
 
     private TypeOfAppointment typeOfAppointment;
 
+    private String value;
+
     private String timePattern;
 
-    private String period;
+    private Integer period;
 
-    private String dose;
+    private Integer dose;
 
 }

@@ -27,18 +27,133 @@
     </header>
 </div>
 
-<div class="container px-10" >
+<div class="container px-15" th:each = "el:${patient}">
     <div class="row gx-5">
         <div class="col mb-5">
-            <div class="p-3 border bg-light"><h3>Add cure</h3></div>
+            <div class="p-3 border bg-light">
+                <h3>Add cure</h3>
+                <div class="text-end">
+                    <input name="button" class="btn btn-outline-danger" onclick="history.back()" value="Back"/>
+                </div>
+            </div>
+
         </div>
-        <select th:field="*{cures}">
-            <option th:each = "el:${cures}" th:value="${el.name}" th:text="${el.name}"></option>
-        </select>
+    </div>
+    <form th:action = "'/working-with-patients/' + ${el.id} + '/add-cure'"  method="post">
+    <div class="row justify-content-md-center">
+        <div class="col-lg-2">
+            <p class="fw-bold">Select cure:</p>
+        </div>
+        <div class="col-md-auto">
+            <select id="cure" name="cure">
+                <option th:each = "el:${cures}" th:value="${el.name}" th:text="${el.name}"></option>
+            </select>
+        </div>
+    </div>
+    <hr/>
+    <div class="row justify-content-md-center">
+        <div class="col-lg-2">
+            <p class="fw-bold">Select dose(mg):</p>
+        </div>
+        <div class="col-lg-4">
+            <input type = "text" name = "dose">
+        </div>
+    </div>
+    <hr/>
+    <div class="row justify-content-md-center">
+        <div class="col-lg-2">
+            <p class="fw-bold">Select days:</p>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-lg-8">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="mondayCheckbox" name="weekDay[]" value="1">
+                <label class="form-check-label" for="mondayCheckbox">Monday</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="tuesdayCheckbox"  name="weekDay[]" value="2">
+                <label class="form-check-label" for="tuesdayCheckbox">Tuesday</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="wednesdayCheckbox"  name="weekDay[]" value="3">
+                <label class="form-check-label" for="wednesdayCheckbox">Wednesday</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="thursdayCheckbox" name="weekDay[]" value="4">
+                <label class="form-check-label" for="thursdayCheckbox">Thursday</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="fridayCheckbox"  name="weekDay[]" value="5">
+                <label class="form-check-label" for="fridayCheckbox">Friday</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="saturdayCheckbox"  name="weekDay[]" value="6">
+                <label class="form-check-label" for="saturdayCheckbox">Saturday</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="sundayCheckbox"  name="weekDay[]" value="7">
+                <label class="form-check-label" for="sundayCheckbox">Sunday</label>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row justify-content-md-center">
+        <div class="col-lg-2">
+            <p class="fw-bold">Select time:</p>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-lg-8">
+            <input type="time" id="appt" name="time[]" required>
+            <input type="time" id="appt2" name="time[]">
+            <input type="time" id="appt3" name="time[]">
+            <input type="time" id="appt4" name="time[]">
+            <input type="time" id="appt5" name="time[]">
+            <input type="time" id="appt6" name="time[]">
+            <input type="time" id="appt7" name="time[]">
+            <input type="time" id="appt8" name="time[]">
+        </div>
+    </div>
+    <hr/>
+    <div class="row justify-content-md-center">
+        <div class="col-lg-2">
+            <p class="fw-bold">Select period:</p>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-lg-1">
+            <select name="period">
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+                <option value=5>5</option>
+                <option value=6>6</option>
+                <option value=7>7</option>
+                <option value=8>8</option>
+                <option value=9>9</option>
+                <option value=10>10</option>
+                <option value=11>11</option>
+                <option value=12>12</option>
+            </select>
+        </div>
+        <div class="col-md-auto">
+            weeks
+        </div>
+    </div>
+    <hr/>
+    <div class="row justify-content-md-center">
+        <div class="d-grid gap-2 col-4 mx-auto">
+            <button type = "submit" class="btn btn-primary me-2">Add</button>
+        </div>
     </div>
 
 
+
 </div>
+
+
 
 </body>
 </html>

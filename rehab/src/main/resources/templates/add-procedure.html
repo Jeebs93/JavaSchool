@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://thymeleaf.org" lang="en">
@@ -27,7 +29,7 @@
     </header>
 </div>
 
-<div class="container px-15" >
+<div class="container px-15" th:each = "el:${patient}">
     <div class="row gx-5">
         <div class="col mb-5">
             <div class="p-3 border bg-light">
@@ -39,106 +41,109 @@
 
         </div>
     </div>
-    <div class="row justify-content-md-center">
-        <div class="col-lg-2">
-            <p class="fw-bold">Select procedure:</p>
-        </div>
-        <div class="col-md-auto">
-            <select th:field="*{procedures}">
-                <option th:each = "el:${procedures}" th:value="${el.name}" th:text="${el.name}"></option>
-            </select>
-        </div>
-    </div>
-    <hr/>
-    <div class="row justify-content-md-center">
-        <div class="col-lg-2">
-            <p class="fw-bold">Select days:</p>
-        </div>
-    </div>
-    <div class="row justify-content-md-center">
-        <div class="col-lg-8">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="mondayCheckbox" value="option1">
-                <label class="form-check-label" for="mondayCheckbox">Monday</label>
+    <form th:action = "'/working-with-patients/' + ${el.id} + '/add-procedure'"  method="post">
+        <div class="row justify-content-md-center">
+            <div class="col-lg-2">
+                <p class="fw-bold">Select procedure:</p>
             </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="tuesdayCheckbox" value="option1">
-                <label class="form-check-label" for="tuesdayCheckbox">Tuesday</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="wednesdayCheckbox" value="option1">
-                <label class="form-check-label" for="wednesdayCheckbox">Wednesday</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="thursdayCheckbox" value="option1">
-                <label class="form-check-label" for="thursdayCheckbox">Thursday</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="fridayCheckbox" value="option1">
-                <label class="form-check-label" for="fridayCheckbox">Friday</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="saturdayCheckbox" value="option1">
-                <label class="form-check-label" for="saturdayCheckbox">Saturday</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="sundayCheckbox" value="option1">
-                <label class="form-check-label" for="sundayCheckbox">Sunday</label>
+            <div class="col-md-auto">
+                <select id="procedure" name="procedure">
+                    <option th:each = "el:${procedures}" th:value="${el.name}" th:text="${el.name}"></option>
+                </select>
             </div>
         </div>
-    </div>
-    <hr/>
-    <div class="row justify-content-md-center">
-        <div class="col-lg-2">
-            <p class="fw-bold">Select time:</p>
+        <hr/>
+        <div class="row justify-content-md-center">
+            <div class="col-lg-2">
+                <p class="fw-bold">Select days:</p>
+            </div>
         </div>
-    </div>
-    <div class="row justify-content-md-center">
-        <div class="col-lg-8">
-            <input type="time" id="appt" name="appt" required>
-            <input type="time" id="appt2" name="appt2">
-            <input type="time" id="appt3" name="appt3">
-            <input type="time" id="appt4" name="appt4">
-            <input type="time" id="appt5" name="appt5">
-            <input type="time" id="appt6" name="appt6">
-            <input type="time" id="appt7" name="appt7">
-            <input type="time" id="appt8" name="appt8">
+        <div class="row justify-content-md-center">
+            <div class="col-lg-8">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox"
+                           id="mondayCheckbox" name="weekDay[]" value="1">
+                    <label class="form-check-label" for="mondayCheckbox">Monday</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="tuesdayCheckbox" name="weekDay[]" value="2">
+                    <label class="form-check-label" for="tuesdayCheckbox">Tuesday</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="wednesdayCheckbox" name="weekDay[]" value="3">
+                    <label class="form-check-label" for="wednesdayCheckbox">Wednesday</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="thursdayCheckbox" name="weekDay[]" value="4">
+                    <label class="form-check-label" for="thursdayCheckbox">Thursday</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="fridayCheckbox" name="weekDay[]" value="5">
+                    <label class="form-check-label" for="fridayCheckbox">Friday</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="saturdayCheckbox" name="weekDay[]" value="6">
+                    <label class="form-check-label" for="saturdayCheckbox">Saturday</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="sundayCheckbox" name="weekDay[]" value="7">
+                    <label class="form-check-label" for="sundayCheckbox">Sunday</label>
+                </div>
+            </div>
         </div>
-    </div>
-    <hr/>
-    <div class="row justify-content-md-center">
-        <div class="col-lg-2">
-            <p class="fw-bold">Select period:</p>
+        <hr/>
+        <div class="row justify-content-md-center">
+            <div class="col-lg-2">
+                <p class="fw-bold">Select time:</p>
+            </div>
         </div>
-    </div>
-    <div class="row justify-content-md-center">
-        <div class="col-lg-1">
-            <select name="number-of-weeks" id="number-of-weeks">
-                <option value=1>1</option>
-                <option value=2>2</option>
-                <option value=3>3</option>
-                <option value=4>4</option>
-                <option value=5>5</option>
-                <option value=6>6</option>
-                <option value=7>7</option>
-                <option value=8>8</option>
-                <option value=9>9</option>
-                <option value=10>10</option>
-                <option value=11>11</option>
-                <option value=12>12</option>
-            </select>
+        <div class="row justify-content-md-center">
+            <div class="col-lg-8">
+                <input type="time" id="time" name="time[]" required>
+                <input type="time" id="appt2" name="time[]">
+                <input type="time" id="appt3" name="time[]">
+                <input type="time" id="appt4" name="time[]">
+                <input type="time" id="appt5" name="time[]">
+                <input type="time" id="appt6" name="time[]">
+                <input type="time" id="appt7" name="time[]">
+                <input type="time" id="appt8" name="time[]">
+            </div>
         </div>
-        <div class="col-md-auto">
-            weeks
+        <hr/>
+        <div class="row justify-content-md-center">
+            <div class="col-lg-2">
+                <p class="fw-bold">Select period:</p>
+            </div>
         </div>
-    </div>
-    <hr/>
-    <div class="row justify-content-md-center">
-        <div class="d-grid gap-2 col-4 mx-auto">
-            <button type = "submit" class="btn btn-primary me-2">Add</button>
+        <div class="row justify-content-md-center">
+            <div class="col-lg-1">
+                <select name="period">
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                    <option value=7>7</option>
+                    <option value=8>8</option>
+                    <option value=9>9</option>
+                    <option value=10>10</option>
+                    <option value=11>11</option>
+                    <option value=12>12</option>
+                </select>
+            </div>
+            <div class="col-md-auto">
+                weeks
+            </div>
         </div>
-    </div>
+        <hr/>
 
+        <div class="row justify-content-md-center">
+            <div class="d-grid gap-2 col-4 mx-auto">
+                <button type = "submit" class="btn btn-primary me-2">Add</button>
+            </div>
+        </div>
+    </form>
 
 
 </div>

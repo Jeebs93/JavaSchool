@@ -2,14 +2,18 @@ package com.example.rehab.controllers;
 
 import com.example.rehab.models.Appointment;
 import com.example.rehab.models.Patient;
+import com.example.rehab.models.dto.AppointmentDTO;
 import com.example.rehab.models.dto.PatientDTO;
 import com.example.rehab.models.enums.PatientStatus;
 import com.example.rehab.models.enums.TypeOfAppointment;
 import com.example.rehab.repo.AppointmentRepository;
 import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.repo.UserRepository;
+import com.example.rehab.service.AppointmentService;
 import com.example.rehab.service.PatientService;
+import com.example.rehab.service.mapper.Mapper;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,14 +34,22 @@ public class WorkingWithPatientsController {
 
     private PatientRepository patientRepository;
 
+    private AppointmentService appointmentService;
+
 
 
     private AppointmentRepository appointmentRepository;
 
+    private Mapper mapper;
+
     @Autowired
-    public WorkingWithPatientsController(PatientRepository patientRepository, PatientService patientService) {
+    public WorkingWithPatientsController(PatientRepository patientRepository, PatientService patientService,
+                                         AppointmentService appointmentService,
+                                         Mapper mapper) {
         this.patientRepository = patientRepository;
         this.patientService = patientService;
+        this.appointmentService = appointmentService;
+        this.mapper = mapper;
     }
 
     @GetMapping("/working-with-patients")
@@ -65,7 +77,9 @@ public class WorkingWithPatientsController {
     @GetMapping("/working-with-patients/{id}")
     public String patientDetails(@PathVariable(value = "id") long id, Model model) {
         PatientDTO result = patientService.getPatientDTObyID(id);
+        List<AppointmentDTO> appointments = appointmentService.findAllByPatient(mapper.convertPatientToEntity(result));
         model.addAttribute("patient", result);
+        model.addAttribute("appointment", appointments);
        return "patient-details";
     }
 
