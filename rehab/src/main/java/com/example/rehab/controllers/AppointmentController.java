@@ -6,6 +6,7 @@ import com.example.rehab.models.dto.PatientDTO;
 import com.example.rehab.models.enums.TypeOfAppointment;
 import com.example.rehab.repo.ProceduresAndCuresRepository;
 import com.example.rehab.service.AppointmentService;
+import com.example.rehab.service.EventService;
 import com.example.rehab.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import static com.example.rehab.models.enums.TypeOfAppointment.CURE;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class AppointmentController {
@@ -27,14 +29,17 @@ public class AppointmentController {
     private PatientService patientService;
     private ProceduresAndCuresRepository proceduresAndCuresRepository;
     private AppointmentService appointmentService;
+    private EventService eventService;
 
     @Autowired
     public AppointmentController (PatientService patientService,
                                   AppointmentService appointmentService,
-                                  ProceduresAndCuresRepository proceduresAndCuresRepository) {
+                                  ProceduresAndCuresRepository proceduresAndCuresRepository,
+                                  EventService eventService) {
         this.patientService = patientService;
         this.appointmentService = appointmentService;
         this.proceduresAndCuresRepository = proceduresAndCuresRepository;
+        this.eventService = eventService;
     }
 
 
@@ -57,10 +62,12 @@ public class AppointmentController {
                                    @RequestParam String period,
                                    Model model) {
         List<String> resultWeekDays = Arrays.asList(weekdays);
-        List<String> resultTime = Arrays.asList(time);
+        List<String> timeList = Arrays.asList(time);
+        List<String> resultTime = timeList.stream().filter(i -> i != "").collect(Collectors.toList());
         AppointmentDTO appointmentDTO = new AppointmentDTO(id, procedure, resultWeekDays,
                 resultTime, period, "0", PROCEDURE);
         appointmentService.createAppointment(appointmentDTO);
+        eventService.createEvents(appointmentDTO);
 
         return "redirect:/working-with-patients/" + id;
     }
@@ -86,10 +93,12 @@ public class AppointmentController {
                                    @RequestParam String period,
                                    Model model) {
         List<String> resultWeekDays = Arrays.asList(weekdays);
-        List<String> resultTime = Arrays.asList(time);
+        List<String> timeList = Arrays.asList(time);
+        List<String> resultTime = timeList.stream().filter(i -> i != "").collect(Collectors.toList());
         AppointmentDTO appointmentDTO = new AppointmentDTO(id, cure, resultWeekDays,
                 resultTime, period, dose, CURE);
         appointmentService.createAppointment(appointmentDTO);
+        eventService.createEvents(appointmentDTO);
 
         return "redirect:/working-with-patients/" + id;
     }

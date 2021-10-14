@@ -1,9 +1,11 @@
 package com.example.rehab.service.mapper;
 
 import com.example.rehab.models.Appointment;
+import com.example.rehab.models.Event;
 import com.example.rehab.models.Patient;
 import com.example.rehab.models.User;
 import com.example.rehab.models.dto.AppointmentDTO;
+import com.example.rehab.models.dto.EventDTO;
 import com.example.rehab.models.dto.PatientDTO;
 import com.example.rehab.models.dto.UserDTO;
 import lombok.NoArgsConstructor;
@@ -44,5 +46,9 @@ public class Mapper {
     public Appointment convertAppointmentToEntity(AppointmentDTO appointmentDTO) {
         return modelMapper.map(appointmentDTO, Appointment.class);
     }
+
+    public EventDTO convertEventToDTO(Event event) {return modelMapper.map(event, EventDTO.class);}
+
+    public Event convertEventToEntity(EventDTO eventDTO) {return modelMapper.map(eventDTO, Event.class);}
 
 }

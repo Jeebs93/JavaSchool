@@ -10,4 +10,6 @@ public interface PatientRepository extends CrudRepository<Patient, Long>, Paging
 
     List<Patient> findAll();
 
+    Patient getPatientById(long id);
+
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -20,7 +21,7 @@ public class Event {
     @ManyToOne
     private Patient patient;
 
-    private Date date;
+    private LocalDateTime date;
 
     private EventStatus eventStatus;
 
