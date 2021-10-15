@@ -2,6 +2,7 @@ package com.example.rehab.service;
 
 import com.example.rehab.models.Event;
 import com.example.rehab.models.dto.AppointmentDTO;
+import com.example.rehab.models.dto.EventDTO;
 import com.example.rehab.models.enums.EventStatus;
 import com.example.rehab.repo.EventRepository;
 import com.example.rehab.repo.PatientRepository;
@@ -14,6 +15,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,41 +27,36 @@ public class EventService {
 
     private final PatientRepository patientRepository;
 
+    public List<EventDTO> findAll() {
+        List<Event> events = eventRepository.findAll();
+
+        return events.stream()
+                .map(mapper::convertEventToDTO)
+                .collect(Collectors.toList());
+    }
+
     public void createEvents(AppointmentDTO appointmentDTO) {
 
         List<String> timeList = appointmentDTO.getTime();
         int periodInt = Integer.parseInt(appointmentDTO.getPeriod());
-
         int numberOfEvents = appointmentDTO.getWeekDays().size() * timeList.size()
                 * periodInt;
-
-
         List<Event> events = new ArrayList<>(numberOfEvents);
 
         int timeCounter = 0;
         int dateCounter = 0;
-
         List<LocalDateTime> dateList = generateDateList(appointmentDTO.getWeekDays(), periodInt);
 
-
-
-
         for (int i = 0; i < numberOfEvents; i++) {
-
             Event event = new Event();
 
             event.setPatient(patientRepository.getPatientById(appointmentDTO.getPatientId()));
-
             event.setDate(parseDate((dateList.get(dateCounter)),timeList.get(timeCounter)));
-
             event.setEventStatus(EventStatus.PLANNED);
-
             event.setTypeOfAppointment(appointmentDTO.getTypeOfAppointment());
-
             events.add(event);
 
             timeCounter++;
-
             if (timeCounter >= appointmentDTO.getTime().size()) {
                 timeCounter = 0;
                 dateCounter++;
@@ -70,9 +67,7 @@ public class EventService {
 
             }
         }
-
         eventRepository.saveAll(events);
-
     }
 
     private static List<LocalDateTime> generateDateList(List<String> weekDays, int period) {
@@ -105,13 +100,9 @@ public class EventService {
     private static LocalDateTime parseDate(LocalDateTime date, String time) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
         String strDate = date.format(formatter);
-
         strDate += " " + time;
-
         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
         return LocalDateTime.parse(strDate, formatter);
 
     }

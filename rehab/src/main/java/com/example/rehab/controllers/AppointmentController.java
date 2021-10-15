@@ -63,7 +63,7 @@ public class AppointmentController {
                                    Model model) {
         List<String> resultWeekDays = Arrays.asList(weekdays);
         List<String> timeList = Arrays.asList(time);
-        List<String> resultTime = timeList.stream().filter(i -> i != "").collect(Collectors.toList());
+        List<String> resultTime = timeList.stream().filter(i -> !i.equals("")).collect(Collectors.toList());
         AppointmentDTO appointmentDTO = new AppointmentDTO(id, procedure, resultWeekDays,
                 resultTime, period, "0", PROCEDURE);
         appointmentService.createAppointment(appointmentDTO);
@@ -94,7 +94,7 @@ public class AppointmentController {
                                    Model model) {
         List<String> resultWeekDays = Arrays.asList(weekdays);
         List<String> timeList = Arrays.asList(time);
-        List<String> resultTime = timeList.stream().filter(i -> i != "").collect(Collectors.toList());
+        List<String> resultTime = timeList.stream().filter(i -> !i.equals("")).collect(Collectors.toList());
         AppointmentDTO appointmentDTO = new AppointmentDTO(id, cure, resultWeekDays,
                 resultTime, period, dose, CURE);
         appointmentService.createAppointment(appointmentDTO);
