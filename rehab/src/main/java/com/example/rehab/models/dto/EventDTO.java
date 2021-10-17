@@ -1,5 +1,6 @@
 package com.example.rehab.models.dto;
 
+import com.example.rehab.models.Appointment;
 import com.example.rehab.models.Patient;
 import com.example.rehab.models.enums.EventStatus;
 import com.example.rehab.models.enums.TypeOfAppointment;
@@ -14,10 +15,14 @@ public class EventDTO {
 
     private Patient patient;
 
+    private Appointment appointment;
+
     private LocalDateTime date;
 
     private EventStatus eventStatus;
 
     private TypeOfAppointment typeOfAppointment;
+
+    private Long appointmentId;
 
 }

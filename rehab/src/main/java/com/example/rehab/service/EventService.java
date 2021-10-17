@@ -1,9 +1,11 @@
 package com.example.rehab.service;
 
+import com.example.rehab.models.Appointment;
 import com.example.rehab.models.Event;
 import com.example.rehab.models.dto.AppointmentDTO;
 import com.example.rehab.models.dto.EventDTO;
 import com.example.rehab.models.enums.EventStatus;
+import com.example.rehab.repo.AppointmentRepository;
 import com.example.rehab.repo.EventRepository;
 import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.service.mapper.Mapper;
@@ -27,6 +29,8 @@ public class EventService {
 
     private final PatientRepository patientRepository;
 
+    private final AppointmentRepository appointmentRepository;
+
     public List<EventDTO> findAll() {
         List<Event> events = eventRepository.findAll();
 
@@ -35,7 +39,7 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
-    public void createEvents(AppointmentDTO appointmentDTO) {
+    public void createEvents(AppointmentDTO appointmentDTO, long appointmentId) {
 
         List<String> timeList = appointmentDTO.getTime();
         int periodInt = Integer.parseInt(appointmentDTO.getPeriod());
@@ -54,6 +58,7 @@ public class EventService {
             event.setDate(parseDate((dateList.get(dateCounter)),timeList.get(timeCounter)));
             event.setEventStatus(EventStatus.PLANNED);
             event.setTypeOfAppointment(appointmentDTO.getTypeOfAppointment());
+            event.setAppointment(appointmentRepository.getAppointmentById(appointmentId));
             events.add(event);
 
             timeCounter++;

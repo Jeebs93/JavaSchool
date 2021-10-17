@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,7 +17,11 @@ public class Appointment {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name="patient_id", nullable = false)
     private Patient patient;
+
+    @OneToMany(mappedBy = "appointment")
+    private List<Event> eventList;
 
     private TypeOfAppointment typeOfAppointment;
 
@@ -27,5 +32,7 @@ public class Appointment {
     private Integer period;
 
     private Integer dose;
+
+
 
 }

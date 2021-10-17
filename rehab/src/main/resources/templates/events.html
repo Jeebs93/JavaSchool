@@ -41,6 +41,21 @@
             <div class="col">
                 <div class="p-3"><p class="fw-bold" th:text="${el.patient.name}"/></div>
             </div>
+            <div class="col">
+                <div class="p-3"><p class="text-warning fw-bold" th:text="${el.eventStatus}"/></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="p-3"><p class="fw-bold" th:text="${el.appointment.value}"/></div>
+            </div>
+
+            <div class="col">
+                <span th:unless="${el.appointment.dose == 0}">
+                <div class="p-3"><p class="fw-bold" th:text="${el.appointment.dose} + mg"/></div>
+                </span>
+            </div>
+
         </div>
         <div class="row">
             <div class="col">
@@ -48,16 +63,10 @@
             </div>
         </div>
         <div class="row">
-            <span th:if="${el.typeOfAppointment == T(com.example.rehab.models.enums.TypeOfAppointment).PROCEDURE}">
-            <div class="col">
-                <div class="p-3"><p>Procedure</p></div>
+            <div class="col p-3">
+                <a  class="btn btn-success btn-sm" role="button">Complete</a>
+                <a  class="btn btn-danger btn-sm" role="button">Cancel</a>
             </div>
-            </span>
-            <span th:if="${el.typeOfAppointment == T(com.example.rehab.models.enums.TypeOfAppointment).CURE}">
-            <div class="col">
-                <div class="p-3"><p>Cure</p></div>
-            </div>
-            </span>
         </div>
     </div>
     <br>

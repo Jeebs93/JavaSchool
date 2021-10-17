@@ -61,14 +61,8 @@ public class AppointmentController {
                                    @RequestParam(value = "time[]") String[] time,
                                    @RequestParam String period,
                                    Model model) {
-        List<String> resultWeekDays = Arrays.asList(weekdays);
-        List<String> timeList = Arrays.asList(time);
-        List<String> resultTime = timeList.stream().filter(i -> !i.equals("")).collect(Collectors.toList());
-        AppointmentDTO appointmentDTO = new AppointmentDTO(id, procedure, resultWeekDays,
-                resultTime, period, "0", PROCEDURE);
-        appointmentService.createAppointment(appointmentDTO);
-        eventService.createEvents(appointmentDTO);
 
+        appointmentService.createAppointment(id, procedure, weekdays, time, period, "0", PROCEDURE);
         return "redirect:/working-with-patients/" + id;
     }
 
@@ -92,14 +86,8 @@ public class AppointmentController {
                                    @RequestParam(value = "time[]") String[] time,
                                    @RequestParam String period,
                                    Model model) {
-        List<String> resultWeekDays = Arrays.asList(weekdays);
-        List<String> timeList = Arrays.asList(time);
-        List<String> resultTime = timeList.stream().filter(i -> !i.equals("")).collect(Collectors.toList());
-        AppointmentDTO appointmentDTO = new AppointmentDTO(id, cure, resultWeekDays,
-                resultTime, period, dose, CURE);
-        appointmentService.createAppointment(appointmentDTO);
-        eventService.createEvents(appointmentDTO);
 
+        appointmentService.createAppointment(id, cure, weekdays, time, period, dose, CURE);
         return "redirect:/working-with-patients/" + id;
     }
 

@@ -21,10 +21,14 @@ public class Event {
     @ManyToOne
     private Patient patient;
 
+    @ManyToOne
+    private Appointment appointment;
+
     private LocalDateTime date;
 
     private EventStatus eventStatus;
 
     private TypeOfAppointment typeOfAppointment;
+
 
 }
