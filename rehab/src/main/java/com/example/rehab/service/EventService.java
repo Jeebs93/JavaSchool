@@ -10,6 +10,10 @@ import com.example.rehab.repo.EventRepository;
 import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.service.mapper.Mapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.print.DocFlavor;
@@ -31,7 +35,23 @@ public class EventService {
 
     private final AppointmentRepository appointmentRepository;
 
+    public Page<EventDTO> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo-1,pageSize, sort);
+
+
+
+        return this.eventRepository.findAll(pageable).map(mapper::convertEventToDTO);
+
+    }
+
     public List<EventDTO> findAll() {
+
+
+
+
         List<Event> events = eventRepository.findAll();
 
         return events.stream()
@@ -111,5 +131,7 @@ public class EventService {
         return LocalDateTime.parse(strDate, formatter);
 
     }
+
+
 
 }

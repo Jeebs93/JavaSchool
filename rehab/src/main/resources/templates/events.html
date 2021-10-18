@@ -30,11 +30,32 @@
 <div class="container px-10">
     <div class="p-3 border bg-light">
         <h3>Events</h3></div>
-    </div>
+    </div> &nbsp;
+<a th:href="@{'/events/' + ${currentPage} + '?sortField=date&sortDir=' + ${reverseSortDir}}">Sort by date</a>
 </div>
 
 <br>
 
+<div th:if = "${totalPages > 1}" class="container px-10">
+    <div class = "row col-sm-10">
+        <div class = "col-sm-2">
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						<a th:if="${currentPage != i}" th:href="@{'/events/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					</span>
+        </div>
+        <div class = "col-sm-1">
+            <a th:if="${currentPage < totalPages}" th:href="@{'/events/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+            <span th:unless="${currentPage < totalPages}">Next</span>
+        </div>
+
+        <div class="col-sm-1">
+            <a th:if="${currentPage < totalPages}" th:href="@{'/events/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+            <span th:unless="${currentPage < totalPages}">Last</span>
+        </div>
+    </div>
+</div>
+&nbsp;
 <div class="container px-10"  th:each = "el:${events}">
     <div class = "border bg-light" >
         <div class="row">
@@ -69,6 +90,7 @@
             </div>
         </div>
     </div>
+
     <br>
 </div>
 </body>
