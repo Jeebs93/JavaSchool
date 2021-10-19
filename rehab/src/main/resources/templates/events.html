@@ -28,10 +28,17 @@
 </div>
 
 <div class="container px-10">
-    <div class="p-3 border bg-light">
-        <h3>Events</h3></div>
+    <div class="row">
+    <div class="col p-3 border bg-light">
+        <h3>Events</h3>
     </div> &nbsp;
-<a th:href="@{'/events/' + ${currentPage} + '?sortField=date&sortDir=' + ${reverseSortDir}}">Sort by date</a>
+    </div>
+    <div class="row">
+         <div class="col text-end p-3">
+            <a class="btn btn-primary btn-sm" role="button" th:href="@{'/events/' + ${currentPage} + '?sortField=date&sortDir=' + ${reverseSortDir}}">Sort by date</a>
+             <a class="btn btn-primary btn-sm" role="button" th:href="@{'/events/' + ${currentPage} + '?sortField=patient&sortDir=' + ${reverseSortDir}}">Sort by patient</a>
+         </div>
+    </div>
 </div>
 
 <br>
@@ -63,7 +70,15 @@
                 <div class="p-3"><p class="fw-bold" th:text="${el.patient.name}"/></div>
             </div>
             <div class="col">
+                <span th:if="${el.eventStatus == T(com.example.rehab.models.enums.EventStatus).PLANNED}">
                 <div class="p-3"><p class="text-warning fw-bold" th:text="${el.eventStatus}"/></div>
+                </span>
+                <span th:if="${el.eventStatus == T(com.example.rehab.models.enums.EventStatus).COMPLETED}">
+                <div class="p-3"><p class="text-success fw-bold" th:text="${el.eventStatus}"/></div>
+                </span>
+                <span th:if="${el.eventStatus == T(com.example.rehab.models.enums.EventStatus).CANCELED}">
+                <div class="p-3"><p class="text-danger fw-bold" th:text="${el.eventStatus}"/></div>
+                </span>
             </div>
         </div>
         <div class="row">
@@ -82,11 +97,14 @@
             <div class="col">
                 <div class="p-3"><p th:text="${el.date}"/></div>
             </div>
+            <div class="col">
+                <div class="p-3"><p class="text-danger" th:text="${el.message}"/></div>
+            </div>
         </div>
         <div class="row">
             <div class="col p-3">
-                <a  class="btn btn-success btn-sm" role="button">Complete</a>
-                <a  class="btn btn-danger btn-sm" role="button">Cancel</a>
+                <a  class="btn btn-success btn-sm" th:href=" '/events/' + ${el.id} + '/complete'" role="button">Complete</a>
+                <a  class="btn btn-danger btn-sm" th:href=" '/events/' + ${el.id} + '/cancel'" role="button">Cancel</a>
             </div>
         </div>
     </div>

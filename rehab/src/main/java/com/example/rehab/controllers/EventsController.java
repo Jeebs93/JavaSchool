@@ -2,6 +2,8 @@ package com.example.rehab.controllers;
 
 import com.example.rehab.models.Event;
 import com.example.rehab.models.dto.EventDTO;
+import com.example.rehab.models.enums.EventStatus;
+import com.example.rehab.repo.EventRepository;
 import com.example.rehab.service.EventService;
 import com.example.rehab.service.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import static com.example.rehab.models.enums.EventStatus.COMPLETED;
+import static com.example.rehab.models.enums.EventStatus.CANCELED;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,11 +24,13 @@ import java.util.stream.Collectors;
 public class EventsController {
 
     private EventService eventService;
+    private EventRepository eventRepository;
     private Mapper mapper;
 
     @Autowired
-    public EventsController(EventService eventService, Mapper mapper) {
+    public EventsController(EventService eventService, EventRepository eventRepository, Mapper mapper) {
         this.eventService = eventService;
+        this.eventRepository = eventRepository;
         this.mapper = mapper;
     }
 
@@ -56,6 +63,35 @@ public class EventsController {
 
         model.addAttribute("events", eventList);
         return "events";
+    }
+
+    @GetMapping("/events/{eventId}/complete")
+    public String completeEvent(@PathVariable(value = "eventId") int eventId,
+                                Model model) {
+        Event event = eventRepository.findEventById(eventId);
+        event.setEventStatus(COMPLETED);
+        event.setMessage("");
+        eventRepository.save(event);
+        return "redirect:/events";
+    }
+
+    @GetMapping("/events/{eventId}/cancel")
+    public String cancelEvent(@PathVariable(value = "eventId") int eventId,
+                              Model model) {
+        return "cancel-event";
+    }
+
+    @PostMapping("/events/{eventId}/cancel")
+    public String cancelEventPost(@PathVariable(value = "eventId") int eventId,
+                                  @RequestParam String message,
+                                  Model model) {
+        model.addAttribute("eventId",eventId);
+        Event event = eventRepository.findEventById(eventId);
+        event.setEventStatus(CANCELED);
+        event.setMessage(message);
+        eventRepository.save(event);
+        return "redirect:/events";
+
     }
 
 

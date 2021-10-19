@@ -3,7 +3,7 @@
       xmlns:th="http://thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Medical Rehabilitation Center</title>
+    <title>Cancel event</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
 </head>
 <body>
@@ -31,15 +31,13 @@
 <div class="container px-10">
     <div class="row gx-5">
         <div class="col mb-5">
-            <div class="p-3 border bg-light"><h3>Add patient</h3></div>
+            <div class="p-3 border bg-light"><h3>Cancel event</h3></div>
         </div>
-        <form action = "/working-with-patients/add" method = "post">
-            <input type = "text" name = "name" placeholder = "Enter patient's name" class = "form-control"><br>
-            <input type = "text" name = "insurance_number" placeholder = "Enter patient's insurance number" class = "form-control"><br>
-            <input type = "text" name = "doctor" placeholder = "Enter patient's doctor" class = "form-control"><br>
+        <form th:action = "'/events/' + ${eventId} + '/cancel'" method = "post">
+            <input type = "text" name = "message" placeholder = "Enter the reason for canceling the event" class = "form-control"><br>
             <div class="col-md-3">
-                <button type = "submit" class="btn btn-primary me-2">Add patient</button>
-                <a class="btn btn-outline-danger"  href = "/working-with-patients/" role="button">Back</a>
+                <button type = "submit" class="btn btn-danger me-2">Cancel event</button>
+                <a class="btn btn-outline-danger"  onclick=history.back() role="button">Back</a>
             </div>
         </form>
     </div>

@@ -11,4 +11,6 @@ public interface EventRepository extends CrudRepository<Event, Long>, PagingAndS
 
     List<Event> findAll();
 
+    Event findEventById(long id);
+
 }

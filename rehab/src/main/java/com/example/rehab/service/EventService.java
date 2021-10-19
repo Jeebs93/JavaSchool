@@ -79,6 +79,7 @@ public class EventService {
             event.setEventStatus(EventStatus.PLANNED);
             event.setTypeOfAppointment(appointmentDTO.getTypeOfAppointment());
             event.setAppointment(appointmentRepository.getAppointmentById(appointmentId));
+            event.setMessage("");
             events.add(event);
 
             timeCounter++;

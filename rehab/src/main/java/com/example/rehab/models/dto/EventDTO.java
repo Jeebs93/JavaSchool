@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class EventDTO {
 
+    private Long id;
+
     private Patient patient;
 
     private Appointment appointment;
@@ -24,5 +26,7 @@ public class EventDTO {
     private TypeOfAppointment typeOfAppointment;
 
     private Long appointmentId;
+
+    private String message;
 
 }
