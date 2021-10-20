@@ -33,6 +33,8 @@ public class Appointment {
 
     private Integer dose;
 
+    boolean isCancelled;
+
 
 
 }

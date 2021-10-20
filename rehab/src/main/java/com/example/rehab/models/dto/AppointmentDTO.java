@@ -24,6 +24,7 @@ public class AppointmentDTO {
                 weekDays.size() + " days in a week at " + time.toString() + " for " + period + " weeks.";
         this.dose = dose;
         this.typeOfAppointment = typeOfAppointment;
+        this.isCancelled = false;
     }
 
     private Long id;
@@ -43,6 +44,8 @@ public class AppointmentDTO {
     private TypeOfAppointment typeOfAppointment;
 
     private String dose;
+
+    boolean isCancelled;
 
 
 }

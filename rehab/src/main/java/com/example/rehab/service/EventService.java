@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import static com.example.rehab.models.enums.EventStatus.CANCELED;
+import static com.example.rehab.models.enums.EventStatus.PLANNED;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +59,16 @@ public class EventService {
         return events.stream()
                 .map(mapper::convertEventToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public void deleteEvents(long appointmentId) {
+        Appointment appointment = appointmentRepository.getAppointmentById(appointmentId);
+        List<Event> events = eventRepository.findAllByAppointment(appointment);
+        for (Event event:events) {
+            if (event.getEventStatus().equals(PLANNED)) {
+                eventRepository.delete(event);
+            }
+        }
     }
 
     public void createEvents(AppointmentDTO appointmentDTO, long appointmentId) {

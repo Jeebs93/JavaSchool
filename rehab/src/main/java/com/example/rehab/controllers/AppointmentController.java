@@ -1,9 +1,13 @@
 package com.example.rehab.controllers;
 
+import com.example.rehab.models.Appointment;
+import com.example.rehab.models.Patient;
 import com.example.rehab.models.ProceduresAndCures;
 import com.example.rehab.models.dto.AppointmentDTO;
 import com.example.rehab.models.dto.PatientDTO;
 import com.example.rehab.models.enums.TypeOfAppointment;
+import com.example.rehab.repo.AppointmentRepository;
+import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.repo.ProceduresAndCuresRepository;
 import com.example.rehab.service.AppointmentService;
 import com.example.rehab.service.EventService;
@@ -29,17 +33,31 @@ public class AppointmentController {
     private PatientService patientService;
     private ProceduresAndCuresRepository proceduresAndCuresRepository;
     private AppointmentService appointmentService;
+    private AppointmentRepository appointmentRepository;
     private EventService eventService;
+    private PatientRepository patientRepository;
 
     @Autowired
     public AppointmentController (PatientService patientService,
                                   AppointmentService appointmentService,
                                   ProceduresAndCuresRepository proceduresAndCuresRepository,
-                                  EventService eventService) {
+                                  EventService eventService,
+                                  PatientRepository patientRepository,
+                                  AppointmentRepository appointmentRepository) {
         this.patientService = patientService;
         this.appointmentService = appointmentService;
         this.proceduresAndCuresRepository = proceduresAndCuresRepository;
         this.eventService = eventService;
+        this.patientRepository = patientRepository;
+        this.appointmentRepository = appointmentRepository;
+    }
+
+    @GetMapping("/working-with-patients/{patientId}/{appointmentId}/cancel")
+    public String cancelAppointment(@PathVariable(value = "appointmentId") long appointmentId,
+                                    @PathVariable(value = "patientId") long patientId,
+                                    Model model) {
+        appointmentService.cancelAppointment(appointmentId);
+        return "redirect:/working-with-patients/" + patientId;
     }
 
 

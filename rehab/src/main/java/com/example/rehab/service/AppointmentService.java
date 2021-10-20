@@ -41,6 +41,12 @@ public class AppointmentService {
 
     }
 
+    public void cancelAppointment(long appointmentId) {
+        Appointment appointment = appointmentRepository.getAppointmentById(appointmentId);
+        appointment.setCancelled(true);
+        eventService.deleteEvents(appointmentId);
+    }
+
     public List<AppointmentDTO> findAllByPatient(Patient patient) {
         List<Appointment> appointments = appointmentRepository.findAllByPatient(patient);
 

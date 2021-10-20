@@ -102,6 +102,7 @@
 <br>
 
 <div class="container px-10"  th:each = "el:${appointment}">
+    <span th:unless="${el.isCancelled}">
     <span th:if="${el.typeOfAppointment == T(com.example.rehab.models.enums.TypeOfAppointment).PROCEDURE}">
     <div class = "border border-primary border-2" >
         <div class="row">
@@ -115,7 +116,7 @@
             </div>
             <div class="col">
                 <a  class="btn btn-outline-primary" role="button">Edit</a>
-                <a  class="btn btn-outline-danger" role="button">Cancel</a>
+                <a  class="btn btn-outline-danger"  th:href=" '/working-with-patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
             </div>
         </div>
     </div>
@@ -138,15 +139,18 @@
             </div>
             <div class="col">
                 <a  class="btn btn-outline-primary" role="button">Edit</a>
-                <a  class="btn btn-outline-danger" role="button">Cancel</a>
+                <a  class="btn btn-outline-danger"  th:href=" '/working-with-patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
             </div>
         </div>
     </div>
+
+    </span>
+        <br>
     </span>
 
 
 
-    <br>
+
 </div>
 
 </body>

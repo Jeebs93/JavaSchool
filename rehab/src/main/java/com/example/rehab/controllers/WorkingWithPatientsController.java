@@ -79,6 +79,7 @@ public class WorkingWithPatientsController {
         PatientDTO result = patientService.getPatientDTObyID(id);
         List<AppointmentDTO> appointments = appointmentService.findAllByPatient(mapper.convertPatientToEntity(result));
         model.addAttribute("patient", result);
+        model.addAttribute("patientId", id);
         model.addAttribute("appointment", appointments);
        return "patient-details";
     }
