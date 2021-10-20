@@ -71,10 +71,10 @@ public class EventService {
         }
     }
 
-    public void createEvents(AppointmentDTO appointmentDTO, long appointmentId) {
+    public void createEvents(AppointmentDTO appointmentDTO, long appointmentId, int pastEvents) {
 
         List<String> timeList = appointmentDTO.getTime();
-        int periodInt = Integer.parseInt(appointmentDTO.getPeriod());
+        int periodInt = appointmentDTO.getPeriod();
         int numberOfEvents = appointmentDTO.getWeekDays().size() * timeList.size()
                 * periodInt;
         List<Event> events = new ArrayList<>(numberOfEvents);
@@ -83,7 +83,7 @@ public class EventService {
         int dateCounter = 0;
         List<LocalDateTime> dateList = generateDateList(appointmentDTO.getWeekDays(), periodInt);
 
-        for (int i = 0; i < numberOfEvents; i++) {
+        for (int i = 0; i < numberOfEvents-pastEvents; i++) {
             Event event = new Event();
 
             event.setPatient(patientRepository.getPatientById(appointmentDTO.getPatientId()));

@@ -115,7 +115,7 @@
                 <div class="p-3"><p th:text="${el.timePattern}"/></div>
             </div>
             <div class="col">
-                <a  class="btn btn-outline-primary" role="button">Edit</a>
+                <a  class="btn btn-outline-primary" th:href=" '/working-with-patients/' + ${patientId} + '/' + ${el.id} + '/edit-procedure'" role="button">Edit</a>
                 <a  class="btn btn-outline-danger"  th:href=" '/working-with-patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
             </div>
         </div>
@@ -138,7 +138,7 @@
                 <div class="p-3"><p th:text="${el.timePattern}"/></div>
             </div>
             <div class="col">
-                <a  class="btn btn-outline-primary" role="button">Edit</a>
+                <a  class="btn btn-outline-primary" th:href=" '/working-with-patients/' + ${patientId} + '/' + ${el.id} + '/edit-cure'" role="button">Edit</a>
                 <a  class="btn btn-outline-danger"  th:href=" '/working-with-patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
             </div>
         </div>

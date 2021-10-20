@@ -16,4 +16,6 @@ public interface EventRepository extends CrudRepository<Event, Long>, PagingAndS
 
     List<Event> findAllByAppointment(Appointment appointment);
 
+    void delete(Event event);
+
 }

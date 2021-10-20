@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import com.example.rehab.models.enums.UserRole;
+
 
 import javax.sql.DataSource;
 
@@ -29,8 +29,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/working-with-patients/**").hasRole(String.valueOf(UserRole.DOCTOR))
-                    .antMatchers("/events").hasRole(String.valueOf(UserRole.NURSE))
+                    .antMatchers("/working-with-patients/**").hasAnyAuthority(String.valueOf(UserRole.DOCTOR),
+                        String.valueOf(UserRole.ADMIN))
+                    .antMatchers("/events").hasAnyAuthority(String.valueOf(UserRole.NURSE),
+                        String.valueOf(UserRole.ADMIN))
                     .antMatchers("/images/**").permitAll()
                     .antMatchers("/","/registration").permitAll()
                     .anyRequest().authenticated()

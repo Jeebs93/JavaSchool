@@ -12,7 +12,7 @@ import java.util.List;
 public class AppointmentDTO {
 
     public AppointmentDTO(Long patientId, String value, List<String> weekDays,
-                          List<String> time, String period, String dose, TypeOfAppointment typeOfAppointment) {
+                          List<String> time, Integer period, String dose, TypeOfAppointment typeOfAppointment) {
         this.patientId = patientId;
         this.value = value;
         this.weekDays = weekDays;
@@ -37,7 +37,7 @@ public class AppointmentDTO {
 
     private List<String> time;
 
-    private String period;
+    private Integer period;
 
     private String timePattern;
 
