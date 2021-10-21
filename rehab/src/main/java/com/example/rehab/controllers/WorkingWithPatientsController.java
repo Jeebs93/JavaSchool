@@ -84,6 +84,12 @@ public class WorkingWithPatientsController {
        return "patient-details";
     }
 
+    @GetMapping("/working-with-patients/{id}/discharge")
+    public String dischargePatient(@PathVariable(value = "id") long id) {
+        patientService.dischargePatient(id);
+        return "redirect:/working-with-patients";
+    }
+
 
 
 }
