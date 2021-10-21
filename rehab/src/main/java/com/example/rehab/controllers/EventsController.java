@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import static com.example.rehab.models.enums.EventStatus.COMPLETED;
 import static com.example.rehab.models.enums.EventStatus.CANCELED;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -92,6 +93,20 @@ public class EventsController {
         eventRepository.save(event);
         return "redirect:/events";
 
+    }
+
+    @GetMapping("/events/today")
+    public String eventsToday(Model model) {
+        List<EventDTO> events = eventService.findAllToday();
+        model.addAttribute("events",events);
+        return "events-today";
+    }
+
+    @GetMapping("/events/recent")
+    public String eventsRecent(Model model) {
+        List<EventDTO> events = eventService.findAllRecent();
+        model.addAttribute("events",events);
+        return "events-recent";
     }
 
 

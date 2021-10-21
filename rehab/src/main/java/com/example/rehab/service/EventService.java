@@ -52,13 +52,48 @@ public class EventService {
     public List<EventDTO> findAll() {
 
 
-
-
         List<Event> events = eventRepository.findAll();
 
         return events.stream()
                 .map(mapper::convertEventToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public boolean isToday(EventDTO eventDTO) {
+        LocalDateTime date = LocalDateTime.now();
+        LocalDateTime eventDate = eventDTO.getDate();
+        return date.getDayOfYear()==eventDate.getDayOfYear();
+    }
+
+    public boolean isRecent(EventDTO eventDTO) {
+        LocalDateTime date = LocalDateTime.now();
+        LocalDateTime eventDate = eventDTO.getDate();
+        return isToday(eventDTO) &&
+                ((date.getHour() == eventDate.getHour()) || (date.getHour()+1 == eventDate.getHour()));
+    }
+
+
+    public List<EventDTO> findAllRecent() {
+        List<EventDTO> events = findAll();
+        List<EventDTO> result = new ArrayList<>();
+        for (EventDTO event:events) {
+            if (isRecent(event)) {
+                result.add(event);
+            }
+        }
+        return result;
+    }
+
+    public List<EventDTO> findAllToday(){
+        List<EventDTO> events = findAll();
+        List<EventDTO> result = new ArrayList<>();
+        for (EventDTO event:events) {
+            if (isToday(event)) {
+                result.add(event);
+            }
+        }
+
+        return result;
     }
 
     public void deleteEvents(long appointmentId) {

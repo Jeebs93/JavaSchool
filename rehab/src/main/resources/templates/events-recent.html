@@ -29,43 +29,26 @@
 
 <div class="container px-10">
     <div class="row">
-    <div class="col p-3 border bg-light">
-        <h3>Events</h3>
-        <div class="text-end">
-            <a  class="btn btn-success btn-sm" href = /events/today role="button">Today</a>
-            <a  class="btn btn-success btn-sm" href = /events/recent role="button">In recent hour</a>
-        </div>
-    </div> &nbsp;
+        <div class="col p-3 border bg-light">
+            <h3>Recent events</h3>
+            <div class="text-end">
+                <a  class="btn btn-success btn-sm" href = /events/today role="button">Today</a>
+                <a  class="btn btn-success btn-sm" href = /events/ role="button">In recent hour</a>
+            </div>
+        </div> &nbsp;
     </div>
+    <!--
     <div class="row">
-         <div class="col text-end p-3">
+        <div class="col text-end p-3">
             <a class="btn btn-primary btn-sm" role="button" th:href="@{'/events/' + ${currentPage} + '?sortField=date&sortDir=' + ${reverseSortDir}}">Sort by date</a>
-             <a class="btn btn-primary btn-sm" role="button" th:href="@{'/events/' + ${currentPage} + '?sortField=patient&sortDir=' + ${reverseSortDir}}">Sort by patient</a>
-         </div>
+            <a class="btn btn-primary btn-sm" role="button" th:href="@{'/events/' + ${currentPage} + '?sortField=patient&sortDir=' + ${reverseSortDir}}">Sort by patient</a>
+        </div>
     </div>
+    -->
 </div>
 
 <br>
 
-<div th:if = "${totalPages > 1}" class="container px-10">
-    <div class = "row col-sm-10">
-        <div class = "col-sm-2">
-					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
-						<a th:if="${currentPage != i}" th:href="@{'/events/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
-						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
-					</span>
-        </div>
-        <div class = "col-sm-1">
-            <a th:if="${currentPage < totalPages}" th:href="@{'/events/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
-            <span th:unless="${currentPage < totalPages}">Next</span>
-        </div>
-
-        <div class="col-sm-1">
-            <a th:if="${currentPage < totalPages}" th:href="@{'/events/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
-            <span th:unless="${currentPage < totalPages}">Last</span>
-        </div>
-    </div>
-</div>
 &nbsp;
 <div class="container px-10"  th:each = "el:${events}">
     <div class = "border bg-light" >
