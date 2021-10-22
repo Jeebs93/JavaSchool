@@ -22,8 +22,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-import static com.example.rehab.models.enums.EventStatus.CANCELED;
-import static com.example.rehab.models.enums.EventStatus.PLANNED;
+
+import static com.example.rehab.models.enums.EventStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -104,6 +104,20 @@ public class EventService {
                 eventRepository.delete(event);
             }
         }
+    }
+
+    public void completeEvent(long eventId) {
+        Event event = eventRepository.findEventById(eventId);
+        event.setEventStatus(COMPLETED);
+        event.setMessage("");
+        eventRepository.save(event);
+    }
+
+    public void cancelEvent(long eventId, String message) {
+        Event event = eventRepository.findEventById(eventId);
+        event.setEventStatus(CANCELED);
+        event.setMessage(message);
+        eventRepository.save(event);
     }
 
     public void createEvents(AppointmentDTO appointmentDTO, long appointmentId, int pastEvents) {

@@ -2,13 +2,16 @@ package com.example.rehab.models;
 
 import com.example.rehab.models.enums.TypeOfAppointment;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @RequiredArgsConstructor
 public class Appointment {
 

@@ -47,19 +47,19 @@
     <span th:if="${el.patientStatus == T(com.example.rehab.models.enums.PatientStatus).ON_TREATMENT}">
     <div class="row gx-5 gy-18">
         <div class="col">
-            <div class="p-3"><p class="fw-bold">Name:</p></div>
+            <div class="p-3"><p style="font-size: 110%" class="fw-bold">Name:</p></div>
         </div>
         <div class="col">
-            <div class="p-3"><p th:text="${el.name}"/></div>
+            <div class="p-3"><p style="font-size: 120%" th:text="${el.name}"/></div>
         </div>
     </div>
 
     <div class="row gx-5">
         <div class="col">
-            <div class="p-3"><p class="fw-bold">Insurance number:</p></div>
+            <div class="p-3"><p style="font-size: 110%" class="fw-bold">Insurance number:</p></div>
         </div>
         <div class="col">
-            <div class="p-3"><p th:text="${el.insuranceNumber}"/></div>
+            <div class="p-3"><p style="font-size: 120%" th:text="${el.insuranceNumber}"/></div>
         </div>
     </div>
 

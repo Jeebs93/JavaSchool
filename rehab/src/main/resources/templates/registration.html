@@ -12,8 +12,9 @@
 <div th:if="${param.logout}">
     You have been logged out.
 </div>
-
-<div class="p-3 border bg-light">
+<br/>
+<br/>
+<div align=center>
     <h3>Add new user</h3></div>
 <div style="text-align: center;">
     <img width="220" height="220" th:src="@{/images/start.jpg}"/>
@@ -30,6 +31,9 @@
         </div>
         <div class="nav-link px-14 link-dark" style="font-size: 120%">
             <input type="submit" class="btn btn-primary" style="width: 207px;"  value="Sign up"/>
+        </div>
+        <div class="nav-link px-14 link-dark" style="font-size: 120%">
+            <a  class="btn btn-danger" style="width: 207px;" href = / role="button">Back</a>
         </div>
     </form>
 </div>

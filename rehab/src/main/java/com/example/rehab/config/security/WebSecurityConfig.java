@@ -1,6 +1,7 @@
-package com.example.rehab.config;
+package com.example.rehab.config.security;
 
 import com.example.rehab.models.enums.UserRole;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,14 +14,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
 
     @Autowired
     private DataSource dataSource;
@@ -29,10 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/working-with-patients/**").hasAnyAuthority(String.valueOf(UserRole.DOCTOR),
-                        String.valueOf(UserRole.ADMIN))
-                    .antMatchers("/events").hasAnyAuthority(String.valueOf(UserRole.NURSE),
-                        String.valueOf(UserRole.ADMIN))
+                    .antMatchers("/working-with-patients/**").hasAnyAuthority("DOCTOR","ADMIN")
+                    .antMatchers("/events").hasAnyAuthority("NURSE","ADMIN")
                     .antMatchers("/images/**").permitAll()
                     .antMatchers("/","/registration").permitAll()
                     .anyRequest().authenticated()
@@ -41,8 +43,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/login")
                     .permitAll()
                 .and()
-                    .logout()
-                    .permitAll();
+                    .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/")
+                    .permitAll()
+                .and()
+                    .exceptionHandling()
+                .accessDeniedPage("/403");
         http.csrf().disable();
     }
 

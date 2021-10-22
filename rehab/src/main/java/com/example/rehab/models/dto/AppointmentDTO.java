@@ -12,16 +12,15 @@ import java.util.List;
 public class AppointmentDTO {
 
     public AppointmentDTO(Long patientId, String value, List<String> weekDays,
-                          List<String> time, Integer period, String dose, TypeOfAppointment typeOfAppointment) {
+                          List<String> time, Integer period, String dose,
+                          TypeOfAppointment typeOfAppointment, String timePattern) {
         this.patientId = patientId;
         this.value = value;
         this.weekDays = weekDays;
         this.time = time;
         this.period = period;
 
-        this.timePattern = weekDays.size() == 1 ?
-                "One day in a week at " + time.toString() + " for " + period + " weeks." :
-                weekDays.size() + " days in a week at " + time.toString() + " for " + period + " weeks.";
+        this.timePattern = timePattern;
         this.dose = dose;
         this.typeOfAppointment = typeOfAppointment;
         this.isCancelled = false;

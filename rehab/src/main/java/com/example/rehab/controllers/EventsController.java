@@ -69,10 +69,7 @@ public class EventsController {
     @GetMapping("/events/{eventId}/complete")
     public String completeEvent(@PathVariable(value = "eventId") int eventId,
                                 Model model) {
-        Event event = eventRepository.findEventById(eventId);
-        event.setEventStatus(COMPLETED);
-        event.setMessage("");
-        eventRepository.save(event);
+        eventService.completeEvent(eventId);
         return "redirect:/events";
     }
 
@@ -86,11 +83,8 @@ public class EventsController {
     public String cancelEventPost(@PathVariable(value = "eventId") int eventId,
                                   @RequestParam String message,
                                   Model model) {
-        model.addAttribute("eventId",eventId);
-        Event event = eventRepository.findEventById(eventId);
-        event.setEventStatus(CANCELED);
-        event.setMessage(message);
-        eventRepository.save(event);
+       // model.addAttribute("eventId",eventId);
+        eventService.cancelEvent(eventId,message);
         return "redirect:/events";
 
     }

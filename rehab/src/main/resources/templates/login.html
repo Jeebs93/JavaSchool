@@ -13,6 +13,10 @@
 <div style="text-align: center;">
     <img width="220" height="220" th:src="@{/images/start.jpg}"/>
     <form th:action="@{/login}" method="post">
+        <div class="text-danger px14" th:if="${param.error}">
+            <p class="fw-bold" style="font-size: 120%">Invalid username and password.</p>
+            <br>
+        </div>
         <div class="nav-link px-14 link-dark" style="font-size: 120%">
             <label><input type="text" name="username" placeholder = "Enter username" class = "form-control"/> </label>
         </div>
@@ -24,6 +28,9 @@
         </div>
         <div class="nav-link px-14 link-dark" style="font-size: 120%">
             <a href = "/registration"  class="btn btn-primary" role="button" style="width: 207px;">Sign-up</a>
+        </div>
+        <div class="nav-link px-14 link-dark" style="font-size: 120%">
+            <a  class="btn btn-danger" style="width: 207px;" href = / role="button">Back</a>
         </div>
     </form>
 </div>

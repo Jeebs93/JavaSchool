@@ -1,15 +1,15 @@
 package com.example.rehab.models;
 
 import com.example.rehab.models.enums.PatientStatus;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @RequiredArgsConstructor
 public class Patient {
 
@@ -17,12 +17,13 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotEmpty(message = "Please, enter insurance number")
     private Long insuranceNumber;
-
+    @NotEmpty(message = "Please, enter insurance number")
     private String name;
 
     private PatientStatus patientStatus;
-
+    @NotEmpty(message = "Please, enter insurance number")
     private String doctor;
 
     @OneToMany(mappedBy = "patient")
@@ -37,4 +38,5 @@ public class Patient {
         this.doctor = doctor;
         this.patientStatus = patientStatus;
     }
+
 }

@@ -14,10 +14,8 @@ import com.example.rehab.service.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.*;
 
 import static com.example.rehab.models.enums.TypeOfAppointment.PROCEDURE;
 import static com.example.rehab.models.enums.TypeOfAppointment.CURE;
@@ -150,9 +148,13 @@ public class AppointmentController {
                                    @RequestParam(value = "time[]") String[] time,
                                    @RequestParam String period,
                                    Model model) {
-
-        appointmentService.createAppointment(id, cure, weekdays, time, period, dose, CURE);
+            appointmentService.createAppointment(id, cure, weekdays, time, period, dose, CURE);
         return "redirect:/working-with-patients/" + id;
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public String handleException(MissingServletRequestParameterException e, Model model) {
+        return "error";
     }
 
 

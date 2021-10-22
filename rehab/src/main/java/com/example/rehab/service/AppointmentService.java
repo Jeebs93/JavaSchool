@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,17 +35,51 @@ public class AppointmentService {
     private final EventRepository eventRepository;
 
     public void createAppointment(long id, String procedure, String[] weekdays, String[] time,
-                                  String period, String dose, TypeOfAppointment typeOfAppointment) {
+                                  String period, String dose, TypeOfAppointment typeOfAppointment)  {
         List<String> resultWeekDays = Arrays.asList(weekdays);
         List<String> timeList = Arrays.asList(time);
         List<String> resultTime = timeList.stream().filter(i -> !i.equals("")).collect(Collectors.toList());
+        String timePattern = getTimePatternView(weekdays,resultTime,period);
         AppointmentDTO appointmentDTO = new AppointmentDTO(id, procedure, resultWeekDays,
-                resultTime, Integer.parseInt(period), dose, typeOfAppointment);
+                resultTime, Integer.parseInt(period), dose, typeOfAppointment,timePattern);
         Appointment appointment = mapper.convertAppointmentToEntity(appointmentDTO);
         appointmentRepository.save(appointment);
         long appointmentId = appointment.getId();
         eventService.createEvents(appointmentDTO, appointmentId,0);
 
+    }
+
+    public static String getTimePatternView(String[] weekDays, List<String> time, String period) {
+
+        List<String> listWeekdays = new ArrayList<>();
+
+        for (int i = 0; i < weekDays.length; i++) {
+            switch (weekDays[i]) {
+                case "1":listWeekdays.add("Monday");
+                    break;
+                case "2":listWeekdays.add("Tuesday");
+                    break;
+                case "3":listWeekdays.add("Wednesday");
+                    break;
+                case "4":listWeekdays.add("Thursday");
+                    break;
+                case "5":listWeekdays.add("Friday");
+                    break;
+                case "6":listWeekdays.add("Saturday");
+                    break;
+                case "7":listWeekdays.add("Sunday");
+                    break;
+            }
+        }
+
+        String resultWeekdays = listWeekdays.toString().substring(1,listWeekdays.toString().length()-1);
+
+        String weeks = Integer.parseInt(period) > 1 ? " weeks." : " week.";
+
+          String timePattern = "On " + resultWeekdays + " at " +
+                  time.toString().substring(1,time.toString().length()-1) + " for " + period + weeks;
+
+          return timePattern;
     }
 
     public void updateAppointment(AppointmentDTO appointmentDTO, String[] weekdays,
@@ -92,6 +127,7 @@ public class AppointmentService {
     public void cancelAppointment(long appointmentId) {
         Appointment appointment = appointmentRepository.getAppointmentById(appointmentId);
         appointment.setCancelled(true);
+        appointmentRepository.save(appointment);
         eventService.deleteEvents(appointmentId);
     }
 

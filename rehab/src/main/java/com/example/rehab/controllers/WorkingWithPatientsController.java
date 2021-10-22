@@ -17,11 +17,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -65,7 +64,7 @@ public class WorkingWithPatientsController {
     }
 
     @PostMapping("/working-with-patients/add")
-    public String workingWithPatientPostAdd(@RequestParam String name,
+    public String workingWithPatientPostAdd(@Valid @RequestParam String name,
                                             @RequestParam Long insurance_number,
                                             @RequestParam String doctor,
                                             Model model) {
