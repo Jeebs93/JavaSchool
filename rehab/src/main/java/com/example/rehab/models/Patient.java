@@ -17,13 +17,13 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotEmpty(message = "Please, enter insurance number")
+
     private Long insuranceNumber;
-    @NotEmpty(message = "Please, enter insurance number")
+
     private String name;
 
     private PatientStatus patientStatus;
-    @NotEmpty(message = "Please, enter insurance number")
+
     private String doctor;
 
     @OneToMany(mappedBy = "patient")

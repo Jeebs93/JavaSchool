@@ -15,11 +15,13 @@ public class PatientDTO {
 
     private Long id;
 
-    @NotNull(message = "Please, enter insurance number")
-    private Long insuranceNumber;
+
 
     @NotEmpty(message = "Please, enter name of patient")
     private String name;
+
+    @NotNull(message = "Please, enter insurance number")
+    private Long insuranceNumber;
 
     private PatientStatus patientStatus;
 

@@ -28,9 +28,6 @@ public class AppointmentController {
     private PatientService patientService;
     private ProceduresAndCuresRepository proceduresAndCuresRepository;
     private AppointmentService appointmentService;
-    private AppointmentRepository appointmentRepository;
-    private EventService eventService;
-    private PatientRepository patientRepository;
     private Mapper mapper;
 
     @Autowired
@@ -44,9 +41,7 @@ public class AppointmentController {
         this.patientService = patientService;
         this.appointmentService = appointmentService;
         this.proceduresAndCuresRepository = proceduresAndCuresRepository;
-        this.eventService = eventService;
-        this.patientRepository = patientRepository;
-        this.appointmentRepository = appointmentRepository;
+
         this.mapper = mapper;
     }
 
@@ -99,7 +94,7 @@ public class AppointmentController {
                                     @RequestParam(value = "time[]") String[] time,
                                     @RequestParam String period,
                                     Model model) {
-        Appointment appointment = appointmentService.findAppointmentById(appointmentId);
+        Appointment appointment = appointmentService.findAppointmentById(appointmentId); // to services
         AppointmentDTO appointmentDTO = mapper.convertAppointmentToDTO(appointment);
         appointmentService.updateAppointment(appointmentDTO,weekdays,time,period,dose);
         return "redirect:/working-with-patients/" + patientId;
@@ -107,12 +102,9 @@ public class AppointmentController {
 
     @GetMapping("/working-with-patients/{id}/add-procedure")
     public String addProcedure(@PathVariable(value = "id") long id, Model model) {
-        PatientDTO result = patientService.getPatientDTObyID(id);
-        model.addAttribute("patient", result);
-        List<ProceduresAndCures> proceduresAndCures =
-                proceduresAndCuresRepository
-                        .findAllByTypeOfAppointment(PROCEDURE);
-        model.addAttribute("procedures", proceduresAndCures);
+        model.addAttribute("patient", patientService.getPatientDTObyID(id));
+        model.addAttribute("procedures", proceduresAndCuresRepository
+                .findAllByTypeOfAppointment(PROCEDURE));
         return "add-procedure";
     }
 

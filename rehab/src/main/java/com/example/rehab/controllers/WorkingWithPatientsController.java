@@ -59,17 +59,18 @@ public class WorkingWithPatientsController {
     }
 
     @GetMapping("/working-with-patients/add")
-    public String workingWithPatientsAdd() {
+    public String workingWithPatientsAdd(Model model) {
+        model.addAttribute("patient",new PatientDTO());
         return "add-patient";
     }
 
     @PostMapping("/working-with-patients/add")
-    public String workingWithPatientPostAdd(@Valid @RequestParam String name,
-                                            @RequestParam Long insurance_number,
-                                            @RequestParam String doctor,
+    public String workingWithPatientPostAdd(@Valid @ModelAttribute(name="patient") PatientDTO patient, BindingResult result,
                                             Model model) {
-        PatientDTO patientDTO = new PatientDTO(name, insurance_number, doctor, PatientStatus.ON_TREATMENT);
-        patientService.createPatient(patientDTO);
+        if (result.hasErrors()) {
+            return "add-patient";
+        }
+        patientService.createPatient(patient);
         return "redirect:/working-with-patients";
     }
 

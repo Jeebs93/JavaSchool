@@ -33,10 +33,22 @@
         <div class="col mb-5">
             <div class="p-3 border bg-light"><h3>Add patient</h3></div>
         </div>
-        <form action = "/working-with-patients/add" method = "post">
-            <input type = "text" name = "name" placeholder = "Enter patient's name" class = "form-control"><br>
-            <input type = "text" name = "insurance_number" placeholder = "Enter patient's insurance number" class = "form-control"><br>
-            <input type = "text" name = "doctor" placeholder = "Enter patient's doctor" class = "form-control"><br>
+        <form th:action = @{/working-with-patients/add} th:object="${patient}" method = "post">
+            <div class = "form-group">
+            <input type = "text" name = "name" th:field="*{name}" placeholder = "Enter patient's name" class = "form-control">
+                <div class="alert alert-warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+                <br>
+            <div class = "form-group">
+                <input type = "text" name = "insuranceNumber" th:field="*{insuranceNumber}" placeholder = "Enter patient's insurance number" class = "form-control">
+                <div class="alert alert-warning" th:if="${#fields.hasErrors('insuranceNumber')}" th:errors="*{insuranceNumber}"></div>
+            </div>
+            <br>
+            <div class = "form-group">
+                <input type = "text" name = "doctor" th:field="*{doctor}" placeholder = "Enter patient's doctor" class = "form-control">
+                <div class="alert alert-warning" th:if="${#fields.hasErrors('doctor')}" th:errors="*{doctor}"></div>
+            </div>
+            <br>
             <div class="col-md-3">
                 <button type = "submit" class="btn btn-primary me-2">Add patient</button>
                 <a class="btn btn-outline-danger"  href = "/working-with-patients/" role="button">Back</a>

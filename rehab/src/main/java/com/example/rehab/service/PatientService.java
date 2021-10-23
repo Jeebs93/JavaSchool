@@ -35,6 +35,7 @@ public class PatientService {
     }
 
     public void createPatient(PatientDTO patientDTO) {
+        patientDTO.setPatientStatus(PatientStatus.ON_TREATMENT);
         Patient patient = mapper.convertPatientToEntity(patientDTO);
         patientRepository.save(patient);
     }
