@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import java.time.format.DateTimeFormatter;
+
 
 @Component
 @RequiredArgsConstructor
@@ -47,7 +49,12 @@ public class Mapper {
         return modelMapper.map(appointmentDTO, Appointment.class);
     }
 
-    public EventDTO convertEventToDTO(Event event) {return modelMapper.map(event, EventDTO.class);}
+    public EventDTO convertEventToDTO(Event event) {
+        EventDTO eventDTO = modelMapper.map(event, EventDTO.class);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+        eventDTO.setDateString(event.getDate().format(formatter));
+        return eventDTO;
+    }
 
     public Event convertEventToEntity(EventDTO eventDTO) {return modelMapper.map(eventDTO, Event.class);}
 

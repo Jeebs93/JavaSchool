@@ -45,10 +45,8 @@ public class EventsController {
                                 @RequestParam("sortField") String sortField,
                                 @RequestParam("sortDir") String sortDir,
                                 Model model) {
-        int pageSize = 10;
 
-        Page<EventDTO> page = eventService.findPaginated(pageNumber, pageSize, sortField, sortDir);
-        List<EventDTO> eventList = page.getContent();
+        Page<EventDTO> page = eventService.findPaginated(pageNumber, 10, sortField, sortDir);
 
        /* List<EventDTO> resultList = eventList.stream()
                 .map(mapper::convertEventToDTO)
@@ -62,7 +60,7 @@ public class EventsController {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
-        model.addAttribute("events", eventList);
+        model.addAttribute("events", page.getContent());
         return "events";
     }
 
@@ -87,6 +85,19 @@ public class EventsController {
         eventService.cancelEvent(eventId,message);
         return "redirect:/events";
 
+    }
+
+    @PostMapping("/events/")
+    public String filterByPatient(@RequestParam String name) {
+        return "redirect:/events/patient/" + name;
+    }
+
+    @GetMapping("/events/patient/{name}")
+    public String getEventsPyPatient(@PathVariable String name,Model model) {
+        List<EventDTO> events = eventService.findByPatient(name);
+        model.addAttribute("patientName",name);
+        model.addAttribute("events", events);
+        return "events-by-patient";
     }
 
     @GetMapping("/events/today")

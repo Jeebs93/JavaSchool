@@ -21,6 +21,8 @@ public class EventDTO {
 
     private LocalDateTime date;
 
+    private String dateString;
+
     private EventStatus eventStatus;
 
     private TypeOfAppointment typeOfAppointment;

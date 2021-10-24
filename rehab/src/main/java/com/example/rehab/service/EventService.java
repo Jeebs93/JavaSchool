@@ -49,14 +49,27 @@ public class EventService {
 
     }
 
+
+
     public List<EventDTO> findAll() {
 
 
         List<Event> events = eventRepository.findAll();
 
-        return events.stream()
-                .map(mapper::convertEventToDTO)
-                .collect(Collectors.toList());
+        List<EventDTO> result = events.stream().map(mapper::convertEventToDTO).collect(Collectors.toList());
+
+        return result;
+    }
+
+    public List<EventDTO> findByPatient(String name) {
+        List<EventDTO> events = findAll();
+        List<EventDTO> result = new ArrayList<>();
+        for (EventDTO event:events) {
+            if (event.getPatient().getName().equalsIgnoreCase(name)) {
+                result.add(event);
+            }
+        }
+        return result;
     }
 
     public boolean isToday(EventDTO eventDTO) {
