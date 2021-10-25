@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://thymeleaf.org" lang="en">
+      xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Cancel event</title>
@@ -17,12 +17,17 @@
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <li style="font-size: 120%"><a href="/" class="nav-link px-14 link-secondary">Home</a></li>
             <li style="font-size: 120%"><a href="/events" class="nav-link px-14 link-secondary">Events</a></li>
-            <li style="font-size: 120%"><a href="#" class="nav-link px-14 link-dark">About</a></li>
+            <li style="font-size: 120%"><a href="#" class="nav-link px-14 link-secondary">About</a></li>
         </ul>
 
         <div class="col-md-3 text-end">
-            <a href = "/login"  class="btn btn-outline-primary me-2" role="button">Login</a>
-            <a href = "/registration"  class="btn btn-primary" role="button">Sign-up</a>
+            <div sec:authorize="isAuthenticated()">
+                <a th:href="@{/logout}" class="btn btn-outline-danger" role="button">Log out</a>
+            </div>
+            <div sec:authorize="isAnonymous()">
+                <a href = "/login"  class="btn btn-outline-primary me-2" role="button">Login</a>
+                <a href = "/registration"  class="btn btn-primary" role="button">Sign-up</a>
+            </div>
         </div>
     </header>
 </div>

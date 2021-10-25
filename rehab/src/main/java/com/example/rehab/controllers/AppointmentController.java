@@ -11,6 +11,7 @@ import com.example.rehab.service.AppointmentService;
 import com.example.rehab.service.EventService;
 import com.example.rehab.service.PatientService;
 import com.example.rehab.service.mapper.Mapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ import static com.example.rehab.models.enums.TypeOfAppointment.CURE;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 public class AppointmentController {
 
@@ -146,7 +148,10 @@ public class AppointmentController {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public String handleException(MissingServletRequestParameterException e, Model model) {
-        return "error";
+        log.error("Input data error");
+        String message = "Please, check your input data";
+        model.addAttribute("message",message);
+        return "error-page";
     }
 
 

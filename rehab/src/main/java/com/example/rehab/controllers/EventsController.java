@@ -4,7 +4,9 @@ import com.example.rehab.models.Event;
 import com.example.rehab.models.dto.EventDTO;
 import com.example.rehab.models.enums.EventStatus;
 import com.example.rehab.repo.EventRepository;
+import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.service.EventService;
+import com.example.rehab.service.PatientService;
 import com.example.rehab.service.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,12 +29,17 @@ public class EventsController {
     private EventService eventService;
     private EventRepository eventRepository;
     private Mapper mapper;
+    private PatientService patientService;
+    private PatientRepository patientRepository;
 
     @Autowired
-    public EventsController(EventService eventService, EventRepository eventRepository, Mapper mapper) {
+    public EventsController(EventService eventService, EventRepository eventRepository, Mapper mapper,
+                            PatientService patientService, PatientRepository patientRepository) {
         this.eventService = eventService;
         this.eventRepository = eventRepository;
         this.mapper = mapper;
+        this.patientService = patientService;
+        this.patientRepository = patientRepository;
     }
 
     @GetMapping("/events")
@@ -89,13 +96,14 @@ public class EventsController {
 
     @PostMapping("/events/")
     public String filterByPatient(@RequestParam String name) {
-        return "redirect:/events/patient/" + name;
+
+        return "redirect:/events/patient/" + patientService.getIdByName(name);
     }
 
-    @GetMapping("/events/patient/{name}")
-    public String getEventsPyPatient(@PathVariable String name,Model model) {
-        List<EventDTO> events = eventService.findByPatient(name);
-        model.addAttribute("patientName",name);
+    @GetMapping("/events/patient/{id}")
+    public String getEventsPyPatient(@PathVariable int id,Model model) {
+        List<EventDTO> events = eventService.findByPatient(id);
+        model.addAttribute("patientName",patientService.getPatientDTObyID(id).getName());
         model.addAttribute("events", events);
         return "events-by-patient";
     }

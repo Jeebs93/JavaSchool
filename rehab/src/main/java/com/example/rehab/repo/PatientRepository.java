@@ -13,6 +13,9 @@ public interface PatientRepository extends CrudRepository<Patient, Long>, Paging
 
     Patient getPatientById(long id);
 
+    long getIdByName(String name);
+
+    Patient getPatientByName(String name);
   //  Patient getPatientByAppointment(Appointment appointment);
 
 

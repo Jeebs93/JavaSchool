@@ -10,6 +10,7 @@ import com.example.rehab.repo.EventRepository;
 import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.service.mapper.Mapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 import static com.example.rehab.models.enums.EventStatus.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EventService {
@@ -61,11 +63,11 @@ public class EventService {
         return result;
     }
 
-    public List<EventDTO> findByPatient(String name) {
+    public List<EventDTO> findByPatient(long id) {
         List<EventDTO> events = findAll();
         List<EventDTO> result = new ArrayList<>();
         for (EventDTO event:events) {
-            if (event.getPatient().getName().equalsIgnoreCase(name)) {
+            if (event.getPatient().getId().equals(id)) {
                 result.add(event);
             }
         }
@@ -117,6 +119,7 @@ public class EventService {
                 eventRepository.delete(event);
             }
         }
+        log.info("Appointment events have been deleted");
     }
 
     public void completeEvent(long eventId) {
@@ -168,6 +171,7 @@ public class EventService {
             }
         }
         eventRepository.saveAll(events);
+        log.info("Events have been created");
     }
 
     private static List<LocalDateTime> generateDateList(List<String> weekDays, int period) {

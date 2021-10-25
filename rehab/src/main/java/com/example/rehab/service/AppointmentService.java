@@ -11,6 +11,7 @@ import com.example.rehab.repo.AppointmentRepository;
 import com.example.rehab.repo.EventRepository;
 import com.example.rehab.service.mapper.Mapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.rehab.models.enums.TypeOfAppointment.PROCEDURE;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AppointmentService {
@@ -44,6 +45,7 @@ public class AppointmentService {
                 resultTime, Integer.parseInt(period), dose, typeOfAppointment,timePattern);
         Appointment appointment = mapper.convertAppointmentToEntity(appointmentDTO);
         appointmentRepository.save(appointment);
+        log.info("Appointment has been created");
         long appointmentId = appointment.getId();
         eventService.createEvents(appointmentDTO, appointmentId,0);
 
@@ -120,6 +122,7 @@ public class AppointmentService {
 
 
         eventService.createEvents(appointmentDTO, appointmentId, pastEvents);
+        log.info("Appointment has been updated");
 
 
     }
@@ -127,6 +130,7 @@ public class AppointmentService {
     public void cancelAppointment(long appointmentId) {
         Appointment appointment = appointmentRepository.getAppointmentById(appointmentId);
         appointment.setCancelled(true);
+        log.info("Appointment has been canceled");
         appointmentRepository.save(appointment);
         eventService.deleteEvents(appointmentId);
     }

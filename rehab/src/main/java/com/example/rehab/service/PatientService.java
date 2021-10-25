@@ -8,12 +8,13 @@ import com.example.rehab.repo.AppointmentRepository;
 import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.service.mapper.Mapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PatientService {
@@ -38,6 +39,7 @@ public class PatientService {
         patientDTO.setPatientStatus(PatientStatus.ON_TREATMENT);
         Patient patient = mapper.convertPatientToEntity(patientDTO);
         patientRepository.save(patient);
+        log.info("Patient has been created");
     }
 
     public PatientDTO getPatientDTObyID(long id) {
@@ -49,10 +51,15 @@ public class PatientService {
         return result;
     }
 
+    public long getIdByName(String name) {
+        return patientRepository.getPatientByName(name).getId();
+    }
+
     public void dischargePatient(long id) {
         Patient patient = patientRepository.getPatientById(id);
         patient.setPatientStatus(PatientStatus.DISCHARGED);
         patientRepository.save(patient);
+        log.info("Patient has been discharged");
         List<Appointment> appointments = appointmentRepository.findAllByPatient(patient);
         for (Appointment appointment:appointments) {
             appointmentService.cancelAppointment(appointment.getId());
