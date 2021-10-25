@@ -12,13 +12,12 @@ import com.example.rehab.repo.EventRepository;
 import com.example.rehab.service.mapper.Mapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.MappingException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.example.rehab.models.enums.TypeOfAppointment.PROCEDURE;
@@ -36,11 +35,17 @@ public class AppointmentService {
     private final EventRepository eventRepository;
 
     public void createAppointment(long id, String procedure, String[] weekdays, String[] time,
-                                  String period, String dose, TypeOfAppointment typeOfAppointment)  {
+                                  String period, String dose, TypeOfAppointment typeOfAppointment) throws MappingException {
         List<String> resultWeekDays = Arrays.asList(weekdays);
         List<String> timeList = Arrays.asList(time);
         List<String> resultTime = timeList.stream().filter(i -> !i.equals("")).collect(Collectors.toList());
         String timePattern = getTimePatternView(weekdays,resultTime,period);
+        try {
+           int doseInt = Integer.parseInt(dose);
+        } catch (NumberFormatException e) {
+            dose = "0";
+            log.warn("Wrong input type for dose");
+        }
         AppointmentDTO appointmentDTO = new AppointmentDTO(id, procedure, resultWeekDays,
                 resultTime, Integer.parseInt(period), dose, typeOfAppointment,timePattern);
         Appointment appointment = mapper.convertAppointmentToEntity(appointmentDTO);
@@ -55,23 +60,18 @@ public class AppointmentService {
 
         List<String> listWeekdays = new ArrayList<>();
 
+        Map<String,String> week = new HashMap<>() {{
+            put("1","Monday");
+            put("2","Tuesday");
+            put("3","Wednesday");
+            put("4","Thursday");
+            put("5","Friday");
+            put("6","Saturday");
+            put("7","Sunday");
+        }};
+
         for (int i = 0; i < weekDays.length; i++) {
-            switch (weekDays[i]) {
-                case "1":listWeekdays.add("Monday");
-                    break;
-                case "2":listWeekdays.add("Tuesday");
-                    break;
-                case "3":listWeekdays.add("Wednesday");
-                    break;
-                case "4":listWeekdays.add("Thursday");
-                    break;
-                case "5":listWeekdays.add("Friday");
-                    break;
-                case "6":listWeekdays.add("Saturday");
-                    break;
-                case "7":listWeekdays.add("Sunday");
-                    break;
-            }
+           listWeekdays.add(week.get(weekDays[i]));
         }
 
         String resultWeekdays = listWeekdays.toString().substring(1,listWeekdays.toString().length()-1);
@@ -90,9 +90,7 @@ public class AppointmentService {
         List<String> resultWeekDays = Arrays.asList(weekdays);
         List<String> timeList = Arrays.asList(time);
         List<String> resultTime = timeList.stream().filter(i -> !i.equals("")).collect(Collectors.toList());
-        String timePattern = resultWeekDays.size() == 1 ?
-                "One day in a week at " + resultTime.toString() + " for " + period + " weeks." :
-                resultWeekDays.size() + " days in a week at " + time.toString() + " for " + period + " weeks.";
+        String timePattern = getTimePatternView(weekdays,resultTime,period);
         appointmentDTO.setWeekDays(resultWeekDays);
         appointmentDTO.setTime(resultTime);
         appointmentDTO.setTimePattern(timePattern);

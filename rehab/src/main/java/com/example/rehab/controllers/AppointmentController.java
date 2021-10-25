@@ -12,6 +12,7 @@ import com.example.rehab.service.EventService;
 import com.example.rehab.service.PatientService;
 import com.example.rehab.service.mapper.Mapper;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.MappingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -146,13 +147,15 @@ public class AppointmentController {
         return "redirect:/working-with-patients/" + id;
     }
 
-    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ExceptionHandler({MissingServletRequestParameterException.class})
     public String handleException(MissingServletRequestParameterException e, Model model) {
         log.error("Input data error");
         String message = "Please, check your input data";
         model.addAttribute("message",message);
         return "error-page";
     }
+
+
 
 
 

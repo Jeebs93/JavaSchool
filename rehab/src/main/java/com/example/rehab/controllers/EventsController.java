@@ -8,14 +8,16 @@ import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.service.EventService;
 import com.example.rehab.service.PatientService;
 import com.example.rehab.service.mapper.Mapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.NonUniqueResultException;
+
 import static com.example.rehab.models.enums.EventStatus.COMPLETED;
 import static com.example.rehab.models.enums.EventStatus.CANCELED;
 
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 public class EventsController {
 
@@ -121,6 +124,17 @@ public class EventsController {
         model.addAttribute("events",events);
         return "events-recent";
     }
+
+    @ExceptionHandler(NullPointerException.class)
+    public String handleException(NullPointerException e, Model model) {
+        log.warn("Patient not found");
+        String message = "Patient not found";
+        model.addAttribute("message",message);
+        model.addAttribute("path","/events");
+        return "error-page";
+    }
+
+
 
 
 }

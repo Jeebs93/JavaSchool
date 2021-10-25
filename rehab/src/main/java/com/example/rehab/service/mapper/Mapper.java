@@ -10,10 +10,14 @@ import com.example.rehab.models.dto.PatientDTO;
 import com.example.rehab.models.dto.UserDTO;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.MappingException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.format.DateTimeFormatter;
 
@@ -45,7 +49,7 @@ public class Mapper {
         return modelMapper.map(appointment, AppointmentDTO.class);
     }
 
-    public Appointment convertAppointmentToEntity(AppointmentDTO appointmentDTO) {
+    public Appointment convertAppointmentToEntity(AppointmentDTO appointmentDTO) throws MappingException {
         return modelMapper.map(appointmentDTO, Appointment.class);
     }
 
@@ -57,5 +61,7 @@ public class Mapper {
     }
 
     public Event convertEventToEntity(EventDTO eventDTO) {return modelMapper.map(eventDTO, Event.class);}
+
+
 
 }

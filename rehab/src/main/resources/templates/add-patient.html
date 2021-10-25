@@ -45,8 +45,13 @@
             </div>
                 <br>
             <div class = "form-group">
-                <input type = "text" name = "insuranceNumber" th:field="*{insuranceNumber}" placeholder = "Enter patient's insurance number" class = "form-control">
+                <input type = "number" name = "insuranceNumber" th:field="*{insuranceNumber}" placeholder = "Enter patient's insurance number" class = "form-control">
                 <div class="alert alert-warning" th:if="${#fields.hasErrors('insuranceNumber')}" th:errors="*{insuranceNumber}"></div>
+            </div>
+            <br>
+            <div class = "form-group">
+                <input type = "text" name = "diagnosis" th:field="*{diagnosis}" placeholder = "Enter patient's diagnosis" class = "form-control">
+                <div class="alert alert-warning" th:if="${#fields.hasErrors('diagnosis')}" th:errors="*{diagnosis}"></div>
             </div>
             <br>
             <div class = "form-group">

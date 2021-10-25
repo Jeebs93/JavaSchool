@@ -62,7 +62,7 @@
 <br>
 
 <div th:if = "${totalPages > 1}" class="container px-10">
-    <div class = "row col-sm-10">
+    <div class = "row col-sm-18">
         <div class = "col-sm-2">
 					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
 						<a th:if="${currentPage != i}" th:href="@{'/events/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>

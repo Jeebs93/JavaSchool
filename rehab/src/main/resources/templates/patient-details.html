@@ -61,6 +61,15 @@
 
         <div class="row gx-5">
             <div class="col">
+                <div class="p-3"><p class="fw-bold">Diagnosis:</p></div>
+            </div>
+            <div class="col">
+                <div class="p-3"><p th:text="${el.diagnosis}"/></div>
+            </div>
+        </div>
+
+        <div class="row gx-5">
+            <div class="col">
                 <div class="p-3"><p class="fw-bold">Doctor:</p></div>
             </div>
             <div class="col">
@@ -118,11 +127,13 @@
                 <div class="p-3"><p class="fw-bold" style="font-size: 120%"  th:text="${el.value}"/></div>
             </div>
         </div>
+        <span th:unless="${el.dose=='0'}">
         <div class="row">
             <div class="col">
-                <div class="p-3"><p th:text="${el.dose}+ mg"/></div>
+                <div class="p-3"><p th:text="${el.dose}+ ' mg'"/></div>
             </div>
         </div>
+        </span>
         <div class="row">
             <div class="col-lg-10">
                 <div class="p-3"><p th:text="${el.timePattern}"/></div>

@@ -4,9 +4,7 @@ import com.example.rehab.models.enums.PatientStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 
 @Data
@@ -23,14 +21,19 @@ public class PatientDTO {
     @NotNull(message = "Please, enter insurance number")
     private Long insuranceNumber;
 
+    @NotEmpty(message = "Please, enter diagnosis")
+    public String diagnosis;
+
     private PatientStatus patientStatus;
 
     @NotEmpty(message = "Please, enter name of doctor")
     private String doctor;
 
-    public PatientDTO(String name, Long insurance_number, String doctor, PatientStatus patientStatus) {
+    public PatientDTO(String name, Long insurance_number, String diagnosis,
+                      String doctor, PatientStatus patientStatus) {
         this.name = name;
         this.insuranceNumber = insurance_number;
+        this.diagnosis = diagnosis;
         this.doctor = doctor;
         this.patientStatus = patientStatus;
     }

@@ -22,6 +22,8 @@ public class Patient {
 
     private String name;
 
+    public String diagnosis;
+
     private PatientStatus patientStatus;
 
     private String doctor;

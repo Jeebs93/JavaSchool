@@ -52,7 +52,9 @@ public class PatientService {
     }
 
     public long getIdByName(String name) {
-        return patientRepository.getPatientByName(name).getId();
+
+        List<Patient> patients = patientRepository.getPatientsByName(name);
+        return patients.get(0).getId();
     }
 
     public void dischargePatient(long id) {
