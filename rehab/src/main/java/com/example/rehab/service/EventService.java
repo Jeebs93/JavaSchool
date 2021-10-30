@@ -66,9 +66,11 @@ public class EventService {
     public List<EventDTO> findByPatient(long id) {
         List<EventDTO> events = findAll();
         List<EventDTO> result = new ArrayList<>();
-        for (EventDTO event:events) {
-            if (event.getPatient().getId().equals(id)) {
-                result.add(event);
+        if (events.size() > 0) {
+            for (EventDTO event : events) {
+                if (event.getPatient().getId().equals(id)) {
+                    result.add(event);
+                }
             }
         }
         return result;

@@ -36,16 +36,16 @@ public class AppointmentService {
 
     public void createAppointment(long id, String procedure, String[] weekdays, String[] time,
                                   String period, String dose, TypeOfAppointment typeOfAppointment) throws MappingException {
-        List<String> resultWeekDays = Arrays.asList(weekdays);
-        List<String> timeList = Arrays.asList(time);
-        List<String> resultTime = timeList.stream().filter(i -> !i.equals("")).collect(Collectors.toList());
-        String timePattern = getTimePatternView(weekdays,resultTime,period);
         try {
-           int doseInt = Integer.parseInt(dose);
+            int doseInt = Integer.parseInt(dose);
         } catch (NumberFormatException e) {
             dose = "0";
             log.warn("Wrong input type for dose");
         }
+        List<String> resultWeekDays = Arrays.asList(weekdays);
+        List<String> timeList = Arrays.asList(time);
+        List<String> resultTime = timeList.stream().filter(i -> !i.equals("")).collect(Collectors.toList());
+        String timePattern = getTimePatternView(weekdays,resultTime,period);
         AppointmentDTO appointmentDTO = new AppointmentDTO(id, procedure, resultWeekDays,
                 resultTime, Integer.parseInt(period), dose, typeOfAppointment,timePattern);
         Appointment appointment = mapper.convertAppointmentToEntity(appointmentDTO);
@@ -84,9 +84,11 @@ public class AppointmentService {
           return timePattern;
     }
 
-    public void updateAppointment(AppointmentDTO appointmentDTO, String[] weekdays,
+    public void updateAppointment(long appointmentId, String[] weekdays,
                                   String[] time, String period, String dose) {
 
+        Appointment appointment = appointmentRepository.getAppointmentById(appointmentId);
+        AppointmentDTO appointmentDTO = mapper.convertAppointmentToDTO(appointment);
         List<String> resultWeekDays = Arrays.asList(weekdays);
         List<String> timeList = Arrays.asList(time);
         List<String> resultTime = timeList.stream().filter(i -> !i.equals("")).collect(Collectors.toList());
@@ -97,12 +99,11 @@ public class AppointmentService {
         appointmentDTO.setDose(dose);
         appointmentDTO.setPeriod(Integer.parseInt(period));
 
-        long appointmentId = appointmentDTO.getId();
 
         int pastEvents = 0;
 
         LocalDateTime date = LocalDateTime.now();
-        Appointment appointment = mapper.convertAppointmentToEntity(appointmentDTO);
+        appointment = mapper.convertAppointmentToEntity(appointmentDTO);
         appointmentRepository.save(appointment);
         List<Event> events = eventRepository.findAllByAppointment(appointment);
 
@@ -133,7 +134,8 @@ public class AppointmentService {
         eventService.deleteEvents(appointmentId);
     }
 
-    public List<AppointmentDTO> findAllByPatient(Patient patient) {
+    public List<AppointmentDTO> findAllByPatient(PatientDTO patientDTO) {
+        Patient patient = mapper.convertPatientToEntity(patientDTO);
         List<Appointment> appointments = appointmentRepository.findAllByPatient(patient);
 
         return appointments.stream()
@@ -141,9 +143,9 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
-    public Appointment findAppointmentById(long id) {
+    public AppointmentDTO findAppointmentDTOById(long id) {
         Appointment appointment = appointmentRepository.getAppointmentById(id);
-        return appointment;
+        return mapper.convertAppointmentToDTO(appointment);
     }
 
 }

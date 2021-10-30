@@ -21,4 +21,5 @@ public interface PatientRepository extends CrudRepository<Patient, Long>, Paging
   //  Patient getPatientByAppointment(Appointment appointment);
 
 
+
 }

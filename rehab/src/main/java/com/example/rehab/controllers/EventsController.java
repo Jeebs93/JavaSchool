@@ -134,6 +134,15 @@ public class EventsController {
         return "error-page";
     }
 
+    @ExceptionHandler(IndexOutOfBoundsException.class)
+    public String handleIndexException(IndexOutOfBoundsException e, Model model) {
+        log.warn("Patient not found");
+        String message = "Events not found";
+        model.addAttribute("message",message);
+        model.addAttribute("path","/events");
+        return "error-page";
+    }
+
 
 
 

@@ -77,7 +77,7 @@ public class WorkingWithPatientsController {
     @GetMapping("/working-with-patients/{id}")
     public String patientDetails(@PathVariable(value = "id") long id, Model model) {
         PatientDTO result = patientService.getPatientDTObyID(id);
-        List<AppointmentDTO> appointments = appointmentService.findAllByPatient(mapper.convertPatientToEntity(result));
+        List<AppointmentDTO> appointments = appointmentService.findAllByPatient(result);
         model.addAttribute("patient", result);
         model.addAttribute("patientId", id);
         model.addAttribute("appointment", appointments);
@@ -88,6 +88,13 @@ public class WorkingWithPatientsController {
     public String dischargePatient(@PathVariable(value = "id") long id) {
         patientService.dischargePatient(id);
         return "redirect:/working-with-patients";
+    }
+
+    @GetMapping("/working-with-patients/discharged")
+    public String dischargedPatients(Model model) {
+        List<PatientDTO> patients = patientService.findAll();
+        model.addAttribute("patients",patients);
+        return "discharged-patients";
     }
 
 

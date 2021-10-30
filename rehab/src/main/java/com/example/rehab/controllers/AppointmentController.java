@@ -60,7 +60,7 @@ public class AppointmentController {
     public String editProcedure(@PathVariable(value = "appointmentId") long appointmentId,
                                 @PathVariable(value = "patientId") long patientId,
                                 Model model) {
-        Appointment appointment = appointmentService.findAppointmentById(appointmentId);
+        AppointmentDTO appointment = appointmentService.findAppointmentDTOById(appointmentId);
         model.addAttribute("appointmentId",appointmentId);
         model.addAttribute("patientId", patientId);
         return "edit-procedure";
@@ -73,9 +73,7 @@ public class AppointmentController {
                                     @RequestParam(value = "time[]") String[] time,
                                     @RequestParam String period,
                                     Model model) {
-        Appointment appointment = appointmentService.findAppointmentById(appointmentId);
-        AppointmentDTO appointmentDTO = mapper.convertAppointmentToDTO(appointment);
-        appointmentService.updateAppointment(appointmentDTO,weekdays,time,period,"0");
+        appointmentService.updateAppointment(appointmentId,weekdays,time,period,"0");
         return "redirect:/working-with-patients/" + patientId;
     }
 
@@ -83,7 +81,7 @@ public class AppointmentController {
     public String editCure(@PathVariable(value = "appointmentId") long appointmentId,
                                 @PathVariable(value = "patientId") long patientId,
                                 Model model) {
-        Appointment appointment = appointmentService.findAppointmentById(appointmentId);
+        AppointmentDTO appointment = appointmentService.findAppointmentDTOById(appointmentId);
         model.addAttribute("appointmentId",appointmentId);
         model.addAttribute("patientId", patientId);
         return "edit-cure";
@@ -97,9 +95,7 @@ public class AppointmentController {
                                     @RequestParam(value = "time[]") String[] time,
                                     @RequestParam String period,
                                     Model model) {
-        Appointment appointment = appointmentService.findAppointmentById(appointmentId); // to services
-        AppointmentDTO appointmentDTO = mapper.convertAppointmentToDTO(appointment);
-        appointmentService.updateAppointment(appointmentDTO,weekdays,time,period,dose);
+        appointmentService.updateAppointment(appointmentId,weekdays,time,period,dose);
         return "redirect:/working-with-patients/" + patientId;
     }
 
