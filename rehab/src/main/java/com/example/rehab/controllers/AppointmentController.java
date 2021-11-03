@@ -8,6 +8,7 @@ import com.example.rehab.repo.AppointmentRepository;
 import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.repo.ProceduresAndCuresRepository;
 import com.example.rehab.service.AppointmentService;
+import com.example.rehab.service.DispatcherService;
 import com.example.rehab.service.EventService;
 import com.example.rehab.service.PatientService;
 import com.example.rehab.service.mapper.Mapper;
@@ -31,20 +32,19 @@ public class AppointmentController {
     private PatientService patientService;
     private ProceduresAndCuresRepository proceduresAndCuresRepository;
     private AppointmentService appointmentService;
+    private DispatcherService dispatcherService;
     private Mapper mapper;
 
     @Autowired
     public AppointmentController (PatientService patientService,
                                   AppointmentService appointmentService,
                                   ProceduresAndCuresRepository proceduresAndCuresRepository,
-                                  EventService eventService,
-                                  PatientRepository patientRepository,
-                                  AppointmentRepository appointmentRepository,
+                                  DispatcherService dispatcherService,
                                   Mapper mapper) {
         this.patientService = patientService;
         this.appointmentService = appointmentService;
         this.proceduresAndCuresRepository = proceduresAndCuresRepository;
-
+        this.dispatcherService = dispatcherService;
         this.mapper = mapper;
     }
 
@@ -116,6 +116,7 @@ public class AppointmentController {
                                    Model model) {
 
         appointmentService.createAppointment(id, procedure, weekdays, time, period, "0", PROCEDURE);
+        dispatcherService.sendMessage("Hello");
         return "redirect:/working-with-patients/" + id;
     }
 
