@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/working-with-patients/**").hasAnyAuthority("DOCTOR","ADMIN")
+                    .antMatchers("/patients/**").hasAnyAuthority("DOCTOR","ADMIN")
                     .antMatchers("/events").hasAnyAuthority("NURSE","ADMIN")
                     .antMatchers("/images/**").permitAll()
                     .antMatchers("/","/registration").permitAll()
@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usersByUsernameQuery("SELECT username, password, is_active FROM rehab_web_application.user WHERE username=?")
                 .authoritiesByUsernameQuery("select u.username, ur.user_roles from user u inner join user_role ur on u.id = ur.user_id where u.username=?");
 
-        auth.inMemoryAuthentication()
+      /*  auth.inMemoryAuthentication()
                 .withUser("doctor")
                 .password("{noop}doctor")
                 .roles("DOCTOR")
@@ -69,6 +69,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("nurse")
                 .password("{noop}nurse")
                 .roles("NURSE", "DOCTOR");
+
+       */
     }
 
 

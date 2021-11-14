@@ -1,17 +1,25 @@
 package com.example.rehab.service;
 
+import com.example.rehab.service.impl.EventServiceImpl;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ReceiverService {
-/*
-    @JmsListener(destination="${jms.queue}")
+
+    private final EventServiceImpl eventService;
+
+    private final DispatcherService dispatcherService;
+
+    @JmsListener(destination="TestQueue")
     public void receiveMessage(String message) {
-        log.info(message);
+        dispatcherService.sendMessage(dispatcherService.getMessage());
     }
 
-*/
+
 }
+

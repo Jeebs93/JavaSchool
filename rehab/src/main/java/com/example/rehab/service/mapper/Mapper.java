@@ -56,7 +56,9 @@ public class Mapper {
     public EventDTO convertEventToDTO(Event event) {
         EventDTO eventDTO = modelMapper.map(event, EventDTO.class);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+        eventDTO.setAppointmentValue(event.getAppointment().getValue());
         eventDTO.setDateString(event.getDate().format(formatter));
+        eventDTO.setPatientName(event.getPatient().getName());
         return eventDTO;
     }
 

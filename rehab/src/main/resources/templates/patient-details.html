@@ -17,6 +17,9 @@
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <li style="font-size: 120%"><a href="/" class="nav-link px-14 link-secondary">Home</a></li>
             <li style="font-size: 120%"><a href="/events" class="nav-link px-14 link-secondary">Events</a></li>
+            <div sec:authorize="hasAuthority('ADMIN')" >
+                <li style="font-size: 120%"><a href="/registration" class="nav-link px-14 link-secondary">Create user</a></li>
+            </div>
             <li style="font-size: 120%"><a href="#" class="nav-link px-14 link-secondary">About</a></li>
         </ul>
 
@@ -41,7 +44,7 @@
             <div class="p-3 border bg-light">
                 <h4 th:text="${patient.name}"/>
                 <div class="text-end">
-                    <a  class="btn btn-outline-danger"  href = /working-with-patients/ role="button">Back</a>
+                    <a  class="btn btn-outline-danger"  href = /patients/ role="button">Back</a>
                 </div>
             </div>
         </div>
@@ -90,8 +93,8 @@
             <div class="p-3 border bg-light">
                 <h4>Appointments</h4>
                 <div class="text-end">
-                    <a  class="btn btn-primary" th:href = " '/working-with-patients/' + ${el.id} + '/add-procedure'" role="button">Add procedure</a>
-                    <a  class="btn btn-primary" th:href = " '/working-with-patients/' + ${el.id} + '/add-cure'" role="button">Add cure</a>
+                    <a  class="btn btn-primary" th:href = " '/patients/' + ${el.id} + '/add-procedure'" role="button">Add procedure</a>
+                    <a  class="btn btn-primary" th:href = " '/patients/' + ${el.id} + '/add-cure'" role="button">Add cure</a>
                 </div>
             </div>
         </div>
@@ -114,8 +117,8 @@
                 <div class="p-3"><p th:text="${el.timePattern}"/></div>
             </div>
             <div class="col">
-                <a  class="btn btn-outline-primary" th:href=" '/working-with-patients/' + ${patientId} + '/' + ${el.id} + '/edit-procedure'" role="button">Edit</a>
-                <a  class="btn btn-outline-danger"  th:href=" '/working-with-patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
+                <a  class="btn btn-outline-primary" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/edit-procedure'" role="button">Edit</a>
+                <a  class="btn btn-outline-danger"  th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
             </div>
         </div>
     </div>
@@ -139,8 +142,8 @@
                 <div class="p-3"><p th:text="${el.timePattern}"/></div>
             </div>
             <div class="col">
-                <a  class="btn btn-outline-primary" th:href=" '/working-with-patients/' + ${patientId} + '/' + ${el.id} + '/edit-cure'" role="button">Edit</a>
-                <a  class="btn btn-outline-danger"  th:href=" '/working-with-patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
+                <a  class="btn btn-outline-primary" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/edit-cure'" role="button">Edit</a>
+                <a  class="btn btn-outline-danger"  th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
             </div>
         </div>
     </div>

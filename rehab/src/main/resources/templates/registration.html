@@ -22,15 +22,26 @@
 
 </body>
 <div style="text-align: center;">
-    <form th:action="@{/registration}" method="post">
+    <form th:action= "@{/registration}" th:object= "${user}" method="post">
         <div class="nav-link px-14 link-secondary" style="font-size: 120%">
-            <label><input type="text" name="username" placeholder = "Enter username" class = "form-control"/> </label>
+            <div style="color:red; font-size: 80%" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+            <label><input type="text" name="username" th:field="*{username}" placeholder = "Enter username" class = "form-control"/> </label>
         </div>
         <div class="nav-link px-14 link-secondary" style="font-size: 120%">
-            <label><input type="password" name="password" placeholder = "Enter password" class = "form-control"/> </label>
+            <div style="color:red; font-size: 80%" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+            <label><input type="password" name="password" th:field="*{password}" placeholder = "Enter password" class = "form-control"/> </label>
+        </div>
+        <div class="nav-link px-14 link-secondary" style="font-weight: bold">
+            <p>Select user role:</p>
+        </div>
+        <div class="nav-link px-14 link-secondary" style="font-size: 120%" align="center">
+        <select id="userRole" name="userRole" th:field="*{userRole}" class = "form-control" style="width: 210px">
+            <option th:value="${T(com.example.rehab.models.enums.UserRole).DOCTOR}">Doctor</option>
+            <option th:value="${T(com.example.rehab.models.enums.UserRole).NURSE}">Nurse</option>
+        </select>
         </div>
         <div class="nav-link px-14 link-secondary" style="font-size: 120%">
-            <input type="submit" class="btn btn-primary" style="width: 207px;"  value="Sign up"/>
+            <input type="submit" class="btn btn-primary" style="width: 207px;"  value="Create user"/>
         </div>
         <div class="nav-link px-14 link-secondary" style="font-size: 120%">
             <a  class="btn btn-danger" style="width: 207px;" href = / role="button">Back</a>

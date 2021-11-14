@@ -4,6 +4,7 @@ import com.example.rehab.models.Appointment;
 import com.example.rehab.models.Patient;
 import com.example.rehab.models.enums.EventStatus;
 import com.example.rehab.models.enums.TypeOfAppointment;
+import com.google.gson.annotations.Expose;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,13 @@ public class EventDTO {
 
     private LocalDateTime date;
 
+    @Expose
+    private String patientName;
+
+    @Expose
+    private String appointmentValue;
+
+    @Expose
     private String dateString;
 
     private EventStatus eventStatus;

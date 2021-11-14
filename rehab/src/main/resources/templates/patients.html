@@ -17,6 +17,9 @@
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <li style="font-size: 120%"><a href="/" class="nav-link px-14 link-secondary">Home</a></li>
             <li style="font-size: 120%"><a href="/events" class="nav-link px-14 link-secondary">Events</a></li>
+            <div sec:authorize="hasAuthority('ADMIN')" >
+                <li style="font-size: 120%"><a href="/registration" class="nav-link px-14 link-secondary">Create user</a></li>
+            </div>
             <li style="font-size: 120%"><a href="#" class="nav-link px-14 link-secondary">About</a></li>
         </ul>
 
@@ -41,8 +44,8 @@
             <div class="p-3 border bg-light">
                 <h3>Patients</h3>
                 <div class="text-end">
-                    <a  class="btn btn-outline-danger" href = /working-with-patients/discharged role="button">Discharged patients</a>
-                    <a  class="btn btn-primary" href = /working-with-patients/add role="button">Add</a>
+                    <a  class="btn btn-outline-danger" href = /patients/discharged role="button">Discharged patients</a>
+                    <a  class="btn btn-primary" href = /patients/new role="button">Add</a>
                 </div>
             </div>
         </div>
@@ -70,8 +73,8 @@
     </div>
 
     <div class="text-end p-3">
-        <a  class="btn btn-primary btn-sm" th:href = " '/working-with-patients/' + ${el.id}" role="button">Details</a>
-        <a  class="btn btn-danger btn-sm" th:href = " '/working-with-patients/' + ${el.id} + '/discharge'" role="button">Discharge</a>
+        <a  class="btn btn-primary btn-sm" th:href = " '/patients/' + ${el.id}" role="button">Details</a>
+        <a  class="btn btn-danger btn-sm" th:href = " '/patients/' + ${el.id} + '/discharge'" role="button">Discharge</a>
     </div>
 
 

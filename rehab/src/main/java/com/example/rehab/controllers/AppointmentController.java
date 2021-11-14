@@ -1,19 +1,13 @@
 package com.example.rehab.controllers;
 
-import com.example.rehab.models.Appointment;
 import com.example.rehab.models.ProceduresAndCures;
 import com.example.rehab.models.dto.AppointmentDTO;
 import com.example.rehab.models.dto.PatientDTO;
-import com.example.rehab.repo.AppointmentRepository;
-import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.repo.ProceduresAndCuresRepository;
 import com.example.rehab.service.AppointmentService;
-import com.example.rehab.service.DispatcherService;
-import com.example.rehab.service.EventService;
-import com.example.rehab.service.PatientService;
+import com.example.rehab.service.impl.PatientServiceImpl;
 import com.example.rehab.service.mapper.Mapper;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.MappingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,44 +23,41 @@ import java.util.List;
 @Controller
 public class AppointmentController {
 
-    private PatientService patientService;
+    private PatientServiceImpl patientService;
     private ProceduresAndCuresRepository proceduresAndCuresRepository;
     private AppointmentService appointmentService;
-    private DispatcherService dispatcherService;
     private Mapper mapper;
 
     @Autowired
-    public AppointmentController (PatientService patientService,
+    public AppointmentController (PatientServiceImpl patientService,
                                   AppointmentService appointmentService,
                                   ProceduresAndCuresRepository proceduresAndCuresRepository,
-                                  DispatcherService dispatcherService,
                                   Mapper mapper) {
         this.patientService = patientService;
         this.appointmentService = appointmentService;
         this.proceduresAndCuresRepository = proceduresAndCuresRepository;
-        this.dispatcherService = dispatcherService;
         this.mapper = mapper;
     }
 
-    @GetMapping("/working-with-patients/{patientId}/{appointmentId}/cancel")
+    @GetMapping("/patients/{patientId}/{appointmentId}/cancel")
     public String cancelAppointment(@PathVariable(value = "appointmentId") long appointmentId,
                                     @PathVariable(value = "patientId") long patientId,
                                     Model model) {
         appointmentService.cancelAppointment(appointmentId);
-        return "redirect:/working-with-patients/" + patientId;
+        return "redirect:/patients/" + patientId;
     }
 
-    @GetMapping("/working-with-patients/{patientId}/{appointmentId}/edit-procedure")
+    @GetMapping("/patients/{patientId}/{appointmentId}/edit-procedure")
     public String editProcedure(@PathVariable(value = "appointmentId") long appointmentId,
                                 @PathVariable(value = "patientId") long patientId,
                                 Model model) {
-        AppointmentDTO appointment = appointmentService.findAppointmentDTOById(appointmentId);
+        AppointmentDTO appointment = appointmentService.findAppointmentById(appointmentId);
         model.addAttribute("appointmentId",appointmentId);
         model.addAttribute("patientId", patientId);
         return "edit-procedure";
     }
 
-    @PostMapping("/working-with-patients/{patientId}/{appointmentId}/edit-procedure")
+    @PostMapping("/patients/{patientId}/{appointmentId}/edit-procedure")
     public String editProcedurePost(@PathVariable(value = "appointmentId") long appointmentId,
                                     @PathVariable(value = "patientId") long patientId,
                                     @RequestParam(value = "weekDay[]") String[] weekdays,
@@ -74,20 +65,20 @@ public class AppointmentController {
                                     @RequestParam String period,
                                     Model model) {
         appointmentService.updateAppointment(appointmentId,weekdays,time,period,"0");
-        return "redirect:/working-with-patients/" + patientId;
+        return "redirect:/patients/" + patientId;
     }
 
-    @GetMapping("/working-with-patients/{patientId}/{appointmentId}/edit-cure")
+    @GetMapping("/patients/{patientId}/{appointmentId}/edit-cure")
     public String editCure(@PathVariable(value = "appointmentId") long appointmentId,
                                 @PathVariable(value = "patientId") long patientId,
                                 Model model) {
-        AppointmentDTO appointment = appointmentService.findAppointmentDTOById(appointmentId);
+        AppointmentDTO appointment = appointmentService.findAppointmentById(appointmentId);
         model.addAttribute("appointmentId",appointmentId);
         model.addAttribute("patientId", patientId);
         return "edit-cure";
     }
 
-    @PostMapping("/working-with-patients/{patientId}/{appointmentId}/edit-cure")
+    @PostMapping("/patients/{patientId}/{appointmentId}/edit-cure")
     public String editCurePost(@PathVariable(value = "appointmentId") long appointmentId,
                                     @PathVariable(value = "patientId") long patientId,
                                     @RequestParam String dose,
@@ -96,18 +87,18 @@ public class AppointmentController {
                                     @RequestParam String period,
                                     Model model) {
         appointmentService.updateAppointment(appointmentId,weekdays,time,period,dose);
-        return "redirect:/working-with-patients/" + patientId;
+        return "redirect:/patients/" + patientId;
     }
 
-    @GetMapping("/working-with-patients/{id}/add-procedure")
+    @GetMapping("/patients/{id}/add-procedure")
     public String addProcedure(@PathVariable(value = "id") long id, Model model) {
-        model.addAttribute("patient", patientService.getPatientDTObyID(id));
+        model.addAttribute("patient", patientService.getPatientByID(id));
         model.addAttribute("procedures", proceduresAndCuresRepository
                 .findAllByTypeOfAppointment(PROCEDURE));
         return "add-procedure";
     }
 
-    @PostMapping("/working-with-patients/{id}/add-procedure")
+    @PostMapping("/patients/{id}/add-procedure")
     public String addProcedurePost(@PathVariable(value = "id") long id,
                                    @RequestParam String procedure,
                                    @RequestParam(value = "weekDay[]") String[] weekdays,
@@ -116,13 +107,12 @@ public class AppointmentController {
                                    Model model) {
 
         appointmentService.createAppointment(id, procedure, weekdays, time, period, "0", PROCEDURE);
-        dispatcherService.sendMessage("Hello");
-        return "redirect:/working-with-patients/" + id;
+        return "redirect:/patients/" + id;
     }
 
-    @GetMapping("/working-with-patients/{id}/add-cure")
+    @GetMapping("/patients/{id}/add-cure")
     public String addCure(@PathVariable(value = "id") long id, Model model) {
-        PatientDTO result = patientService.getPatientDTObyID(id);
+        PatientDTO result = patientService.getPatientByID(id);
         model.addAttribute("patient", result);
         List<ProceduresAndCures> proceduresAndCures =
                 proceduresAndCuresRepository
@@ -132,7 +122,7 @@ public class AppointmentController {
     }
 
 
-    @PostMapping("/working-with-patients/{id}/add-cure")
+    @PostMapping("/patients/{id}/add-cure")
     public String addCurePost(@PathVariable(value = "id") long id,
                                    @RequestParam String cure,
                                    @RequestParam String dose,
@@ -141,7 +131,7 @@ public class AppointmentController {
                                    @RequestParam String period,
                                    Model model) {
             appointmentService.createAppointment(id, cure, weekdays, time, period, dose, CURE);
-        return "redirect:/working-with-patients/" + id;
+        return "redirect:/patients/" + id;
     }
 
     @ExceptionHandler({MissingServletRequestParameterException.class})

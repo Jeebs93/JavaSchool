@@ -16,7 +16,10 @@
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <li style="font-size: 120%"><a href="/" class="nav-link px-14 link-secondary">Home</a></li>
-            <li style="font-size: 120%"><a href="/working-with-patients" class="nav-link px-14 link-secondary">Working with patients</a></li>
+            <li style="font-size: 120%"><a href="/patients" class="nav-link px-14 link-secondary">Working with patients</a></li>
+            <div sec:authorize="hasAuthority('ADMIN')" >
+                <li style="font-size: 120%"><a href="/registration" class="nav-link px-14 link-secondary">Create user</a></li>
+            </div>
             <li style="font-size: 120%"><a href="#" class="nav-link px-14 link-secondary">About</a></li>
         </ul>
 

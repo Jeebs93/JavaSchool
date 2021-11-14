@@ -17,6 +17,9 @@
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <li style="font-size: 120%"><a href="/" class="nav-link px-14 link-secondary">Home</a></li>
             <li style="font-size: 120%"><a href="/events" class="nav-link px-14 link-secondary">Events</a></li>
+            <div sec:authorize="hasAuthority('ADMIN')" >
+                <li style="font-size: 120%"><a href="/registration" class="nav-link px-14 link-secondary">Create user</a></li>
+            </div>
             <li style="font-size: 120%"><a href="#" class="nav-link px-14 link-secondary">About</a></li>
         </ul>
 
@@ -38,7 +41,7 @@
         <div class="col mb-5">
             <div class="p-3 border bg-light"><h3>Add patient</h3></div>
         </div>
-        <form th:action = @{/working-with-patients/add} th:object="${patient}" method = "post">
+        <form th:action = @{/patients/new} th:object="${patient}" method = "post">
             <div class = "form-group">
             <input type = "text" name = "name" th:field="*{name}" placeholder = "Enter patient's name" class = "form-control">
                 <div class="alert alert-warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
@@ -61,7 +64,7 @@
             <br>
             <div class="col-md-3">
                 <button type = "submit" class="btn btn-primary me-2">Add patient</button>
-                <a class="btn btn-outline-danger"  href = "/working-with-patients/" role="button">Back</a>
+                <a class="btn btn-outline-danger"  href = "/patients/" role="button">Back</a>
             </div>
         </form>
     </div>

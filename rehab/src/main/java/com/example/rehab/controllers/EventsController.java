@@ -1,29 +1,19 @@
 package com.example.rehab.controllers;
 
-import com.example.rehab.models.Event;
 import com.example.rehab.models.dto.EventDTO;
-import com.example.rehab.models.enums.EventStatus;
 import com.example.rehab.repo.EventRepository;
 import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.service.EventService;
-import com.example.rehab.service.PatientService;
+import com.example.rehab.service.impl.PatientServiceImpl;
 import com.example.rehab.service.mapper.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.NonUniqueResultException;
-
-import static com.example.rehab.models.enums.EventStatus.COMPLETED;
-import static com.example.rehab.models.enums.EventStatus.CANCELED;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -32,12 +22,12 @@ public class EventsController {
     private EventService eventService;
     private EventRepository eventRepository;
     private Mapper mapper;
-    private PatientService patientService;
+    private PatientServiceImpl patientService;
     private PatientRepository patientRepository;
 
     @Autowired
     public EventsController(EventService eventService, EventRepository eventRepository, Mapper mapper,
-                            PatientService patientService, PatientRepository patientRepository) {
+                            PatientServiceImpl patientService, PatientRepository patientRepository) {
         this.eventService = eventService;
         this.eventRepository = eventRepository;
         this.mapper = mapper;
@@ -106,7 +96,7 @@ public class EventsController {
     @GetMapping("/events/patient/{id}")
     public String getEventsPyPatient(@PathVariable int id,Model model) {
         List<EventDTO> events = eventService.findByPatient(id);
-        model.addAttribute("patientName",patientService.getPatientDTObyID(id).getName());
+        model.addAttribute("patientName",patientService.getPatientByID(id).getName());
         model.addAttribute("events", events);
         return "events-by-patient";
     }
