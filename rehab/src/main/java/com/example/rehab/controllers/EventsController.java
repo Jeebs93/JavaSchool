@@ -1,6 +1,7 @@
 package com.example.rehab.controllers;
 
 import com.example.rehab.models.dto.EventDTO;
+import com.example.rehab.models.dto.PatientDTO;
 import com.example.rehab.repo.EventRepository;
 import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.service.EventService;
@@ -71,6 +72,12 @@ public class EventsController {
         return "redirect:/events";
     }
 
+    @GetMapping("/events/{eventId}/hide")
+    public String hideEvent(@PathVariable(value="eventId") int eventId) {
+        eventService.hideEvent(eventId);
+        return "redirect:/events";
+    }
+
     @GetMapping("/events/{eventId}/cancel")
     public String cancelEvent(@PathVariable(value = "eventId") int eventId,
                               Model model) {
@@ -90,7 +97,16 @@ public class EventsController {
     @PostMapping("/events/")
     public String filterByPatient(@RequestParam String name) {
 
+        if (patientService.isPatientAmbiguous(name)) return "redirect:/events/patient/ambiguous/" + name;
+
         return "redirect:/events/patient/" + patientService.getIdByName(name);
+    }
+
+    @GetMapping("/events/patient/ambiguous/{name}")
+    public String ambiguousPatient(@PathVariable String name, Model model) {
+        List<PatientDTO> patients = patientService.getPatientsByName(name);
+        model.addAttribute("patients", patients);
+        return "ambiguous-patient";
     }
 
     @GetMapping("/events/patient/{id}")
@@ -126,6 +142,15 @@ public class EventsController {
 
     @ExceptionHandler(IndexOutOfBoundsException.class)
     public String handleIndexException(IndexOutOfBoundsException e, Model model) {
+        log.warn("Patient not found");
+        String message = "Events not found";
+        model.addAttribute("message",message);
+        model.addAttribute("path","/events");
+        return "error-page";
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handlePatientsException(IllegalArgumentException e, Model model) {
         log.warn("Patient not found");
         String message = "Events not found";
         model.addAttribute("message",message);

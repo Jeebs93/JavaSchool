@@ -39,4 +39,6 @@ public class EventDTO {
 
     private String message;
 
+    private boolean active;
+
 }

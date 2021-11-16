@@ -29,7 +29,6 @@
             </div>
             <div sec:authorize="isAnonymous()">
                 <a href = "/login"  class="btn btn-outline-primary me-2" role="button">Login</a>
-                <a href = "/registration"  class="btn btn-primary" role="button">Sign-up</a>
             </div>
         </div>
     </header>
@@ -98,8 +97,17 @@
         </div>
         <div class="row">
             <div class="col p-4">
-                <a  class="btn btn-success btn-sm" th:href=" '/events/' + ${el.id} + '/complete'" role="button">Complete</a>
-                <a  class="btn btn-danger btn-sm" th:href=" '/events/' + ${el.id} + '/cancel'" role="button">Cancel</a>
+                <a  class="btn btn-primary btn-sm" th:href=" '/patients/' + ${el.patient.id}" role="button">Patient details</a>
+                <span th:if="${el.eventStatus == T(com.example.rehab.models.enums.EventStatus).PLANNED}">
+                <a  class="btn btn-success btn-sm" onClick="return confirm('Are you sure you want to complete the event?')"
+                    th:href=" '/events/' + ${el.id} + '/complete'" role="button">Complete</a>
+                <a  class="btn btn-danger btn-sm"  th:href=" '/events/' + ${el.id} + '/cancel'" role="button">Cancel</a>
+                </span>
+                <span th:if="${el.eventStatus == T(com.example.rehab.models.enums.EventStatus).COMPLETED OR
+                el.eventStatus == T(com.example.rehab.models.enums.EventStatus).CANCELED}">
+                <a  class="btn btn-success btn-sm" onClick="return confirm('Are you sure you want to hide the event?')"
+                    th:href=" '/events/' + ${el.id} + '/hide'" role="button">Hide</a>
+                </span>
             </div>
         </div>
     </div>

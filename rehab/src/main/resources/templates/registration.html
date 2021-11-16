@@ -31,6 +31,10 @@
             <div style="color:red; font-size: 80%" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
             <label><input type="password" name="password" th:field="*{password}" placeholder = "Enter password" class = "form-control"/> </label>
         </div>
+        <div class="nav-link px-14 link-secondary" style="font-size: 120%">
+            <div style="color:red; font-size: 80%" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
+            <label><input type="password" name="confirmPassword" th:field="*{confirmPassword}" placeholder = "Confirm password" class = "form-control"/> </label>
+        </div>
         <div class="nav-link px-14 link-secondary" style="font-weight: bold">
             <p>Select user role:</p>
         </div>

@@ -49,9 +49,19 @@ public class EventServiceImpl implements EventService {
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo-1,pageSize, sort);
 
+        List<Event> events = eventRepository.findAll();
 
+        LocalDateTime date = LocalDateTime.now();
 
-        return this.eventRepository.findAll(pageable).map(mapper::convertEventToDTO);
+        for (Event event:events) {
+            if (event.getEventStatus().equals(PLANNED) &&
+                    (event.getDate().getDayOfYear()<date.getDayOfYear() && (event.getDate().getYear())==date.getYear())) {
+                event.setEventStatus(CANCELED);
+                event.setMessage("Event hasn't been marked as completed.");
+            }
+        }
+
+        return this.eventRepository.findAllByActiveTrue(pageable).map(mapper::convertEventToDTO);
 
     }
 
@@ -83,14 +93,15 @@ public class EventServiceImpl implements EventService {
     public boolean isToday(EventDTO eventDTO) {
         LocalDateTime date = LocalDateTime.now();
         LocalDateTime eventDate = eventDTO.getDate();
-        return date.getDayOfYear()==eventDate.getDayOfYear();
+        return (date.getDayOfYear()==eventDate.getDayOfYear()) && (date.getHour() <= eventDate.getHour());
     }
 
     public boolean isRecent(EventDTO eventDTO) {
         LocalDateTime date = LocalDateTime.now();
         LocalDateTime eventDate = eventDTO.getDate();
         return isToday(eventDTO) &&
-                ((date.getHour() == eventDate.getHour()) || (date.getHour()+1 == eventDate.getHour()));
+                (((date.getHour() == eventDate.getHour()) && (date.getMinute() < eventDate.getMinute()))
+                        || (date.getHour()+1 == eventDate.getHour()));
     }
 
 
@@ -114,6 +125,8 @@ public class EventServiceImpl implements EventService {
             }
         }
 
+        Collections.sort(result, Comparator.comparing(EventDTO::getDateString));
+
         return result;
     }
 
@@ -132,7 +145,6 @@ public class EventServiceImpl implements EventService {
     public void completeEvent(long eventId) {
         Event event = eventRepository.findEventById(eventId);
         event.setEventStatus(COMPLETED);
-        event.setMessage("");
         eventRepository.save(event);
     }
 
@@ -140,6 +152,12 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findEventById(eventId);
         event.setEventStatus(CANCELED);
         event.setMessage(message);
+        eventRepository.save(event);
+    }
+
+    public void hideEvent(long eventId) {
+        Event event = eventRepository.findEventById(eventId);
+        event.setActive(false);
         eventRepository.save(event);
     }
 
@@ -163,6 +181,7 @@ public class EventServiceImpl implements EventService {
             event.setEventStatus(EventStatus.PLANNED);
             event.setTypeOfAppointment(appointmentDTO.getTypeOfAppointment());
             event.setAppointment(appointmentRepository.getAppointmentById(appointmentId));
+            event.setActive(true);
             event.setMessage("");
             events.add(event);
 

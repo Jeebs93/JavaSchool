@@ -29,7 +29,6 @@
             </div>
             <div sec:authorize="isAnonymous()">
                 <a href = "/login"  class="btn btn-outline-primary me-2" role="button">Login</a>
-                <a href = "/registration"  class="btn btn-primary" role="button">Sign-up</a>
             </div>
         </div>
     </header>
@@ -62,7 +61,8 @@
         </div>
         <div class="col-md-3">
             <div class="text-end">
-                    <a th:href=" '/patients/' + ${el.id} + '/return'" class="btn btn-success btn-sm" >Return to treatment</a>
+                    <a onClick="return confirm('Are you sure you want to return the patient?')"
+                       th:href=" '/patients/' + ${el.id} + '/return'" class="btn btn-success btn-sm" >Return to treatment</a>
             </div>
         </div>
     </div>

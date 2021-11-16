@@ -1,27 +1,46 @@
 package com.example.rehab.service.impl;
 
 import com.example.rehab.models.Appointment;
+import com.example.rehab.models.dto.AppointmentDTO;
+import com.example.rehab.models.dto.PatientDTO;
 import com.example.rehab.service.AppointmentService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.example.rehab.service.PatientService;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AppointmentServiceImplTest {
 
-    private AppointmentServiceImpl appointmentService;
+    @Autowired
+    private AppointmentService appointmentService;
 
-    @BeforeEach
+    @Autowired
+    private PatientService patientService;
+
+    AppointmentDTO testAppointment;
+    long patientID;
+    PatientDTO testPatient;
+
+    @BeforeAll
     void setUp() {
+        testPatient = new PatientDTO("PatientForTest", 1234567L,
+                "Cold", "Doctor", null);
+        patientService.createPatient(testPatient);
+        patientID = patientService.getIdByName("PatientForTest");
 
 
 
     }
 
-    @AfterEach
+    @AfterAll
     void tearDown() {
     }
 

@@ -10,6 +10,7 @@ import com.example.rehab.service.PatientService;
 import com.example.rehab.service.mapper.Mapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.aspectj.AspectJAdviceParameterNameDiscoverer;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,6 +57,17 @@ public class PatientServiceImpl implements PatientService {
 
         List<Patient> patients = patientRepository.getPatientsByName(name);
         return patients.get(0).getId();
+    }
+
+    public boolean isPatientAmbiguous(String name) {
+        return patientRepository.getPatientsByName(name).size() > 1;
+    }
+
+    public List<PatientDTO> getPatientsByName(String name) {
+        List<Patient> patients = patientRepository.getPatientsByName(name);
+        return patients.stream()
+                .map(mapper::convertPatientToDTO)
+                .collect(Collectors.toList());
     }
 
     public void dischargePatient(long id) {

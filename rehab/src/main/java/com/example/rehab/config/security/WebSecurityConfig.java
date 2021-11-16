@@ -33,7 +33,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/patients/**").hasAnyAuthority("DOCTOR","ADMIN")
+                    .antMatchers("/patients/{\\d+}/add-procedure/**").hasAnyAuthority("DOCTOR","ADMIN")
+                    .antMatchers("/patients/{\\d+}/add-cure/**").hasAnyAuthority("DOCTOR","ADMIN")
+                    .antMatchers("/patients/{\\d+}/{\\d+}/**").hasAnyAuthority("DOCTOR","ADMIN")
+                    .antMatchers("/patients/{\\d+}/**").hasAnyAuthority("DOCTOR","ADMIN","NURSE")
                     .antMatchers("/events").hasAnyAuthority("NURSE","ADMIN")
                     .antMatchers("/images/**").permitAll()
                     .antMatchers("/","/registration").permitAll()

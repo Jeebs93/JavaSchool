@@ -30,4 +30,5 @@ public interface EventService {
 
     void createEvents(AppointmentDTO appointmentDTO, long appointmentId, int pastEvents);
 
+    void hideEvent(long eventId);
 }

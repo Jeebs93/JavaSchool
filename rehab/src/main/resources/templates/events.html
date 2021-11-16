@@ -29,7 +29,6 @@
             </div>
             <div sec:authorize="isAnonymous()">
                 <a href = "/login"  class="btn btn-outline-primary me-2" role="button">Login</a>
-                <a href = "/registration"  class="btn btn-primary" role="button">Sign-up</a>
             </div>
         </div>
     </header>
@@ -60,30 +59,38 @@
             </div>
         </div>
     </form>
-</div>
+    <br>
+    <nav aria-label="Page navigation" class="paging">
+        <ul class="pagination" th:if = "${totalPages > 1}">
 
-<br>
-
-<div th:if = "${totalPages > 1}" class="container px-10">
-    <div class = "row col-sm-18">
-        <div class = "col-sm-2">
 					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
-						<a th:if="${currentPage != i}" th:href="@{'/events/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
-						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+                        <li class="page-item">
+						<a class="page-link" th:if="${currentPage != i}" th:href="@{'/events/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+                            <li class="page-item active" aria-current="page">
+						<span class="page-link" th:unless="${currentPage != i}">
+                            [[${i}]]
+                        </span>
+                        </li>
+                        </li>
 					</span>
-        </div>
-        <div class = "col-sm-1">
-            <a th:if="${currentPage < totalPages}" th:href="@{'/events/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
-            <span th:unless="${currentPage < totalPages}">Next</span>
-        </div>
 
-        <div class="col-sm-1">
-            <a th:if="${currentPage < totalPages}" th:href="@{'/events/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
-            <span th:unless="${currentPage < totalPages}">Last</span>
-        </div>
-    </div>
+            <li class="page-item">
+                <a class="page-link" th:if="${currentPage < totalPages}" th:href="@{'/events/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+            </li>
+            <li class="page-item disabled" aria-current="page">
+            <span class="page-link" th:unless="${currentPage < totalPages}">Next</span>
+            </li>
+            <li class="page-item">
+                <a class="page-link" th:if="${currentPage < totalPages}" th:href="@{'/events/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+            </li>
+            <li class="page-item disabled" aria-current="page">
+                <span class="page-link" th:unless="${currentPage < totalPages}">Last</span>
+            </li>
+        </ul>
+    </nav>
 </div>
-&nbsp;
+
+
 <div class="container px-10"  th:each = "el:${events}">
     <div class = "border bg-light" >
         <div class="row">
@@ -124,8 +131,17 @@
         </div>
         <div class="row">
             <div class="col p-4">
-                <a  class="btn btn-success btn-sm" th:href=" '/events/' + ${el.id} + '/complete'" role="button">Complete</a>
-                <a  class="btn btn-danger btn-sm" th:href=" '/events/' + ${el.id} + '/cancel'" role="button">Cancel</a>
+                <a  class="btn btn-primary btn-sm" th:href=" '/patients/' + ${el.patient.id}" role="button">Patient details</a>
+                <span th:if="${el.eventStatus == T(com.example.rehab.models.enums.EventStatus).PLANNED}">
+                <a  class="btn btn-success btn-sm" onClick="return confirm('Are you sure you want to complete the event?')"
+                    th:href=" '/events/' + ${el.id} + '/complete'" role="button">Complete</a>
+                <a  class="btn btn-danger btn-sm"  th:href=" '/events/' + ${el.id} + '/cancel'" role="button">Cancel</a>
+                </span>
+                <span th:if="${el.eventStatus == T(com.example.rehab.models.enums.EventStatus).COMPLETED OR
+                el.eventStatus == T(com.example.rehab.models.enums.EventStatus).CANCELED}">
+                <a  class="btn btn-success btn-sm" onClick="return confirm('Are you sure you want to hide the event?')"
+                    th:href=" '/events/' + ${el.id} + '/hide'" role="button">Hide</a>
+                </span>
             </div>
         </div>
     </div>

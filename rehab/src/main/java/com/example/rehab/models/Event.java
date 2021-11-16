@@ -30,6 +30,8 @@ public class Event {
 
     private TypeOfAppointment typeOfAppointment;
 
+    private boolean active;
+
     private String message;
 
 

@@ -29,7 +29,6 @@
             </div>
             <div sec:authorize="isAnonymous()">
                 <a href = "/login"  class="btn btn-outline-primary me-2" role="button">Login</a>
-                <a href = "/registration"  class="btn btn-primary" role="button">Sign-up</a>
             </div>
         </div>
     </header>
@@ -44,7 +43,7 @@
             <div class="p-3 border bg-light">
                 <h4 th:text="${patient.name}"/>
                 <div class="text-end">
-                    <a  class="btn btn-outline-danger"  href = /patients/ role="button">Back</a>
+                    <input type="button"  class="btn btn-outline-danger"  onclick="history.back()" value="Back"/>
                 </div>
             </div>
         </div>
@@ -118,7 +117,8 @@
             </div>
             <div class="col">
                 <a  class="btn btn-outline-primary" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/edit-procedure'" role="button">Edit</a>
-                <a  class="btn btn-outline-danger"  th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
+                <a  class="btn btn-outline-danger" onClick="return confirm('Are you sure you want to cancel the appointment?')"
+                    th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
             </div>
         </div>
     </div>
@@ -143,7 +143,8 @@
             </div>
             <div class="col">
                 <a  class="btn btn-outline-primary" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/edit-cure'" role="button">Edit</a>
-                <a  class="btn btn-outline-danger"  th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
+                <a  class="btn btn-outline-danger" onClick="return confirm('Are you sure you want to cancel the appointment?')"
+                    th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
             </div>
         </div>
     </div>

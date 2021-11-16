@@ -42,7 +42,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             int doseInt = Integer.parseInt(dose);
         } catch (NumberFormatException e) {
             dose = "0";
-            log.warn("Wrong input type for dose");
+            log.warn("User did not specify a dose. It has been set to zero.");
         }
         List<String> resultWeekDays = Arrays.asList(weekdays);
         List<String> timeList = Arrays.asList(time);
