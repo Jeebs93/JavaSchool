@@ -7,11 +7,12 @@ import com.example.rehab.models.enums.TypeOfAppointment;
 import com.google.gson.annotations.Expose;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class EventDTO {
 
     private Long id;
@@ -41,4 +42,7 @@ public class EventDTO {
 
     private boolean active;
 
+    public EventDTO(LocalDateTime date) {
+        this.date = date;
+    }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 public interface AppointmentService {
 
 
-    void createAppointment(long id, String procedure, String[] weekdays, String[] time,
+    long createAppointment(long id, String procedure, String[] weekdays, String[] time,
                                   String period, String dose, TypeOfAppointment typeOfAppointment);
 
     void updateAppointment(long appointmentId, String[] weekdays,
@@ -23,4 +23,6 @@ public interface AppointmentService {
 
 
     AppointmentDTO findAppointmentById(long id);
+
+    void deleteAppointment(long id);
 }

@@ -15,12 +15,12 @@
         </a>
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li style="font-size: 120%"><a href="/" class="nav-link px-14 link-secondary">Home</a></li>
-            <li style="font-size: 120%"><a href="/patients" class="nav-link px-14 link-secondary">Working with patients</a></li>
+            <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/" class="nav-link px-14 link-secondary">Home</a></li>
+            <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/patients" class="nav-link px-14 link-secondary">Working with patients</a></li>
             <div sec:authorize="hasAuthority('ADMIN')" >
-                <li style="font-size: 120%"><a href="/registration" class="nav-link px-14 link-secondary">Create user</a></li>
+                <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/registration" class="nav-link px-14 link-secondary">Create user</a></li>
             </div>
-            <li style="font-size: 120%"><a href="#" class="nav-link px-14 link-secondary">About</a></li>
+            <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="#" class="nav-link px-14 link-secondary">About</a></li>
         </ul>
 
         <div class="col-md-3 text-end">
@@ -60,19 +60,30 @@
         </div>
     </form>
     <br>
+    <div class="container px-10" style="text-align: left">
+        <div class="row">
     <nav aria-label="Page navigation" class="paging">
-        <ul class="pagination" th:if = "${totalPages > 1}">
+        <ul class="pagination" style="columns:3" th:if = "${totalPages > 1}">
 
-					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                        <li class="page-item">
-						<a class="page-link" th:if="${currentPage != i}" th:href="@{'/events/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
-                            <li class="page-item active" aria-current="page">
-						<span class="page-link" th:unless="${currentPage != i}">
-                            [[${i}]]
-                        </span>
-                        </li>
-                        </li>
-					</span>
+            <li class="page-item">
+                <a class="page-link" th:if="${currentPage > 1}" th:href="@{'/events/' + ${currentPage - 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>
+            </li>
+            <li class="page-item disabled" aria-current="page">
+                <span class="page-link" th:unless="${currentPage > 1}">Previous</span>
+            </li>
+            <span th:each="i: ${#numbers.sequence(beginIndex, endIndex)}">
+                <li class="page-item">
+                    <a class="page-link" th:if="${currentPage != i}" th:href="@{'/events/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+                        [[${i}]]
+                    </a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link active" aria-current="page" th:unless="${currentPage != i}">
+                        [[${i}]]
+                    </a>
+                </li>
+            </span>
+
 
             <li class="page-item">
                 <a class="page-link" th:if="${currentPage < totalPages}" th:href="@{'/events/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
@@ -88,6 +99,10 @@
             </li>
         </ul>
     </nav>
+        </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -95,7 +110,13 @@
     <div class = "border bg-light" >
         <div class="row">
             <div class="col">
-                <div class="p-3"><p class="fw-bold" style="font-size: 120%" th:text="${el.patient.name}"/></div>
+                <div class="p-3">
+                    <a style="text-decoration: none; color:black; font-weight: bold"
+                       onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'"
+                       th:href=" '/events/patient/' + ${el.patient.id}">
+                        <p style="font-size: 120%" th:text="${el.patient.name}"/>
+                    </a>
+                </div>
             </div>
             <div class="col">
                 <span th:if="${el.eventStatus == T(com.example.rehab.models.enums.EventStatus).PLANNED}">
@@ -132,6 +153,7 @@
         <div class="row">
             <div class="col p-4">
                 <a  class="btn btn-primary btn-sm" th:href=" '/patients/' + ${el.patient.id}" role="button">Patient details</a>
+                <span sec:authorize="hasAnyAuthority('ADMIN','NURSE')" >
                 <span th:if="${el.eventStatus == T(com.example.rehab.models.enums.EventStatus).PLANNED}">
                 <a  class="btn btn-success btn-sm" onClick="return confirm('Are you sure you want to complete the event?')"
                     th:href=" '/events/' + ${el.id} + '/complete'" role="button">Complete</a>
@@ -141,6 +163,7 @@
                 el.eventStatus == T(com.example.rehab.models.enums.EventStatus).CANCELED}">
                 <a  class="btn btn-success btn-sm" onClick="return confirm('Are you sure you want to hide the event?')"
                     th:href=" '/events/' + ${el.id} + '/hide'" role="button">Hide</a>
+                </span>
                 </span>
             </div>
         </div>

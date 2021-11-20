@@ -2,58 +2,73 @@ package com.example.rehab.controllers;
 
 import com.example.rehab.models.dto.AppointmentDTO;
 import com.example.rehab.models.dto.PatientDTO;
+import com.example.rehab.models.dto.UserDTO;
 import com.example.rehab.repo.AppointmentRepository;
 import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.service.AppointmentService;
 import com.example.rehab.service.PatientService;
+import com.example.rehab.service.UserService;
 import com.example.rehab.service.impl.AppointmentServiceImpl;
 import com.example.rehab.service.impl.PatientServiceImpl;
 import com.example.rehab.service.mapper.Mapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-
+@Slf4j
 @Controller
 public class PatientsController {
 
 
     private PatientService patientService;
 
-    private PatientRepository patientRepository;
-
     private AppointmentService appointmentService;
 
+    private UserService userService;
 
 
-    private AppointmentRepository appointmentRepository;
-
-    private Mapper mapper;
 
     @Autowired
-    public PatientsController(PatientRepository patientRepository, PatientService patientService,
+    public PatientsController(PatientService patientService,
                               AppointmentService appointmentService,
-                              Mapper mapper) {
-        this.patientRepository = patientRepository;
+                              UserService userService) {
         this.patientService = patientService;
         this.appointmentService = appointmentService;
-        this.mapper = mapper;
+        this.userService = userService;
     }
 
     @GetMapping("/patients")
     public String workingWithPatients(Model model) {
+        String username = userService.getUserName();
        List<PatientDTO> patients = patientService.findAll();
        model.addAttribute("patients", patients);
+       model.addAttribute("username",username);
        return "patients";
+    }
+
+    @GetMapping("/patients/my-patients")
+    public String myPatients(Model model) {
+        String username = userService.getUserName();
+        List<PatientDTO> patients = patientService.getPatientsByDoctor(username);
+        model.addAttribute("patients",patients);
+        return "my-patients";
     }
 
     @GetMapping("/patients/new")
     public String workingWithPatientsAdd(Model model) {
         model.addAttribute("patient",new PatientDTO());
+        List<UserDTO> doctors = userService.findAllDoctors();
+        model.addAttribute("doctors",doctors);
         return "add-patient";
     }
 
@@ -71,6 +86,8 @@ public class PatientsController {
     public String patientDetails(@PathVariable(value = "id") long id, Model model) {
         PatientDTO result = patientService.getPatientByID(id);
         List<AppointmentDTO> appointments = appointmentService.findAllByPatient(result);
+        String doctor = userService.findByUserName(result.getDoctor()).getUsername();
+        model.addAttribute("doctor", doctor);
         model.addAttribute("patient", result);
         model.addAttribute("patientId", id);
         model.addAttribute("appointment", appointments);
@@ -96,7 +113,14 @@ public class PatientsController {
         return "redirect:/patients/discharged";
     }
 
-
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public String handleInsuranceNumberException(DataIntegrityViolationException e, Model model) {
+        log.warn("Insurance number is not unique");
+        String message = "Insurance number is not unique";
+        model.addAttribute("message",message);
+        model.addAttribute("path","/patients/new");
+        return "error-page";
+    }
 
 
 }

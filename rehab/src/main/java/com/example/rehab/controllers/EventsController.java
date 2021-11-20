@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Slf4j
@@ -38,25 +40,25 @@ public class EventsController {
 
     @GetMapping("/events")
     public String events(Model model) {
-        return findPaginated(1,"date","asc", model);
+        return getEventsPaginated(1,"date","asc", model);
     }
 
     @GetMapping("/events/{pageNumber}")
-    public String findPaginated(@PathVariable (value = "pageNumber") int pageNumber,
+    public String getEventsPaginated(@PathVariable (value = "pageNumber") int pageNumber,
                                 @RequestParam("sortField") String sortField,
                                 @RequestParam("sortDir") String sortDir,
                                 Model model) {
 
         Page<EventDTO> page = eventService.findPaginated(pageNumber, 10, sortField, sortDir);
-
-       /* List<EventDTO> resultList = eventList.stream()
-                .map(mapper::convertEventToDTO)
-                .collect(Collectors.toList());*/
+        int current = page.getNumber() + 8;
+        int begin = Math.max(1, current - 15);
+        int end = Math.min(begin + 16, page.getTotalPages());
 
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
-
+        model.addAttribute("beginIndex", begin);
+        model.addAttribute("endIndex", end);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
@@ -65,32 +67,61 @@ public class EventsController {
         return "events";
     }
 
+    @GetMapping("/events/patient/{id}")
+    public String eventsByPatient(Model model,@PathVariable int id) {
+        return getEventsPyPatientPaginated(id, 1, model);
+    }
+
+    @GetMapping("/events/patient/{id}/{pageNumber}")
+    public String getEventsPyPatientPaginated(@PathVariable int id,
+                                              @PathVariable (value = "pageNumber") int pageNumber,
+                                              Model model) {
+        Page<EventDTO> page = eventService.findByPatientPaginated(pageNumber,10,id);
+        List<EventDTO> events = eventService.findByPatient(id);
+        int current = page.getNumber() + 8;
+        int begin = Math.max(1, current - 15);
+        int end = Math.min(begin + 16, page.getTotalPages());
+        model.addAttribute("patientName",patientService.getPatientByID(id).getName());
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("beginIndex", begin);
+        model.addAttribute("endIndex", end);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("patientID",id);
+        model.addAttribute("events", page.getContent());
+        return "events-by-patient";
+    }
+
     @GetMapping("/events/{eventId}/complete")
     public String completeEvent(@PathVariable(value = "eventId") int eventId,
-                                Model model) {
+                                Model model, HttpServletRequest request) {
         eventService.completeEvent(eventId);
-        return "redirect:/events";
+        return "redirect:" + request.getHeader("Referer");
     }
 
     @GetMapping("/events/{eventId}/hide")
-    public String hideEvent(@PathVariable(value="eventId") int eventId) {
+    public String hideEvent(@PathVariable(value="eventId") int eventId, HttpServletRequest request) {
         eventService.hideEvent(eventId);
-        return "redirect:/events";
+        return "redirect:" + request.getHeader("Referer");
     }
 
     @GetMapping("/events/{eventId}/cancel")
     public String cancelEvent(@PathVariable(value = "eventId") int eventId,
+                              HttpServletRequest request,
                               Model model) {
+        String req=request.getHeader("Referer");
+        model.addAttribute("request",req);
         return "cancel-event";
     }
 
     @PostMapping("/events/{eventId}/cancel")
     public String cancelEventPost(@PathVariable(value = "eventId") int eventId,
                                   @RequestParam String message,
+                                  @RequestParam String request,
                                   Model model) {
        // model.addAttribute("eventId",eventId);
         eventService.cancelEvent(eventId,message);
-        return "redirect:/events";
+        return "redirect:" + request;
 
     }
 
@@ -107,14 +138,6 @@ public class EventsController {
         List<PatientDTO> patients = patientService.getPatientsByName(name);
         model.addAttribute("patients", patients);
         return "ambiguous-patient";
-    }
-
-    @GetMapping("/events/patient/{id}")
-    public String getEventsPyPatient(@PathVariable int id,Model model) {
-        List<EventDTO> events = eventService.findByPatient(id);
-        model.addAttribute("patientName",patientService.getPatientByID(id).getName());
-        model.addAttribute("events", events);
-        return "events-by-patient";
     }
 
     @GetMapping("/events/today")
@@ -158,6 +181,23 @@ public class EventsController {
         return "error-page";
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public String handleEntityNotFoundException(EntityNotFoundException e, Model model) {
+        log.warn("Events can not be displayed");
+        String message = "Events can not be displayed";
+        model.addAttribute("message",message);
+        model.addAttribute("path","/");
+        return "error-page";
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public String handleIllegalStateException(IllegalStateException e, Model model) {
+        log.warn("The event could not be completed");
+        String message = "The event could not be completed";
+        model.addAttribute("message",message);
+        model.addAttribute("path","/events");
+        return "error-page";
+    }
 
 
 

@@ -15,12 +15,12 @@
         </a>
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li style="font-size: 120%"><a href="/" class="nav-link px-14 link-secondary">Home</a></li>
-            <li style="font-size: 120%"><a href="/patients" class="nav-link px-14 link-secondary">Working with patients</a></li>
+            <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/" class="nav-link px-14 link-secondary">Home</a></li>
+            <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/patients" class="nav-link px-14 link-secondary">Working with patients</a></li>
             <div sec:authorize="hasAuthority('ADMIN')" >
-                <li style="font-size: 120%"><a href="/registration" class="nav-link px-14 link-secondary">Create user</a></li>
+                <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/registration" class="nav-link px-14 link-secondary">Create user</a></li>
             </div>
-            <li style="font-size: 120%"><a href="#" class="nav-link px-14 link-secondary">About</a></li>
+            <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="#" class="nav-link px-14 link-secondary">About</a></li>
         </ul>
 
         <div class="col-md-3 text-end">
@@ -43,11 +43,47 @@
             </div>
         </div> &nbsp;
     </div>
-
-
 </div>
+<br/>
+<div class="container px-10">
+<nav aria-label="Page navigation" class="paging">
+    <ul class="pagination" th:if = "${totalPages > 1}">
 
-&nbsp;
+        <li class="page-item">
+            <a class="page-link" th:if="${currentPage > 1}" th:href="@{'/events/' + ${currentPage - 1}+ '?sortField=date&sortDir=ASC'}">Previous</a>
+        </li>
+        <li class="page-item disabled" aria-current="page">
+            <span class="page-link" th:unless="${currentPage > 1}">Previous</span>
+        </li>
+        <span th:each="i: ${#numbers.sequence(beginIndex, endIndex)}">
+                <li class="page-item">
+                    <a class="page-link" th:if="${currentPage != i}" th:href="@{'/events/patient/' + ${patientID} + '/' + ${i}+ '?sortField=date&sortDir=ASC'}">
+                        [[${i}]]
+                    </a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link active" aria-current="page" th:unless="${currentPage != i}">
+                        [[${i}]]
+                    </a>
+                </li>
+            </span>
+
+        <li class="page-item">
+            <a class="page-link" th:if="${currentPage < totalPages}" th:href="@{'/events/patient/' + ${patientID} +
+             '/' + ${currentPage + 1}+ '?sortField=date&sortDir=ASC'}">Next</a>
+        </li>
+        <li class="page-item disabled" aria-current="page">
+            <span class="page-link" th:unless="${currentPage < totalPages}">Next</span>
+        </li>
+        <li class="page-item">
+            <a class="page-link" th:if="${currentPage < totalPages}" th:href="@{'/events/' + ${totalPages}+ '?sortField=date&sortDir=ASC'}">Last</a>
+        </li>
+        <li class="page-item disabled" aria-current="page">
+            <span class="page-link" th:unless="${currentPage < totalPages}">Last</span>
+        </li>
+    </ul>
+</nav>
+    &nbsp;</div>
 <div class="container px-10"  th:each = "el:${events}">
     <div class = "border bg-light" >
         <div class="row">
@@ -89,6 +125,7 @@
         <div class="row">
             <div class="col p-4">
                 <a  class="btn btn-primary btn-sm" th:href=" '/patients/' + ${el.patient.id}" role="button">Patient details</a>
+                <span sec:authorize="hasAnyAuthority('ADMIN','NURSE')" >
                 <span th:if="${el.eventStatus == T(com.example.rehab.models.enums.EventStatus).PLANNED}">
                 <a  class="btn btn-success btn-sm" onClick="return confirm('Are you sure you want to complete the event?')"
                     th:href=" '/events/' + ${el.id} + '/complete'" role="button">Complete</a>
@@ -98,6 +135,7 @@
                 el.eventStatus == T(com.example.rehab.models.enums.EventStatus).CANCELED}">
                 <a  class="btn btn-success btn-sm" onClick="return confirm('Are you sure you want to hide the event?')"
                     th:href=" '/events/' + ${el.id} + '/hide'" role="button">Hide</a>
+                </span>
                 </span>
             </div>
         </div>

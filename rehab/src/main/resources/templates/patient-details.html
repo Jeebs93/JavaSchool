@@ -15,12 +15,12 @@
         </a>
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li style="font-size: 120%"><a href="/" class="nav-link px-14 link-secondary">Home</a></li>
-            <li style="font-size: 120%"><a href="/events" class="nav-link px-14 link-secondary">Events</a></li>
+            <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/" class="nav-link px-14 link-secondary">Home</a></li>
+            <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/events" class="nav-link px-14 link-secondary">Events</a></li>
             <div sec:authorize="hasAuthority('ADMIN')" >
-                <li style="font-size: 120%"><a href="/registration" class="nav-link px-14 link-secondary">Create user</a></li>
+                <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/registration" class="nav-link px-14 link-secondary">Create user</a></li>
             </div>
-            <li style="font-size: 120%"><a href="#" class="nav-link px-14 link-secondary">About</a></li>
+            <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="#" class="nav-link px-14 link-secondary">About</a></li>
         </ul>
 
         <div class="col-md-3 text-end">
@@ -91,10 +91,18 @@
         <div class="col">
             <div class="p-3 border bg-light">
                 <h4>Appointments</h4>
+                <span th:if="${#authentication.getPrincipal().getUsername()==doctor}">
                 <div class="text-end">
                     <a  class="btn btn-primary" th:href = " '/patients/' + ${el.id} + '/add-procedure'" role="button">Add procedure</a>
                     <a  class="btn btn-primary" th:href = " '/patients/' + ${el.id} + '/add-cure'" role="button">Add cure</a>
                 </div>
+                </span>
+                <span sec:authorize="hasAnyAuthority('ADMIN')" >
+                <div class="text-end">
+                    <a  class="btn btn-primary" th:href = " '/patients/' + ${el.id} + '/add-procedure'" role="button">Add procedure</a>
+                    <a  class="btn btn-primary" th:href = " '/patients/' + ${el.id} + '/add-cure'" role="button">Add cure</a>
+                </div>
+                </span>
             </div>
         </div>
     </div>
@@ -116,9 +124,17 @@
                 <div class="p-3"><p th:text="${el.timePattern}"/></div>
             </div>
             <div class="col">
+                <span th:if="${#authentication.getPrincipal().getUsername()==doctor}">
                 <a  class="btn btn-outline-primary" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/edit-procedure'" role="button">Edit</a>
                 <a  class="btn btn-outline-danger" onClick="return confirm('Are you sure you want to cancel the appointment?')"
                     th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
+                </span>
+                <span sec:authorize="hasAnyAuthority('ADMIN')" >
+                    <a  class="btn btn-outline-primary" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/edit-procedure'" role="button">Edit</a>
+                <a  class="btn btn-outline-danger" onClick="return confirm('Are you sure you want to cancel the appointment?')"
+                    th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
+                </span>
+
             </div>
         </div>
     </div>
@@ -142,9 +158,16 @@
                 <div class="p-3"><p th:text="${el.timePattern}"/></div>
             </div>
             <div class="col">
+                <span th:if="${#authentication.getPrincipal().getUsername()==doctor}">
                 <a  class="btn btn-outline-primary" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/edit-cure'" role="button">Edit</a>
                 <a  class="btn btn-outline-danger" onClick="return confirm('Are you sure you want to cancel the appointment?')"
                     th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
+                </span>
+                <span sec:authorize="hasAnyAuthority('ADMIN')" >
+                       <a  class="btn btn-outline-primary" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/edit-cure'" role="button">Edit</a>
+                <a  class="btn btn-outline-danger" onClick="return confirm('Are you sure you want to cancel the appointment?')"
+                    th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/cancel'" role="button">Cancel</a>
+                </span>
             </div>
         </div>
     </div>

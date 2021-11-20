@@ -15,12 +15,12 @@
         </a>
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li style="font-size: 120%"><a href="/" class="nav-link px-14 link-secondary">Home</a></li>
-            <li style="font-size: 120%"><a href="/events" class="nav-link px-14 link-secondary">Events</a></li>
+            <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/" class="nav-link px-14 link-secondary">Home</a></li>
+            <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/events" class="nav-link px-14 link-secondary">Events</a></li>
             <div sec:authorize="hasAuthority('ADMIN')" >
-                <li style="font-size: 120%"><a href="/registration" class="nav-link px-14 link-secondary">Create user</a></li>
+                <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/registration" class="nav-link px-14 link-secondary">Create user</a></li>
             </div>
-            <li style="font-size: 120%"><a href="#" class="nav-link px-14 link-secondary">About</a></li>
+            <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="#" class="nav-link px-14 link-secondary">About</a></li>
         </ul>
 
         <div class="col-md-3 text-end">
@@ -56,10 +56,25 @@
                 <div class="alert alert-warning" th:if="${#fields.hasErrors('diagnosis')}" th:errors="*{diagnosis}"></div>
             </div>
             <br>
+            <span sec:authorize="hasAnyAuthority('DOCTOR')" >
             <div class = "form-group">
-                <input type = "text" name = "doctor" th:field="*{doctor}" placeholder = "Enter patient's doctor" class = "form-control">
-                <div class="alert alert-warning" th:if="${#fields.hasErrors('doctor')}" th:errors="*{doctor}"></div>
+                <input type = "hidden" name = "doctor" th:value="${#authentication.getPrincipal().getUsername()}" placeholder = "Enter patient's doctor" class = "form-control">
             </div>
+            </span>
+            <span sec:authorize="hasAnyAuthority('ADMIN')" >
+                <div class = "form-group">
+                 <div class="row">
+            <div class="col-lg-2">
+                <p class="fw-bold">Select doctor:</p>
+            </div>
+            <div class="col-md-auto">
+                <select id="doctor" name="doctor">
+                    <option th:each = "el:${doctors}" th:value="${el.username}" th:text="${el.username}"></option>
+                </select>
+            </div>
+                 </div>
+                </div>
+            </span>
             <br>
             <div class="col-md-3">
                 <button type = "submit" class="btn btn-primary me-2">Add patient</button>

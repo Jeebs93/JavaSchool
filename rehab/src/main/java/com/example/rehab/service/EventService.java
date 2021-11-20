@@ -10,6 +10,8 @@ public interface EventService {
 
     Page<EventDTO> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
 
+    Page<EventDTO> findByPatientPaginated(int pageNo, int pageSize, int patientID);
+
     List<EventDTO> findAll();
 
     List<EventDTO> findByPatient(long id);

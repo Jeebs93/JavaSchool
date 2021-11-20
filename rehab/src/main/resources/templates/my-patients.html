@@ -3,7 +3,7 @@
       xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cancel event</title>
+    <title>My patients</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
 </head>
 <body>
@@ -35,21 +35,53 @@
 </div>
 
 
+
+
 <div class="container px-10">
     <div class="row gx-5">
-        <div class="col mb-5">
-            <div class="p-3 border bg-light"><h3>Cancel event</h3></div>
-        </div>
-        <form th:action = "'/events/' + ${eventId} + '/cancel'" method = "post">
-            <input type = "text" name = "message" placeholder = "Enter the reason for canceling the event" class = "form-control">
-            <input type = "hidden" name = "request" th:value="${request}" class = "form-control">
-            <br>
-            <div class="col-md-3">
-                <button type = "submit" class="btn btn-danger me-2">Cancel event</button>
-                <a class="btn btn-outline-danger"  onclick=history.back() role="button">Back</a>
+        <div class="col">
+            <div class="p-3 border bg-light">
+                <h3>My patients</h3>
+                <div class="text-end">
+                    <a  class="btn btn-primary" href = /patients/new role="button">Add</a>
+                    <a  class="btn btn-outline-danger" href = /patients/ role="button">Back</a>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
+</div>
+
+<div class="container overflow-hidden" th:each = "el:${patients}">
+    <span th:if="${el.patientStatus == T(com.example.rehab.models.enums.PatientStatus).ON_TREATMENT}">
+    <div class="row gx-5 gy-18">
+        <div class="col">
+            <div class="p-3"><p style="font-size: 110%" class="fw-bold">Name:</p></div>
+        </div>
+        <div class="col">
+            <div class="p-3"><p style="font-size: 120%" th:text="${el.name}"/></div>
+        </div>
+    </div>
+
+    <div class="row gx-5">
+        <div class="col">
+            <div class="p-3"><p style="font-size: 110%" class="fw-bold">Insurance number:</p></div>
+        </div>
+        <div class="col">
+            <div class="p-3"><p style="font-size: 120%" th:text="${el.insuranceNumber}"/></div>
+        </div>
+    </div>
+
+    <div class="text-end p-3">
+        <a  class="btn btn-primary btn-sm" th:href = " '/patients/' + ${el.id}" role="button">Details</a>
+        <a  class="btn btn-danger btn-sm" onClick="return confirm('Are you sure you want to discharge the patient?')"
+            th:href = " '/patients/' + ${el.id} + '/discharge'" role="button">Discharge</a>
+    </div>
+
+
+    <hr/>
+
+    </span>
+
 </div>
 
 </body>

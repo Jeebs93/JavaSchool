@@ -8,6 +8,7 @@ import com.example.rehab.models.enums.EventStatus;
 import com.example.rehab.repo.AppointmentRepository;
 import com.example.rehab.repo.EventRepository;
 import com.example.rehab.repo.PatientRepository;
+import com.example.rehab.service.DispatcherService;
 import com.example.rehab.service.EventService;
 import com.example.rehab.service.mapper.Mapper;
 import com.google.gson.Gson;
@@ -42,6 +43,8 @@ public class EventServiceImpl implements EventService {
 
     private final AppointmentRepository appointmentRepository;
 
+    private final DispatcherService dispatcherService;
+
 
     public Page<EventDTO> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
 
@@ -62,6 +65,16 @@ public class EventServiceImpl implements EventService {
         }
 
         return this.eventRepository.findAllByActiveTrue(pageable).map(mapper::convertEventToDTO);
+
+    }
+
+    public Page<EventDTO> findByPatientPaginated(int pageNo, int pageSize, int patientID) {
+
+        Sort sort = Sort.by("date").ascending();
+        Pageable pageable = PageRequest.of(pageNo-1,pageSize, sort);
+        return this.eventRepository
+                .findAllByPatientAndActiveTrue(pageable,patientRepository.getPatientById(patientID))
+                .map(mapper::convertEventToDTO);
 
     }
 
@@ -86,6 +99,7 @@ public class EventServiceImpl implements EventService {
                     result.add(event);
                 }
             }
+            Collections.sort(result, Comparator.comparing(EventDTO::getDateString));
         }
         return result;
     }
@@ -93,7 +107,7 @@ public class EventServiceImpl implements EventService {
     public boolean isToday(EventDTO eventDTO) {
         LocalDateTime date = LocalDateTime.now();
         LocalDateTime eventDate = eventDTO.getDate();
-        return (date.getDayOfYear()==eventDate.getDayOfYear()) && (date.getHour() <= eventDate.getHour());
+        return date.getDayOfYear()==eventDate.getDayOfYear() && date.getYear()==eventDate.getYear();
     }
 
     public boolean isRecent(EventDTO eventDTO) {
@@ -113,6 +127,7 @@ public class EventServiceImpl implements EventService {
                 result.add(event);
             }
         }
+        Collections.sort(result, Comparator.comparing(EventDTO::getDateString));
         return result;
     }
 
@@ -144,8 +159,12 @@ public class EventServiceImpl implements EventService {
 
     public void completeEvent(long eventId) {
         Event event = eventRepository.findEventById(eventId);
-        event.setEventStatus(COMPLETED);
-        eventRepository.save(event);
+        LocalDateTime date = LocalDateTime.now();
+        if (isToday(mapper.convertEventToDTO(event))) {
+            event.setEventStatus(COMPLETED);
+            eventRepository.save(event);
+            dispatcherService.sendMessage(dispatcherService.getMessage());
+        } else throw new IllegalStateException();
     }
 
     public void cancelEvent(long eventId, String message) {
@@ -153,6 +172,7 @@ public class EventServiceImpl implements EventService {
         event.setEventStatus(CANCELED);
         event.setMessage(message);
         eventRepository.save(event);
+        dispatcherService.sendMessage(dispatcherService.getMessage());
     }
 
     public void hideEvent(long eventId) {

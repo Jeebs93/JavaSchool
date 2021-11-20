@@ -70,6 +70,13 @@ public class PatientServiceImpl implements PatientService {
                 .collect(Collectors.toList());
     }
 
+    public List<PatientDTO> getPatientsByDoctor(String doctor) {
+        List<Patient> patients = patientRepository.getPatientsByDoctor(doctor);
+        return patients.stream()
+                .map(mapper::convertPatientToDTO)
+                .collect(Collectors.toList());
+    }
+
     public void dischargePatient(long id) {
         Patient patient = patientRepository.getPatientById(id);
         patient.setPatientStatus(PatientStatus.DISCHARGED);

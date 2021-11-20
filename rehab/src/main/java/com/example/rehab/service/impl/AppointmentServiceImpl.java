@@ -36,7 +36,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private final DispatcherService dispatcherService;
 
-    public void createAppointment(long id, String procedure, String[] weekdays, String[] time,
+    public long createAppointment(long id, String procedure, String[] weekdays, String[] time,
                                   String period, String dose, TypeOfAppointment typeOfAppointment) throws MappingException {
         try {
             int doseInt = Integer.parseInt(dose);
@@ -56,7 +56,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         long appointmentId = appointment.getId();
         eventService.createEvents(appointmentDTO, appointmentId,0);
         dispatcherService.sendMessage(dispatcherService.getMessage());
-
+        return appointmentId;
     }
 
     public static String getTimePatternView(String[] weekDays, List<String> time, String period) {
@@ -151,6 +151,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     public AppointmentDTO findAppointmentById(long id) {
         Appointment appointment = appointmentRepository.getAppointmentById(id);
         return mapper.convertAppointmentToDTO(appointment);
+    }
+
+    public void deleteAppointment(long id) {
+        appointmentRepository.deleteById(id);
+        log.info("Appointment has been deleted");
     }
 
 }

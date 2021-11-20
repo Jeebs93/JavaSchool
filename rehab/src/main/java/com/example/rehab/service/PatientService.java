@@ -20,5 +20,7 @@ public interface PatientService {
 
     void deletePatient(long id);
 
+    List<PatientDTO> getPatientsByDoctor(String doctor);
+
 
 }

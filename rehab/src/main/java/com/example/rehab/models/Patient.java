@@ -18,6 +18,7 @@ public class Patient {
     private Long id;
 
 
+    @Column(unique = true)
     private Long insuranceNumber;
 
     private String name;
