@@ -20,7 +20,7 @@
             <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/" class="nav-link px-14 link-secondary">Home</a></li>
             <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/events" class="nav-link px-14 link-secondary">Events</a></li>
             <div sec:authorize="hasAuthority('ADMIN')" >
-                <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/registration" class="nav-link px-14 link-secondary">Create user</a></li>
+                <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/admin" class="nav-link px-14 link-secondary">Admin panel</a></li>
             </div>
             <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="#" class="nav-link px-14 link-secondary">About</a></li>
         </ul>
@@ -54,7 +54,7 @@
                 <p class="fw-bold">Select procedure:</p>
             </div>
             <div class="col-md-auto">
-                <select id="procedure" name="procedure">
+                <select id="procedure" name="procedure" onfocus="this.size=8;" onblur="this.size=1;" onchange="this.size=1; this.blur();">
                     <option th:each = "el:${procedures}" th:value="${el.name}" th:text="${el.name}"></option>
                 </select>
             </div>

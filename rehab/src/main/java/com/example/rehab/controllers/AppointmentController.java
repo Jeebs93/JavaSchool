@@ -5,6 +5,7 @@ import com.example.rehab.models.dto.AppointmentDTO;
 import com.example.rehab.models.dto.PatientDTO;
 import com.example.rehab.repo.ProceduresAndCuresRepository;
 import com.example.rehab.service.AppointmentService;
+import com.example.rehab.service.ProceduresAndCuresService;
 import com.example.rehab.service.impl.PatientServiceImpl;
 import com.example.rehab.service.mapper.Mapper;
 import lombok.extern.slf4j.Slf4j;
@@ -26,17 +27,20 @@ public class AppointmentController {
     private PatientServiceImpl patientService;
     private ProceduresAndCuresRepository proceduresAndCuresRepository;
     private AppointmentService appointmentService;
+    private ProceduresAndCuresService proceduresAndCuresService;
     private Mapper mapper;
 
     @Autowired
     public AppointmentController (PatientServiceImpl patientService,
                                   AppointmentService appointmentService,
                                   ProceduresAndCuresRepository proceduresAndCuresRepository,
+                                  ProceduresAndCuresService proceduresAndCuresService,
                                   Mapper mapper) {
         this.patientService = patientService;
         this.appointmentService = appointmentService;
         this.proceduresAndCuresRepository = proceduresAndCuresRepository;
         this.mapper = mapper;
+        this.proceduresAndCuresService = proceduresAndCuresService;
     }
 
     @GetMapping("/patients/{patientId}/{appointmentId}/cancel")
@@ -93,8 +97,7 @@ public class AppointmentController {
     @GetMapping("/patients/{id}/add-procedure")
     public String addProcedure(@PathVariable(value = "id") long id, Model model) {
         model.addAttribute("patient", patientService.getPatientByID(id));
-        model.addAttribute("procedures", proceduresAndCuresRepository
-                .findAllByTypeOfAppointment(PROCEDURE));
+        model.addAttribute("procedures", proceduresAndCuresService.findAllProcedures());
         return "add-procedure";
     }
 
@@ -112,12 +115,8 @@ public class AppointmentController {
 
     @GetMapping("/patients/{id}/add-cure")
     public String addCure(@PathVariable(value = "id") long id, Model model) {
-        PatientDTO result = patientService.getPatientByID(id);
-        model.addAttribute("patient", result);
-        List<ProceduresAndCures> proceduresAndCures =
-                proceduresAndCuresRepository
-                        .findAllByTypeOfAppointment(CURE);
-        model.addAttribute("cures", proceduresAndCures);
+        model.addAttribute("patient", patientService.getPatientByID(id));
+        model.addAttribute("cures", proceduresAndCuresService.findAllCures());
         return "add-cure";
     }
 
