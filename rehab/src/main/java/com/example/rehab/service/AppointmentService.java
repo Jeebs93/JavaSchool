@@ -31,4 +31,5 @@ public interface AppointmentService {
     void checkAppointmentsStatus(List<AppointmentDTO> appointments);
 
     void hideAppointment(long id);
+
 }

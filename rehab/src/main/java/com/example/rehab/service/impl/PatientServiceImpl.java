@@ -2,6 +2,7 @@ package com.example.rehab.service.impl;
 
 import com.example.rehab.models.Appointment;
 import com.example.rehab.models.Patient;
+import com.example.rehab.models.dto.AppointmentDTO;
 import com.example.rehab.models.dto.PatientDTO;
 import com.example.rehab.models.enums.PatientStatus;
 import com.example.rehab.repo.AppointmentRepository;
@@ -86,6 +87,20 @@ public class PatientServiceImpl implements PatientService {
         for (Appointment appointment:appointments) {
             appointmentService.cancelAppointment(appointment.getId());
         }
+    }
+
+    public boolean hasUnfinishedAppointments(long patientID) {
+        PatientDTO patientDTO = getPatientByID(patientID);
+        List<AppointmentDTO> appointments = appointmentService.findAllByPatient(patientDTO);
+        boolean result = false;
+
+        for (AppointmentDTO appointment:appointments) {
+            if (!appointment.isCompleted() && !appointment.isCanceled()) {
+                result=true;
+                break;
+            }
+        }
+        return result;
     }
 
     public void returnPatient(long id) {

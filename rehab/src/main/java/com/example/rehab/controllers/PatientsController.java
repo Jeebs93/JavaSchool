@@ -99,6 +99,23 @@ public class PatientsController {
 
     @GetMapping("/patients/{id}/discharge")
     public String dischargePatient(@PathVariable(value = "id") long id) {
+        if (patientService.hasUnfinishedAppointments(id)) return "redirect:/patients/unfinished-appointments/" + id;
+        patientService.dischargePatient(id);
+        return "redirect:/patients";
+    }
+
+    @GetMapping("/patients/unfinished-appointments/{id}")
+    public String unfinishedAppointments(@PathVariable(value = "id") long id, Model model) {
+        List<AppointmentDTO> appointments = appointmentService.findAllByPatient(patientService.getPatientByID(id));
+        PatientDTO patient = patientService.getPatientByID(id);
+        model.addAttribute("patient", patient);
+        model.addAttribute("patientId",id);
+        model.addAttribute("appointments", appointments);
+        return "unfinished-appointments";
+    }
+
+    @PostMapping("/patients/unfinished-appointments/{id}")
+    public String unfinishedAppointmentsPost(@PathVariable(value = "id") long id) {
         patientService.dischargePatient(id);
         return "redirect:/patients";
     }

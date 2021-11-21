@@ -22,5 +22,6 @@ public interface PatientService {
 
     List<PatientDTO> getPatientsByDoctor(String doctor);
 
+    boolean hasUnfinishedAppointments(long patientID);
 
 }
