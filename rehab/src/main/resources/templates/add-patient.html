@@ -68,9 +68,10 @@
                 <p class="fw-bold">Select doctor:</p>
             </div>
             <div class="col-md-auto">
-                <select id="doctor" name="doctor">
+                <select name="doctor">
                     <option th:each = "el:${doctors}" th:value="${el.username}" th:text="${el.username}"></option>
                 </select>
+                <div class="alert alert-warning" th:if="${#fields.hasErrors('doctor')}" th:errors="*{doctor}"></div>
             </div>
                  </div>
                 </div>

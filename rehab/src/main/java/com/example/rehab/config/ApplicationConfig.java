@@ -1,6 +1,5 @@
 package com.example.rehab.config;
 
-import com.tibco.tibjms.TibjmsConnectionFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

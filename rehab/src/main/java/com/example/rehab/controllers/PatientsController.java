@@ -76,6 +76,8 @@ public class PatientsController {
     public String workingWithPatientPostAdd(@Valid @ModelAttribute(name="patient") PatientDTO patient, BindingResult result,
                                             Model model) {
         if (result.hasErrors()) {
+            List<UserDTO> doctors = userService.findAllDoctors();
+            model.addAttribute("doctors",doctors);
             return "add-patient";
         }
         patientService.createPatient(patient);
@@ -85,6 +87,7 @@ public class PatientsController {
     @GetMapping("/patients/{id}")
     public String patientDetails(@PathVariable(value = "id") long id, Model model) {
         PatientDTO result = patientService.getPatientByID(id);
+        appointmentService.checkAppointmentsStatus(appointmentService.findAllByPatient(result));
         List<AppointmentDTO> appointments = appointmentService.findAllByPatient(result);
         String doctor = userService.findByUserName(result.getDoctor()).getUsername();
         model.addAttribute("doctor", doctor);

@@ -51,6 +51,14 @@ public class AppointmentController {
         return "redirect:/patients/" + patientId;
     }
 
+    @GetMapping("/patients/{patientId}/{appointmentId}/hide")
+    public String hideAppointment(@PathVariable(value = "appointmentId") long appointmentId,
+                                    @PathVariable(value = "patientId") long patientId,
+                                    Model model) {
+        appointmentService.hideAppointment(appointmentId);
+        return "redirect:/patients/" + patientId;
+    }
+
     @GetMapping("/patients/{patientId}/{appointmentId}/edit-procedure")
     public String editProcedure(@PathVariable(value = "appointmentId") long appointmentId,
                                 @PathVariable(value = "patientId") long patientId,

@@ -28,4 +28,5 @@ public interface EventRepository extends CrudRepository<Event, Long>, PagingAndS
 
     void delete(Event event);
 
+
 }

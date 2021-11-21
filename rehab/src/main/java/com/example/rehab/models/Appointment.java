@@ -36,7 +36,14 @@ public class Appointment {
 
     private Integer dose;
 
-    boolean isCancelled;
+    private Integer canceledEvents;
+
+    boolean isActive;
+
+    boolean isCompleted;
+
+    boolean isCanceled;
+
 
 
 

@@ -27,7 +27,7 @@ public class PatientDTO {
 
     private PatientStatus patientStatus;
 
-    @NotEmpty(message = "Please, enter name of doctor")
+    @NotEmpty(message = "Please, enter doctor")
     private String doctor;
 
     public PatientDTO(String name, Long insurance_number, String diagnosis,

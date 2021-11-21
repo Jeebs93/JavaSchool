@@ -50,9 +50,9 @@ public class EventsController {
                                 Model model) {
 
         Page<EventDTO> page = eventService.findPaginated(pageNumber, 10, sortField, sortDir);
-        int current = page.getNumber() + 8;
-        int begin = Math.max(1, current - 15);
-        int end = Math.min(begin + 16, page.getTotalPages());
+        int current = page.getNumber() + 5;
+        int begin = Math.max(1, current - 10);
+        int end = Math.min(begin + 11, page.getTotalPages());
 
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("totalPages", page.getTotalPages());
@@ -77,10 +77,9 @@ public class EventsController {
                                               @PathVariable (value = "pageNumber") int pageNumber,
                                               Model model) {
         Page<EventDTO> page = eventService.findByPatientPaginated(pageNumber,10,id);
-        List<EventDTO> events = eventService.findByPatient(id);
-        int current = page.getNumber() + 8;
-        int begin = Math.max(1, current - 15);
-        int end = Math.min(begin + 16, page.getTotalPages());
+        int current = page.getNumber() + 5;
+        int begin = Math.max(1, current - 10);
+        int end = Math.min(begin + 11, page.getTotalPages());
         model.addAttribute("patientName",patientService.getPatientByID(id).getName());
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("beginIndex", begin);

@@ -41,7 +41,7 @@ class PatientServiceImplTest {
 
     @BeforeAll
      void setUp() {
-        testPatient = new PatientDTO("PatientForTest", 1234567L,
+        testPatient = new PatientDTO("PatientForTest", 0L,
                 "Cold", "Doctor", null);
         patientService.createPatient(testPatient);
         patientID = patientService.getIdByName("PatientForTest");

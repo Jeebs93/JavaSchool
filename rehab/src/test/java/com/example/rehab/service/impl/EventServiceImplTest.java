@@ -73,7 +73,7 @@ class EventServiceImplTest {
 
     @BeforeAll
     void setUp() {
-        testPatient = new PatientDTO("PatientForTest", 1234567L,
+        testPatient = new PatientDTO("PatientForTest", 0L,
                 "Cold", "Doctor", null);
         patientService.createPatient(testPatient);
         patientID = patientService.getIdByName("PatientForTest");
@@ -143,9 +143,13 @@ class EventServiceImplTest {
     @Test
     @Order(4)
     void testCompleteEvent() {
-        eventService.completeEvent(eventID);
-        testEvent= eventService.findByPatient(patientID).get(0);
-        assertEquals(COMPLETED,testEvent.getEventStatus());
+        if (eventService.isToday(testEvent)) {
+            eventService.completeEvent(eventID);
+            testEvent= eventService.findByPatient(patientID).get(0);
+            assertEquals(COMPLETED,testEvent.getEventStatus());
+        } else {
+            assertThrows(IllegalStateException.class, ()-> eventService.completeEvent(eventID));
+        }
         eventRepository.deleteById(eventID);
     }
 
@@ -155,7 +159,7 @@ class EventServiceImplTest {
         testEvent= eventService.findByPatient(patientID).get(0);
         eventID=testEvent.getId();
         eventService.cancelEvent(eventID,"Test message");
-        testEvent= eventService.findByPatient(patientID).get(0);
+        testEvent= eventService.findById(eventID);
         assertEquals(CANCELED,testEvent.getEventStatus());
         assertEquals("Test message", testEvent.getMessage());
     }
@@ -164,7 +168,7 @@ class EventServiceImplTest {
     @Order(6)
     void testHideEvent() {
         eventService.hideEvent(eventID);
-        testEvent= eventService.findByPatient(patientID).get(0);
+        testEvent= eventService.findById(eventID);
         assertFalse(testEvent.isActive());
         eventRepository.deleteById(eventID);
     }
@@ -178,3 +182,5 @@ class EventServiceImplTest {
     }
 
 }
+
+

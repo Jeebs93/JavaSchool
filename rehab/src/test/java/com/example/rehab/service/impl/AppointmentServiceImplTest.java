@@ -51,7 +51,7 @@ class AppointmentServiceImplTest {
 
     @BeforeAll
     void setUp() {
-        testPatient = new PatientDTO("PatientForTest", 1234567L,
+        testPatient = new PatientDTO("PatientForTest", 0L,
                 "Cold", "Doctor", null);
         patientService.createPatient(testPatient);
         patientID = patientService.getIdByName("PatientForTest");
@@ -119,7 +119,7 @@ class AppointmentServiceImplTest {
     void testCancelAppointment() {
         appointmentService.cancelAppointment(appointmentID);
         testAppointment = appointmentService.findAppointmentById(appointmentID);
-        assertTrue(testAppointment.isCancelled());
+        assertFalse(testAppointment.isActive());
         List<EventDTO> eventsCanceled = eventService.findByPatient(patientID);
         assertEquals(0,eventsCanceled.size());
     }
@@ -160,3 +160,5 @@ class AppointmentServiceImplTest {
     void findAppointmentById() {
     }
 }
+
+

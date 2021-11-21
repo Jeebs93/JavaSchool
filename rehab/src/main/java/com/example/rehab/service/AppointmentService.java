@@ -25,4 +25,10 @@ public interface AppointmentService {
     AppointmentDTO findAppointmentById(long id);
 
     void deleteAppointment(long id);
+
+    void completeAppointment(long id);
+
+    void checkAppointmentsStatus(List<AppointmentDTO> appointments);
+
+    void hideAppointment(long id);
 }

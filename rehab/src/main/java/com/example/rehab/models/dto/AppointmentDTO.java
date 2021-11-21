@@ -23,7 +23,10 @@ public class AppointmentDTO {
         this.timePattern = timePattern;
         this.dose = dose;
         this.typeOfAppointment = typeOfAppointment;
-        this.isCancelled = false;
+        this.isActive = true;
+        this.isCanceled = false;
+        this.isCompleted = false;
+        this.canceledEvents = 0;
     }
 
     private Long id;
@@ -38,13 +41,18 @@ public class AppointmentDTO {
 
     private Integer period;
 
+    private Integer canceledEvents;
+
     private String timePattern;
 
     private TypeOfAppointment typeOfAppointment;
 
     private String dose;
 
-    boolean isCancelled;
+    boolean isActive;
 
+    boolean isCompleted;
+
+    boolean isCanceled;
 
 }

@@ -21,6 +21,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.example.rehab.models.enums.EventStatus.PLANNED;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -132,7 +134,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     public void cancelAppointment(long appointmentId) {
         Appointment appointment = appointmentRepository.getAppointmentById(appointmentId);
-        appointment.setCancelled(true);
+        appointment.setCanceled(true);
+        appointment.setActive(false);
         log.info("Appointment has been canceled");
         appointmentRepository.save(appointment);
         eventService.deleteEvents(appointmentId);
@@ -141,7 +144,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     public List<AppointmentDTO> findAllByPatient(PatientDTO patientDTO) {
         Patient patient = mapper.convertPatientToEntity(patientDTO);
-        List<Appointment> appointments = appointmentRepository.findAllByPatient(patient);
+        List<Appointment> appointments = appointmentRepository.findAllByPatientAndIsActiveTrue(patient);
 
         return appointments.stream()
                 .map(mapper::convertAppointmentToDTO)
@@ -156,6 +159,40 @@ public class AppointmentServiceImpl implements AppointmentService {
     public void deleteAppointment(long id) {
         appointmentRepository.deleteById(id);
         log.info("Appointment has been deleted");
+    }
+
+    public void hideAppointment(long id) {
+        Appointment appointment = appointmentRepository.getAppointmentById(id);
+        appointment.setActive(false);
+        eventService.hideEvents(id);
+        appointmentRepository.save(appointment);
+    }
+
+    public void checkAppointmentsStatus(List<AppointmentDTO> appointments) {
+
+        List<Appointment> appointmentList = appointments.stream()
+                .map(mapper::convertAppointmentToEntity)
+                .collect(Collectors.toList());
+        for (Appointment appointment:appointmentList) {
+            boolean unfinishedEvents = false;
+            List<Event> eventList = eventRepository.findAllByAppointment(appointment);
+            for (Event ev : eventList) {
+                if (ev.getEventStatus().equals(PLANNED)) {
+                    unfinishedEvents = true;
+                    break;
+                }
+
+            }
+
+            if (!unfinishedEvents && !appointment.isCompleted()) completeAppointment(appointment.getId());
+        }
+    }
+
+    public void completeAppointment(long id) {
+            Appointment appointment = appointmentRepository.getAppointmentById(id);
+            appointment.setCompleted(true);
+            appointmentRepository.save(appointment);
+            log.info("Appointment has been completed");
     }
 
 }
