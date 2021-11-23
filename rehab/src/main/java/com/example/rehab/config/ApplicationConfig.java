@@ -12,14 +12,12 @@ import javax.jms.ConnectionFactory;
 public class ApplicationConfig {
     @Bean
     public ModelMapper modelMapper() {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper;
+        return new ModelMapper();
     }
 
     @Bean
     public ConnectionFactory getConnectionFactory() {
-        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-        return connectionFactory;
+        return new ActiveMQConnectionFactory("tcp://localhost:61616");
     }
 
     @Bean

@@ -24,22 +24,16 @@ import java.util.List;
 @Controller
 public class AppointmentController {
 
-    private PatientServiceImpl patientService;
-    private ProceduresAndCuresRepository proceduresAndCuresRepository;
-    private AppointmentService appointmentService;
-    private ProceduresAndCuresService proceduresAndCuresService;
-    private Mapper mapper;
+    private final PatientServiceImpl patientService;
+    private final AppointmentService appointmentService;
+    private final ProceduresAndCuresService proceduresAndCuresService;
 
     @Autowired
     public AppointmentController (PatientServiceImpl patientService,
                                   AppointmentService appointmentService,
-                                  ProceduresAndCuresRepository proceduresAndCuresRepository,
-                                  ProceduresAndCuresService proceduresAndCuresService,
-                                  Mapper mapper) {
+                                  ProceduresAndCuresService proceduresAndCuresService) {
         this.patientService = patientService;
         this.appointmentService = appointmentService;
-        this.proceduresAndCuresRepository = proceduresAndCuresRepository;
-        this.mapper = mapper;
         this.proceduresAndCuresService = proceduresAndCuresService;
     }
 
@@ -63,7 +57,6 @@ public class AppointmentController {
     public String editProcedure(@PathVariable(value = "appointmentId") long appointmentId,
                                 @PathVariable(value = "patientId") long patientId,
                                 Model model) {
-        AppointmentDTO appointment = appointmentService.findAppointmentById(appointmentId);
         model.addAttribute("appointmentId",appointmentId);
         model.addAttribute("patientId", patientId);
         return "edit-procedure";
@@ -84,7 +77,6 @@ public class AppointmentController {
     public String editCure(@PathVariable(value = "appointmentId") long appointmentId,
                                 @PathVariable(value = "patientId") long patientId,
                                 Model model) {
-        AppointmentDTO appointment = appointmentService.findAppointmentById(appointmentId);
         model.addAttribute("appointmentId",appointmentId);
         model.addAttribute("patientId", patientId);
         return "edit-cure";
@@ -116,7 +108,6 @@ public class AppointmentController {
                                    @RequestParam(value = "time[]") String[] time,
                                    @RequestParam String period,
                                    Model model) {
-
         appointmentService.createAppointment(id, procedure, weekdays, time, period, "0", PROCEDURE);
         return "redirect:/patients/" + id;
     }

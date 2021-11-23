@@ -26,7 +26,7 @@ public class UserDTO {
     @Size(min = 6,message = "Password must contains at least six characters")
     private String password;
 
-    @NotNull(message = "Password mismatch")
+    @NotEmpty(message = "Password mismatch")
     private String confirmPassword;
 
     private UserRole userRole;
@@ -41,24 +41,18 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
-        check();
+        checkPasswordAreEqual();
     }
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
-        check();
+        checkPasswordAreEqual();
     }
 
-    private void check() {
-        if (this.password == null || this.confirmPassword == null) {
-            return;
-        } else if (!this.password.equals(this.confirmPassword)) {
-            this.confirmPassword = null;
+    private void checkPasswordAreEqual() {
+        boolean isNull = password == null || confirmPassword == null;
+        if (!isNull && !password.equals(confirmPassword)) {
+            confirmPassword = "";
         }
     }
-
-    public String getUsername(){
-        return username;
-    }
-
 }

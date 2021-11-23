@@ -2,6 +2,8 @@ package com.example.rehab.models;
 
 import com.example.rehab.models.enums.EventStatus;
 import com.example.rehab.models.enums.TypeOfAppointment;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -11,7 +13,9 @@ import java.util.Date;
 
 @Entity
 @Data
+@Builder
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class Event {
 
     @Id

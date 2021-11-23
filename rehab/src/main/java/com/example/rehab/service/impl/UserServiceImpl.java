@@ -32,6 +32,10 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    public boolean userExists(UserDTO userDTO) {
+        return userRepository.findByUsername(userDTO.getUsername()) != null;
+    }
+
     public List<UserDTO> findAllDoctors() {
         List<User> doctorList = userRepository.findAll()
                 .stream()
@@ -45,8 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDTO findByUserName(String username) {
-     UserDTO user = mapper.convertUserToDTO(userRepository.findByUsername(username));
-     return user;
+        return mapper.convertUserToDTO(userRepository.findByUsername(username));
     }
 
     public String getUserName() {

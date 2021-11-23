@@ -43,6 +43,8 @@ class AppointmentServiceImplTest {
 
     AppointmentDTO testAppointment;
 
+    private EventServiceImplTest testService = new EventServiceImplTest();
+
     long patientID;
 
     long appointmentID;

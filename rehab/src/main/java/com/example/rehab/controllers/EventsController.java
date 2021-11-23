@@ -10,6 +10,7 @@ import com.example.rehab.service.mapper.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,20 +23,13 @@ import java.util.List;
 @Controller
 public class EventsController {
 
-    private EventService eventService;
-    private EventRepository eventRepository;
-    private Mapper mapper;
-    private PatientServiceImpl patientService;
-    private PatientRepository patientRepository;
+    private final EventService eventService;
+    private final PatientServiceImpl patientService;
 
     @Autowired
-    public EventsController(EventService eventService, EventRepository eventRepository, Mapper mapper,
-                            PatientServiceImpl patientService, PatientRepository patientRepository) {
+    public EventsController(EventService eventService, PatientServiceImpl patientService) {
         this.eventService = eventService;
-        this.eventRepository = eventRepository;
-        this.mapper = mapper;
         this.patientService = patientService;
-        this.patientRepository = patientRepository;
     }
 
     @GetMapping("/events")
@@ -50,6 +44,7 @@ public class EventsController {
                                 Model model) {
 
         Page<EventDTO> page = eventService.findPaginated(pageNumber, 10, sortField, sortDir);
+
         int current = page.getNumber() + 5;
         int begin = Math.max(1, current - 10);
         int end = Math.min(begin + 11, page.getTotalPages());
@@ -116,9 +111,7 @@ public class EventsController {
     @PostMapping("/events/{eventId}/cancel")
     public String cancelEventPost(@PathVariable(value = "eventId") int eventId,
                                   @RequestParam String message,
-                                  @RequestParam String request,
-                                  Model model) {
-       // model.addAttribute("eventId",eventId);
+                                  @RequestParam String request) {
         eventService.cancelEvent(eventId,message);
         return "redirect:" + request;
 
@@ -126,10 +119,9 @@ public class EventsController {
 
     @PostMapping("/events/")
     public String filterByPatient(@RequestParam String name) {
-
-        if (patientService.isPatientAmbiguous(name)) return "redirect:/events/patient/ambiguous/" + name;
-
-        return "redirect:/events/patient/" + patientService.getIdByName(name);
+        return patientService.isPatientAmbiguous(name) ?
+                "redirect:/events/patient/ambiguous/" + name :
+                "redirect:/events/patient/" + patientService.getIdByName(name);
     }
 
     @GetMapping("/events/patient/ambiguous/{name}")
@@ -141,15 +133,13 @@ public class EventsController {
 
     @GetMapping("/events/today")
     public String eventsToday(Model model) {
-        List<EventDTO> events = eventService.findAllToday();
-        model.addAttribute("events",events);
+        model.addAttribute("events",eventService.findAllToday());
         return "events-today";
     }
 
     @GetMapping("/events/recent")
     public String eventsRecent(Model model) {
-        List<EventDTO> events = eventService.findAllRecent();
-        model.addAttribute("events",events);
+        model.addAttribute("events",eventService.findAllRecent());
         return "events-recent";
     }
 

@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class Patient {
 
     @Id
@@ -23,7 +24,7 @@ public class Patient {
 
     private String name;
 
-    public String diagnosis;
+    private String diagnosis;
 
     private PatientStatus patientStatus;
 

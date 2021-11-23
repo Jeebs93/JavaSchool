@@ -21,17 +21,13 @@ import java.util.Map;
 @Controller
 public class RegistrationController {
 
-    private UserRepository userRepository;
-    private UserService userService;
-    private Mapper mapper;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public RegistrationController(UserRepository userRepository, UserService userService, Mapper mapper) {
-
+    public RegistrationController(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
         this.userService = userService;
-        this.mapper = mapper;
-
     }
 
     @GetMapping("/registration")
@@ -41,18 +37,14 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(@Valid @ModelAttribute(name="user") UserDTO userDTO, BindingResult result, Map<String, Object> mapModel) {
-        User userFromDB = userRepository.findByUsername(userDTO.getUsername());
-
+    public String addUser(@Valid @ModelAttribute(name="user") UserDTO userDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "registration";
         }
-
-        if (userFromDB != null) {
-            mapModel.put("message", "User exists!");
+        if (userService.userExists(userDTO)) {
+            model.addAttribute("message", "User exists!");
             return "registration";
         }
-
         userService.createUser(userDTO);
         return "redirect:/";
     }

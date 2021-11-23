@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import javax.print.DocFlavor;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -39,13 +40,9 @@ import static com.example.rehab.models.enums.EventStatus.*;
 public class EventServiceImpl implements EventService {
 
     private final Mapper mapper;
-
     private final EventRepository eventRepository;
-
     private final PatientRepository patientRepository;
-
     private final AppointmentRepository appointmentRepository;
-
     private final DispatcherService dispatcherService;
 
 
@@ -55,7 +52,6 @@ public class EventServiceImpl implements EventService {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo-1,pageSize, sort);
-
         List<Event> events = eventRepository.findAll();
 
         LocalDateTime date = LocalDateTime.now();
@@ -73,7 +69,6 @@ public class EventServiceImpl implements EventService {
     }
 
     public Page<EventDTO> findByPatientPaginated(int pageNo, int pageSize, int patientID) {
-
         Sort sort = Sort.by("date").ascending();
         Pageable pageable = PageRequest.of(pageNo-1,pageSize, sort);
         return this.eventRepository
@@ -85,14 +80,9 @@ public class EventServiceImpl implements EventService {
 
 
     public List<EventDTO> findAll() {
-
-
-        List<Event> events = eventRepository.findAllByActiveTrue();
-
-        List<EventDTO> result = events.stream().map(mapper::convertEventToDTO).collect(Collectors.toList());
-
-        return result;
+        return eventRepository.findAllByActiveTrue().stream().map(mapper::convertEventToDTO).collect(Collectors.toList());
     }
+
 
     public List<EventDTO> findByPatient(long id) {
         List<EventDTO> events = findAll();
@@ -108,9 +98,11 @@ public class EventServiceImpl implements EventService {
         return result;
     }
 
+
     public EventDTO findById(long id) {
         return mapper.convertEventToDTO(eventRepository.findEventById(id));
     }
+
 
     public boolean isToday(EventDTO eventDTO) {
         LocalDateTime date = LocalDateTime.now();
@@ -122,7 +114,8 @@ public class EventServiceImpl implements EventService {
         LocalDateTime date = LocalDateTime.now();
         LocalDateTime eventDate = eventDTO.getDate();
         return isToday(eventDTO) &&
-                (((date.getHour() == eventDate.getHour()) && (date.getMinute() < eventDate.getMinute()))
+                (((date.getHour() == eventDate.getHour())
+                        && (date.getMinute() < eventDate.getMinute()))
                         || (date.getHour()+1 == eventDate.getHour()));
     }
 
@@ -161,21 +154,17 @@ public class EventServiceImpl implements EventService {
                 eventRepository.delete(event);
             }
         }
-
-        log.info("Appointment events have been deleted");
+        log.info(String.format("Appointment's(id = %s) events have been deleted",appointmentId));
     }
 
     public void hideEvents(long appointmentId) {
         Appointment appointment = appointmentRepository.getAppointmentById(appointmentId);
         List<Event> events = eventRepository.findAllByAppointment(appointment);
-        events.forEach((event) -> hideEvent(event.getId()));
+        events.forEach(event -> hideEvent(event.getId()));
     }
 
     public void completeEvent(long eventId) {
         Event event = eventRepository.findEventById(eventId);
-        LocalDateTime date = LocalDateTime.now();
-        Appointment appointment = event.getAppointment();
-        boolean unfinishedEvents = false;
         if (isToday(mapper.convertEventToDTO(event))) {
             event.setEventStatus(COMPLETED);
             eventRepository.save(event);
@@ -202,38 +191,34 @@ public class EventServiceImpl implements EventService {
     }
 
     public void createEvents(AppointmentDTO appointmentDTO, long appointmentId, int pastEvents) {
-
         List<String> timeList = appointmentDTO.getTime();
         int periodInt = appointmentDTO.getPeriod();
         int numberOfEvents = appointmentDTO.getWeekDays().size() * timeList.size()
                 * periodInt;
         List<Event> events = new ArrayList<>(numberOfEvents);
-
         int timeCounter = 0;
         int dateCounter = 0;
         List<LocalDateTime> dateList = generateDateList(appointmentDTO.getWeekDays(), periodInt);
 
         for (int i = 0; i < numberOfEvents-pastEvents; i++) {
-            Event event = new Event();
+            Event event = Event.builder()
+                    .patient(patientRepository.getPatientById(appointmentDTO.getPatientId()))
+                    .date(parseDate((dateList.get(dateCounter)),timeList.get(timeCounter)))
+                    .eventStatus(PLANNED)
+                    .typeOfAppointment(appointmentDTO.getTypeOfAppointment())
+                    .appointment(appointmentRepository.getAppointmentById(appointmentId))
+                    .active(true)
+                    .message("")
+                    .build();
 
-            event.setPatient(patientRepository.getPatientById(appointmentDTO.getPatientId()));
-            event.setDate(parseDate((dateList.get(dateCounter)),timeList.get(timeCounter)));
-            event.setEventStatus(EventStatus.PLANNED);
-            event.setTypeOfAppointment(appointmentDTO.getTypeOfAppointment());
-            event.setAppointment(appointmentRepository.getAppointmentById(appointmentId));
-            event.setActive(true);
-            event.setMessage("");
             events.add(event);
-
             timeCounter++;
             if (timeCounter >= appointmentDTO.getTime().size()) {
                 timeCounter = 0;
                 dateCounter++;
             }
-
             if (dateCounter >= dateList.size()) {
                 dateCounter = 0;
-
             }
         }
         eventRepository.saveAll(events);
@@ -241,7 +226,6 @@ public class EventServiceImpl implements EventService {
     }
 
     private static List<LocalDateTime> generateDateList(List<String> weekDays, int period) {
-
         LocalDateTime date = LocalDateTime.now();
         List<LocalDateTime> resultList = new ArrayList<>();
         DayOfWeek dayOfWeek = date.getDayOfWeek();
@@ -268,13 +252,11 @@ public class EventServiceImpl implements EventService {
     }
 
     private static LocalDateTime parseDate(LocalDateTime date, String time) {
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String strDate = date.format(formatter);
         strDate += " " + time;
         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return LocalDateTime.parse(strDate, formatter);
-
     }
 
 

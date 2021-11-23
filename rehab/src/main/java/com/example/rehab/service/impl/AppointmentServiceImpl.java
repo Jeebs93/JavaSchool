@@ -29,19 +29,15 @@ import static com.example.rehab.models.enums.EventStatus.PLANNED;
 public class AppointmentServiceImpl implements AppointmentService {
 
     private final Mapper mapper;
-
     private final AppointmentRepository appointmentRepository;
-
     private final EventServiceImpl eventService;
-
     private final EventRepository eventRepository;
-
     private final DispatcherService dispatcherService;
 
     public long createAppointment(long id, String procedure, String[] weekdays, String[] time,
                                   String period, String dose, TypeOfAppointment typeOfAppointment) throws MappingException {
         try {
-            int doseInt = Integer.parseInt(dose);
+            Integer.parseInt(dose);
         } catch (NumberFormatException e) {
             dose = "0";
             log.warn("User did not specify a dose. It has been set to zero.");
@@ -65,28 +61,23 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         List<String> listWeekdays = new ArrayList<>();
 
-        Map<String,String> week = new HashMap<>() {{
-            put("1","Monday");
-            put("2","Tuesday");
-            put("3","Wednesday");
-            put("4","Thursday");
-            put("5","Friday");
-            put("6","Saturday");
-            put("7","Sunday");
-        }};
+        Map<String,String> week = new HashMap<>();
+            week.put("1","Monday");
+            week.put("2","Tuesday");
+            week.put("3","Wednesday");
+            week.put("4","Thursday");
+            week.put("5","Friday");
+            week.put("6","Saturday");
+            week.put("7","Sunday");
 
-        for (int i = 0; i < weekDays.length; i++) {
-           listWeekdays.add(week.get(weekDays[i]));
+        for (String weekDay : weekDays) {
+            listWeekdays.add(week.get(weekDay));
         }
 
         String resultWeekdays = listWeekdays.toString().substring(1,listWeekdays.toString().length()-1);
-
         String weeks = Integer.parseInt(period) > 1 ? " weeks." : " week.";
-
-          String timePattern = "On " + resultWeekdays + " at " +
+        return "On " + resultWeekdays + " at " +
                   time.toString().substring(1,time.toString().length()-1) + " for " + period + weeks;
-
-          return timePattern;
     }
 
     public void updateAppointment(long appointmentId, String[] weekdays,
@@ -107,7 +98,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         int pastEvents = 0;
 
-        LocalDateTime date = LocalDateTime.now();
         appointment = mapper.convertAppointmentToEntity(appointmentDTO);
         appointmentRepository.save(appointment);
         List<Event> events = eventRepository.findAllByAppointment(appointment);
@@ -119,24 +109,17 @@ public class AppointmentServiceImpl implements AppointmentService {
                 eventRepository.delete(event);
             }
 
-          /*  if (event.getDate().isAfter(date)) {
-                eventRepository.delete(event);
-            }*/
         }
-
-
         eventService.createEvents(appointmentDTO, appointmentId, pastEvents);
         dispatcherService.sendMessage(dispatcherService.getMessage());
-        log.info("Appointment has been updated");
-
-
+        log.info(String.format("Appointment with id %s has been updated", appointmentId));
     }
 
     public void cancelAppointment(long appointmentId) {
         Appointment appointment = appointmentRepository.getAppointmentById(appointmentId);
         appointment.setCanceled(true);
         appointment.setActive(false);
-        log.info("Appointment has been canceled");
+        log.info(String.format("Appointment with id %d has been canceled",appointmentId));
         appointmentRepository.save(appointment);
         eventService.deleteEvents(appointmentId);
         dispatcherService.sendMessage(dispatcherService.getMessage());

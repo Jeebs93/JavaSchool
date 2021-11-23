@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
+</head>
+<body>
+
+<div class="container">
+  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-7 mb-7 border-bottom">
+    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+      <img width="120" height="120" th:src="@{/images/start.jpg}"/>
+    </a>
+
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+      <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/" class="nav-link px-14 link-secondary">Home</a></li>
+      <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/patients" class="nav-link px-14 link-secondary">Working with patients</a></li>
+      <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/events" class="nav-link px-14 link-secondary">Events</a></li>
+      <div sec:authorize="hasAuthority('ADMIN')" >
+        <li style="font-size: 120%"><a onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/admin" class="nav-link px-14 link-secondary">Admin panel</a></li>
+      </div>
+    </ul>
+
+
+    <div class="col-md-3 text-end">
+      <div sec:authorize="isAuthenticated()">
+        <a th:href="@{/logout}" class="btn btn-outline-danger" role="button">Log out</a>
+      </div>
+      <div sec:authorize="isAnonymous()">
+        <a href = "/login"  class="btn btn-outline-primary me-2" role="button">Login</a>
+      </div>
+    </div>
+  </header>
+</div>
+<div class="container px-10">
+  <div class="row gx-5">
+    <div class="col">
+      <div class="p-3 border bg-light">
+        <h4>About</h4>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <hr/>
+  <p style="font-size: 120%; text-align: center; font-weight:bold;">&nbsp;&nbsp;&nbsp;&nbsp;Welcome to Rehab Web Application!</p>
+  <p style="font-size: 120%">&nbsp;&nbsp;&nbsp;&nbsp;If you sign in as
+    <span style="color:blue; font-weight: bold">Doctor</span>, you can:</p>
+  <ul style="font-size: 120%">
+    <li>Add, discharge and return patients</li>
+    <li>Set, edit, and cancel your patients appointments</li>
+    <li>See events</li>
+  </ul>
+  <p style="font-size: 120%">&nbsp;&nbsp;&nbsp;&nbsp;If you sign in as
+    <span style="color:red; font-weight: bold">Nurse</span>, you can:</p>
+  <ul style="font-size: 120%">
+    <li>Complete or cancel events</li>
+    <li>See information about patients</li>
+  </ul>
+  <p style="font-size: 120%">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green; font-weight: bold">Admin</span>
+    can register new doctors, nurses and also add new procedures and cures.
+  </p>
+</div>
+</body>
+</html>

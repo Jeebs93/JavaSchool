@@ -10,16 +10,8 @@ import java.util.List;
 public interface AppointmentRepository extends CrudRepository<Appointment, Long> {
 
     List<Appointment> findAll();
-
     List<Appointment> findAllByPatient(Patient patient);
-
     List<Appointment> findAllByPatientAndIsActiveTrue(Patient patient);
-
-    List<Appointment> findAllByPatientId(long id);
-
     Appointment getAppointmentById(long id);
-
-
-  //  Long findPatientByAppointment(Appointment appointment);
 
 }

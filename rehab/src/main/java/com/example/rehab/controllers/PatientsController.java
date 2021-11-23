@@ -29,14 +29,9 @@ import java.util.List;
 @Controller
 public class PatientsController {
 
-
-    private PatientService patientService;
-
-    private AppointmentService appointmentService;
-
-    private UserService userService;
-
-
+    private final PatientService patientService;
+    private final AppointmentService appointmentService;
+    private final UserService userService;
 
     @Autowired
     public PatientsController(PatientService patientService,
@@ -99,7 +94,9 @@ public class PatientsController {
 
     @GetMapping("/patients/{id}/discharge")
     public String dischargePatient(@PathVariable(value = "id") long id) {
-        if (patientService.hasUnfinishedAppointments(id)) return "redirect:/patients/unfinished-appointments/" + id;
+        if (patientService.hasUnfinishedAppointments(id)){
+            return "redirect:/patients/unfinished-appointments/" + id;
+        }
         patientService.dischargePatient(id);
         return "redirect:/patients";
     }

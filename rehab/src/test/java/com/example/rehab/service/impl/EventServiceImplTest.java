@@ -26,6 +26,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import javax.jms.ConnectionFactory;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.example.rehab.models.enums.EventStatus.CANCELED;
@@ -70,6 +73,7 @@ class EventServiceImplTest {
     PatientDTO testPatient;
 
     EventDTO testEvent;
+
 
     @BeforeAll
     void setUp() {

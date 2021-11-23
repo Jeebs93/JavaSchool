@@ -14,8 +14,6 @@ public class PatientDTO {
 
     private Long id;
 
-
-
     @NotEmpty(message = "Please, enter name of patient")
     private String name;
 
@@ -30,10 +28,10 @@ public class PatientDTO {
     @NotEmpty(message = "Please, enter doctor")
     private String doctor;
 
-    public PatientDTO(String name, Long insurance_number, String diagnosis,
+    public PatientDTO(String name, Long insuranceNumber, String diagnosis,
                       String doctor, PatientStatus patientStatus) {
         this.name = name;
-        this.insuranceNumber = insurance_number;
+        this.insuranceNumber = insuranceNumber;
         this.diagnosis = diagnosis;
         this.doctor = doctor;
         this.patientStatus = patientStatus;

@@ -19,7 +19,6 @@ public class AppointmentDTO {
         this.weekDays = weekDays;
         this.time = time;
         this.period = period;
-
         this.timePattern = timePattern;
         this.dose = dose;
         this.typeOfAppointment = typeOfAppointment;
@@ -30,29 +29,17 @@ public class AppointmentDTO {
     }
 
     private Long id;
-
     private Long patientId;
-
     private String value;
-
     private List<String> weekDays;
-
     private List<String> time;
-
     private Integer period;
-
     private Integer canceledEvents;
-
     private String timePattern;
-
     private TypeOfAppointment typeOfAppointment;
-
     private String dose;
-
     boolean isActive;
-
     boolean isCompleted;
-
     boolean isCanceled;
 
 }

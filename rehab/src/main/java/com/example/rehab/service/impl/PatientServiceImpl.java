@@ -23,17 +23,12 @@ import java.util.stream.Collectors;
 public class PatientServiceImpl implements PatientService {
 
     private final Mapper mapper;
-
     private final PatientRepository patientRepository;
-
     private final AppointmentRepository appointmentRepository;
-
     private final AppointmentServiceImpl appointmentService;
 
     public List<PatientDTO> findAll() {
-        List<Patient> patients = patientRepository.findAll();
-
-        return patients.stream()
+        return patientRepository.findAll().stream()
                 .map(mapper::convertPatientToDTO)
                 .collect(Collectors.toList());
     }
@@ -42,7 +37,8 @@ public class PatientServiceImpl implements PatientService {
         patientDTO.setPatientStatus(PatientStatus.ON_TREATMENT);
         Patient patient = mapper.convertPatientToEntity(patientDTO);
         patientRepository.save(patient);
-        log.info("Patient has been created");
+        long patientId = patientRepository.getPatientByInsuranceNumber(patientDTO.getInsuranceNumber()).getId();
+        log.info(String.format("Patient with id %d has been created",patientId));
     }
 
     public PatientDTO getPatientByID(long id) {
@@ -55,7 +51,6 @@ public class PatientServiceImpl implements PatientService {
     }
 
     public long getIdByName(String name) {
-
         List<Patient> patients = patientRepository.getPatientsByName(name);
         return patients.get(0).getId();
     }
@@ -65,7 +60,10 @@ public class PatientServiceImpl implements PatientService {
     }
 
     public List<PatientDTO> getPatientsByName(String name) {
-        List<Patient> patients = patientRepository.getPatientsByName(name);
+        List<Patient> patients = patientRepository.getPatientsByName(name)
+                .stream()
+                .filter(patient -> patient.getPatientStatus().equals(PatientStatus.ON_TREATMENT))
+                .collect(Collectors.toList());
         return patients.stream()
                 .map(mapper::convertPatientToDTO)
                 .collect(Collectors.toList());
@@ -85,7 +83,9 @@ public class PatientServiceImpl implements PatientService {
         log.info("Patient has been discharged");
         List<Appointment> appointments = appointmentRepository.findAllByPatient(patient);
         for (Appointment appointment:appointments) {
-            appointmentService.cancelAppointment(appointment.getId());
+            if (appointment.isActive() && !appointment.isCompleted()) {
+                appointmentService.cancelAppointment(appointment.getId());
+            }
         }
     }
 
@@ -93,7 +93,6 @@ public class PatientServiceImpl implements PatientService {
         PatientDTO patientDTO = getPatientByID(patientID);
         List<AppointmentDTO> appointments = appointmentService.findAllByPatient(patientDTO);
         boolean result = false;
-
         for (AppointmentDTO appointment:appointments) {
             if (!appointment.isCompleted() && !appointment.isCanceled()) {
                 result=true;

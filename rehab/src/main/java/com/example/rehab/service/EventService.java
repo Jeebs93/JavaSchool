@@ -16,7 +16,6 @@ public interface EventService {
 
     List<EventDTO> findAll();
 
-    List<EventDTO> findByPatient(long id);
 
     boolean isToday(EventDTO eventDTO);
 
@@ -39,4 +38,6 @@ public interface EventService {
     void hideEvents(long appointmentId);
 
     EventDTO findById(long id);
+
+    List<EventDTO> findByPatient(long id);
 }

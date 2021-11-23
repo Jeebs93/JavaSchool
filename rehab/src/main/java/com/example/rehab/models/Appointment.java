@@ -1,10 +1,7 @@
 package com.example.rehab.models;
 
 import com.example.rehab.models.enums.TypeOfAppointment;
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class Appointment {
 
     @Id
@@ -25,24 +23,15 @@ public class Appointment {
 
     @OneToMany(mappedBy = "appointment")
     private List<Event> eventList;
-
     private TypeOfAppointment typeOfAppointment;
-
     private String value;
-
     private String timePattern;
-
     private Integer period;
-
     private Integer dose;
-
     private Integer canceledEvents;
-
-    boolean isActive;
-
-    boolean isCompleted;
-
-    boolean isCanceled;
+    private boolean isActive;
+    private boolean isCompleted;
+    private boolean isCanceled;
 
 
 

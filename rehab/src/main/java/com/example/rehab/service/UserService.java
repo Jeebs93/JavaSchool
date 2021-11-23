@@ -17,4 +17,6 @@ public interface UserService {
 
     String getUserName();
 
+    boolean userExists(UserDTO userDTO);
+
 }
