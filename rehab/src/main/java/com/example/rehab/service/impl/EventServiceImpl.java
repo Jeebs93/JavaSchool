@@ -225,6 +225,13 @@ public class EventServiceImpl implements EventService {
         log.info("Events have been created");
     }
 
+    public List<EventDTO> findAllByAppointmentId(long id) {
+        return eventRepository.findAllByAppointmentId(id)
+                .stream()
+                .map(mapper::convertEventToDTO)
+                .collect(Collectors.toList());
+    }
+
     private static List<LocalDateTime> generateDateList(List<String> weekDays, int period) {
         LocalDateTime date = LocalDateTime.now();
         List<LocalDateTime> resultList = new ArrayList<>();

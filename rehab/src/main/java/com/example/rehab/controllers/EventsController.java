@@ -143,6 +143,12 @@ public class EventsController {
         return "events-recent";
     }
 
+    @GetMapping("/events/appointment/{appointmentId}")
+    public String appointmentEvents(@PathVariable(value = "appointmentId") int appointmentId, Model model) {
+        model.addAttribute("events",eventService.findAllByAppointmentId(appointmentId));
+        return "appointment-events";
+    }
+
     @ExceptionHandler(NullPointerException.class)
     public String handleException(NullPointerException e, Model model) {
         log.warn("Patient not found");

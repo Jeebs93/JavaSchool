@@ -19,6 +19,7 @@ public interface EventRepository extends CrudRepository<Event, Long>, PagingAndS
     Page<Event> findAllByPatientAndActiveTrue(Pageable pageable,Patient patient);
     Event findEventById(long id);
     List<Event> findAllByAppointment(Appointment appointment);
+    List<Event> findAllByAppointmentId(long id);
     void delete(Event event);
 
 

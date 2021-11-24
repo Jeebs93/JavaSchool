@@ -14,10 +14,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +39,7 @@ class PatientServiceImplUnitTests {
     private final PatientServiceImpl patientService = new PatientServiceImpl(mapper, patientRepository,
             appointmentRepository, appointmentService);
 
-    private final Patient testPatient = new Patient("Patient",123L,"doctor", PatientStatus.ON_TREATMENT);
+    private final Patient testPatient = new Patient("Patient",123L,"TestDoctor", PatientStatus.ON_TREATMENT);
     private final Appointment testAppointment1 = new Appointment(1L, testPatient, null,
             TypeOfAppointment.CURE, "Vitamin C", "On Monday at 13:30 for three weeks",
             3, 30, 0, true, false,false);
@@ -102,6 +104,68 @@ class PatientServiceImplUnitTests {
         patientService.dischargePatient(patientID);
         assertEquals(PatientStatus.DISCHARGED,testPatient.getPatientStatus());
         testPatient.setPatientStatus(PatientStatus.ON_TREATMENT);
+    }
+
+    @Test
+    void testPatientsByDoctor() {
+        Mockito.when(patientRepository.getPatientsByDoctor("TestDoctor")).thenReturn(Arrays.asList(testPatient));
+        List<PatientDTO> result = patientService.getPatientsByDoctor("TestDoctor");
+        assertNotNull(result);
+        assertEquals("TestDoctor",result.get(0).getDoctor());
+    }
+
+    @Test
+    void getPatientsByName() {
+        Mockito.when(patientRepository.getPatientsByName("TestPatient")).thenReturn(Arrays.asList(testPatient));
+        List<PatientDTO> result = patientService.getPatientsByName("TestPatient");
+        assertNotNull(result);
+        assertEquals(PatientStatus.ON_TREATMENT,result.get(0).getPatientStatus());
+    }
+
+    @Test
+    void testIsPatientAmbiguous() {
+        List<Patient> patientList = new ArrayList<>();
+        patientList.add(testPatient);
+        patientList.add(testPatient);
+        Mockito.when(patientRepository.getPatientsByName("TestPatient")).thenReturn(patientList);
+        assertTrue(patientService.isPatientAmbiguous("TestPatient"));
+        patientList.remove(0);
+        assertFalse(patientService.isPatientAmbiguous("TestPatient"));
+
+    }
+
+    @Test
+    void testGetPatientIDByName() {
+        List<Patient> patientList = new ArrayList<>();
+        patientList.add(testPatient);
+        patientList.add(testPatient);
+        patientList.get(0).setId(100L);
+        Mockito.when(patientRepository.getPatientsByName("TestPatient")).thenReturn(patientList);
+        assertEquals(100,patientService.getIdByName("TestPatient"));
+        Mockito.when(patientRepository.getPatientsByName("TestPatient")).thenReturn(new ArrayList<Patient>());
+        assertThrows(IndexOutOfBoundsException.class,() -> patientService.getIdByName("TestPatient"));
+        patientList.get(0).setId(5L);
+    }
+
+    @Test
+    void testGetPatientById() {
+        Mockito.when(patientRepository.findById(patientID)).thenReturn(Optional.of(testPatient));
+        PatientDTO result = patientService.getPatientByID(patientID);
+        assertNotNull(result);
+        assertEquals(patientID,result.getId());
+    }
+
+    @Test
+    void testCreatePatient() {
+        PatientDTO testDTO = new PatientDTO("TestPatient",123L,"TestDiagnosis","TestDoctor",null);
+        testDTO.setId(1L);
+        Mockito.doAnswer(invocationOnMock -> {
+            testDTO.setPatientStatus(PatientStatus.ON_TREATMENT);
+            return null;
+        }).when(patientRepository).save(any(Patient.class));
+        Mockito.when(patientRepository.getPatientByInsuranceNumber(testDTO.getInsuranceNumber())).thenReturn(testPatient);
+        patientService.createPatient(testDTO);
+        assertEquals(PatientStatus.ON_TREATMENT,testPatient.getPatientStatus());
     }
 
 }

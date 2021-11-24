@@ -40,4 +40,6 @@ public interface EventService {
     EventDTO findById(long id);
 
     List<EventDTO> findByPatient(long id);
+
+    List<EventDTO> findAllByAppointmentId(long id);
 }
