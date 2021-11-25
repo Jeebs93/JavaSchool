@@ -61,6 +61,10 @@ public class EventServiceImpl implements EventService {
                     (event.getDate().getDayOfYear()<date.getDayOfYear() && (event.getDate().getYear())==date.getYear())) {
                 event.setEventStatus(CANCELED);
                 event.setMessage("Event hasn't been marked as completed.");
+                eventRepository.save(event);
+                Appointment appointment = event.getAppointment();
+                appointment.setCanceledEvents(appointment.getCanceledEvents()+1);
+                appointmentRepository.save(appointment);
             }
         }
 

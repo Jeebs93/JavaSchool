@@ -34,7 +34,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final EventRepository eventRepository;
     private final DispatcherService dispatcherService;
 
-    public long createAppointment(long id, String procedure, String[] weekdays, String[] time,
+    public long createAppointment(long patientId, String procedure, String[] weekdays, String[] time,
                                   String period, String dose, TypeOfAppointment typeOfAppointment) throws MappingException {
         try {
             Integer.parseInt(dose);
@@ -46,7 +46,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         List<String> timeList = Arrays.asList(time);
         List<String> resultTime = timeList.stream().filter(i -> !i.equals("")).collect(Collectors.toList());
         String timePattern = getTimePatternView(weekdays,resultTime,period);
-        AppointmentDTO appointmentDTO = new AppointmentDTO(id, procedure, resultWeekDays,
+        AppointmentDTO appointmentDTO = new AppointmentDTO(patientId, procedure, resultWeekDays,
                 resultTime, Integer.parseInt(period), dose, typeOfAppointment,timePattern);
         Appointment appointment = mapper.convertAppointmentToEntity(appointmentDTO);
         appointmentRepository.save(appointment);
