@@ -14,10 +14,7 @@ import com.example.rehab.service.impl.AppointmentServiceImpl;
 import com.example.rehab.service.impl.EventServiceImpl;
 import com.example.rehab.service.mapper.Mapper;
 import org.hibernate.MappingException;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
@@ -48,7 +45,7 @@ class AppointmentServiceImplUnitTests {
             eventService,eventRepository,dispatcherService);
 
     private final Patient testPatient = new Patient("Patient",123L,"doctor", PatientStatus.ON_TREATMENT);
-    private Appointment testAppointment = new Appointment(1L, testPatient, null,
+    private Appointment testAppointment = new Appointment(5L, testPatient, null,
             TypeOfAppointment.CURE, "Aerobics", "On Thursday, Friday, Saturday at 14:15, 14:30, 15:00 for 3 weeks.",
             3, 0, 0, true, false,false);
 
@@ -70,10 +67,10 @@ class AppointmentServiceImplUnitTests {
 
     @BeforeEach
     void setUpEach() {
-        testAppointment = new Appointment(1L, testPatient, null,
+        testAppointment = new Appointment(5L, testPatient, null,
                 TypeOfAppointment.CURE, "Aerobics", "On Thursday, Friday, Saturday at 14:15, 14:30, 15:00 for 3 weeks.",
                 3, 0, 0, true, false,false);
-
+        testAppointment.setId(1L);
         testEventList = Arrays.asList(
                 new Event(2L,testPatient,testAppointment, LocalDateTime.now(),
                         EventStatus.PLANNED, TypeOfAppointment.CURE, true,""),
@@ -82,6 +79,19 @@ class AppointmentServiceImplUnitTests {
                 new Event(4L,testPatient,testAppointment,LocalDateTime.now().plusDays(14),
                         EventStatus.PLANNED, TypeOfAppointment.CURE, true,"")
         );
+    }
+
+    @Test
+    void testUpdateAppointment() {
+        Mockito.when(appointmentRepository.getAppointmentById(1)).thenReturn(testAppointment);
+        Mockito.doAnswer(invocationOnMock -> {
+            Appointment appointment = invocationOnMock.getArgument(0);
+            assertEquals("On Monday, Tuesday at 16:00, 16:30 for 4 weeks.",appointment.getTimePattern());
+            assertEquals(4,appointment.getPeriod());
+            return null;
+        }).when(appointmentRepository).save(any(Appointment.class));
+        appointmentService.updateAppointment(1,new String[] {"1","2"},new String[]{"16:00", "16:30"},
+                "4","0");
     }
 
     @Test
@@ -99,18 +109,6 @@ class AppointmentServiceImplUnitTests {
                 new String[]{"14:15", "14:30", "15:00"}, "3", "0", TypeOfAppointment.PROCEDURE);
     }
 
-    @Test
-    void testUpdateAppointment() {
-        Mockito.when(appointmentRepository.getAppointmentById(1)).thenReturn(testAppointment);
-        Mockito.doAnswer(invocationOnMock -> {
-            Appointment appointment = invocationOnMock.getArgument(0);
-            assertEquals("On Monday, Tuesday at 16:00, 16:30 for 4 weeks.",appointment.getTimePattern());
-            assertEquals(4,appointment.getPeriod());
-            return null;
-        }).when(appointmentRepository).save(any(Appointment.class));
-        appointmentService.updateAppointment(1,new String[] {"1","2"},new String[]{"16:00", "16:30"},
-                "4","0");
-    }
 
     @Test
     void testCancelAppointment() {
@@ -131,7 +129,7 @@ class AppointmentServiceImplUnitTests {
     void testCompleteAppointment() {
         Mockito.when(appointmentRepository.getAppointmentById(1)).thenReturn(testAppointment);
         appointmentService.completeAppointment(1);
-        assertFalse(testAppointment.isCompleted());
+        assertTrue(testAppointment.isCompleted());
     }
 
     @Test
@@ -140,6 +138,9 @@ class AppointmentServiceImplUnitTests {
         List<AppointmentDTO> list = Arrays.asList(appointmentDTO);
         Mockito.when(eventRepository.findAllByAppointment(any(Appointment.class))).thenReturn(testEventList);
         Mockito.when(appointmentRepository.getAppointmentById(1)).thenReturn(testAppointment);
+        Mockito.doAnswer(invocationOnMock -> {
+            return null;
+        }).when(appointmentRepository).save(any(Appointment.class));
         appointmentService.checkAppointmentsStatus(list);
         assertFalse(testAppointment.isCompleted());
 

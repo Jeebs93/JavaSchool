@@ -3,7 +3,7 @@
       xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Medical Rehabilitation Center</title>
+    <title>Patients</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
 </head>
 <body>
@@ -25,7 +25,7 @@
 
         <div class="col-md-3 text-end">
             <div sec:authorize="isAuthenticated()">
-                <a th:href="@{/logout}" class="btn btn-outline-danger" role="button">Log out</a>
+                <a th:href="@{/logout}" name="logout" class="btn btn-outline-danger" role="button">Log out</a>
             </div>
             <div sec:authorize="isAnonymous()">
                 <a href = "/login"  class="btn btn-outline-primary me-2" role="button">Login</a>
@@ -44,7 +44,7 @@
                 <h3>Patients</h3>
                 <div class="text-end">
                     <span sec:authorize="hasAnyAuthority('DOCTOR')" >
-                        <a  class="btn btn-outline-success" href = /patients/my-patients role="button">My patients</a>
+                        <a  class="btn btn-outline-success" name="my-patients" href = /patients/my-patients role="button">My patients</a>
                     </span>
                     <a  class="btn btn-outline-danger" href = /patients/discharged role="button">Discharged patients</a>
                     <a  class="btn btn-primary" href = /patients/new role="button">Add</a>
@@ -78,11 +78,11 @@
         <a  class="btn btn-primary btn-sm" th:href = " '/patients/' + ${el.id}" role="button">Details</a>
         <span th:if="${#authentication.getPrincipal().getUsername()==el.doctor}">
         <a  class="btn btn-danger btn-sm" onClick="return confirm('Are you sure you want to discharge the patient?')"
-            th:href = " '/patients/' + ${el.id} + '/discharge'" role="button">Discharge</a>
+            th:href = "'/patients/discharge/' + ${el.id}" role="button">Discharge</a>
         </span>
         <span sec:authorize="hasAnyAuthority('ADMIN')" >
             <a  class="btn btn-danger btn-sm" onClick="return confirm('Are you sure you want to discharge the patient?')"
-                th:href = " '/patients/' + ${el.id} + '/discharge'" role="button">Discharge</a>
+                th:href = "'/patients/discharge/' + ${el.id}" role="button">Discharge</a>
         </span>
     </div>
 

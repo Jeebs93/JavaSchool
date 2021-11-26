@@ -165,6 +165,7 @@ public class EventServiceImpl implements EventService {
         Appointment appointment = appointmentRepository.getAppointmentById(appointmentId);
         List<Event> events = eventRepository.findAllByAppointment(appointment);
         events.forEach(event -> hideEvent(event.getId()));
+        log.info(String.format("Appointment's(id = %s) events have been hidden",appointmentId));
     }
 
     public void completeEvent(long eventId) {
@@ -172,6 +173,7 @@ public class EventServiceImpl implements EventService {
         if (isToday(mapper.convertEventToDTO(event))) {
             event.setEventStatus(COMPLETED);
             eventRepository.save(event);
+            log.info(String.format("Event with id %s has been hidden",eventId));
             dispatcherService.sendMessage(dispatcherService.getMessage());
         } else throw new IllegalStateException();
 
@@ -185,6 +187,7 @@ public class EventServiceImpl implements EventService {
         appointment.setCanceledEvents(appointment.getCanceledEvents()+1);
         appointmentRepository.save(appointment);
         eventRepository.save(event);
+        log.info(String.format("Event with id %s has been canceled",eventId));
         dispatcherService.sendMessage(dispatcherService.getMessage());
     }
 
@@ -192,6 +195,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findEventById(eventId);
         event.setActive(false);
         eventRepository.save(event);
+        log.info(String.format("Event with id %s has been hidden",eventId));
     }
 
     public void createEvents(AppointmentDTO appointmentDTO, long appointmentId, int pastEvents) {
@@ -226,7 +230,7 @@ public class EventServiceImpl implements EventService {
             }
         }
         eventRepository.saveAll(events);
-        log.info("Events have been created");
+        log.info(String.format("Events for appointment with id %d have been created",appointmentId));
     }
 
     public List<EventDTO> findAllByAppointmentId(long id) {
@@ -237,7 +241,7 @@ public class EventServiceImpl implements EventService {
     }
 
     private static List<LocalDateTime> generateDateList(List<String> weekDays, int period) {
-        LocalDateTime date = LocalDateTime.now();
+        LocalDateTime date = LocalDateTime.now().plusDays(1);
         List<LocalDateTime> resultList = new ArrayList<>();
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         int dayOfWeekIntValue = dayOfWeek.getValue();

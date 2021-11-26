@@ -51,6 +51,6 @@ public class ProceduresAndCuresServiceImpl implements ProceduresAndCuresService 
             item.setTypeOfAppointment(CURE);
         }
         proceduresAndCuresRepository.save(item);
-        log.info("Item has been added to procedures and cures");
+        log.info(String.format("Item '%s' has been added to procedures and cures",name));
     }
 }

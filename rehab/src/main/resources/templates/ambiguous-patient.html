@@ -25,7 +25,7 @@
 
         <div class="col-md-3 text-end">
             <div sec:authorize="isAuthenticated()">
-                <a th:href="@{/logout}" class="btn btn-outline-danger" role="button">Log out</a>
+                <a th:href="@{/logout}" name="logout" class="btn btn-outline-danger" role="button">Log out</a>
             </div>
             <div sec:authorize="isAnonymous()">
                 <a href = "/login"  class="btn btn-outline-primary me-2" role="button">Login</a>
@@ -40,7 +40,9 @@
             <div class="p-3 border bg-light">
                 <h3>Choose the right patient</h3>
                 <div class="text-end">
+                    <div class="p-4">
                     <a  class="btn btn-outline-danger" href = /events role="button">Back</a>
+                    </div>
                 </div>
             </div>
         </div>

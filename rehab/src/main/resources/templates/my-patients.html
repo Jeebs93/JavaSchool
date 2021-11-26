@@ -25,7 +25,7 @@
 
         <div class="col-md-3 text-end">
             <div sec:authorize="isAuthenticated()">
-                <a th:href="@{/logout}" class="btn btn-outline-danger" role="button">Log out</a>
+                <a th:href="@{/logout}" name="logout" class="btn btn-outline-danger" role="button">Log out</a>
             </div>
             <div sec:authorize="isAnonymous()">
                 <a href = "/login"  class="btn btn-outline-primary me-2" role="button">Login</a>
@@ -72,9 +72,9 @@
     </div>
 
     <div class="text-end p-3">
-        <a  class="btn btn-primary btn-sm" th:href = " '/patients/' + ${el.id}" role="button">Details</a>
+        <a  class="btn btn-primary btn-sm" name="details" th:href = " '/patients/' + ${el.id}" role="button">Details</a>
         <a  class="btn btn-danger btn-sm" onClick="return confirm('Are you sure you want to discharge the patient?')"
-            th:href = " '/patients/' + ${el.id} + '/discharge'" role="button">Discharge</a>
+            th:href = "'/patients/discharge/' + ${el.id}" role="button">Discharge</a>
     </div>
 
 

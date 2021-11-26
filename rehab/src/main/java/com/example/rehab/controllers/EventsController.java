@@ -86,20 +86,20 @@ public class EventsController {
         return "events-by-patient";
     }
 
-    @GetMapping("/events/{eventId}/complete")
+    @GetMapping("/events/complete/{eventId}")
     public String completeEvent(@PathVariable(value = "eventId") int eventId,
                                 Model model, HttpServletRequest request) {
         eventService.completeEvent(eventId);
         return "redirect:" + request.getHeader("Referer");
     }
 
-    @GetMapping("/events/{eventId}/hide")
+    @GetMapping("/events/hide/{eventId}")
     public String hideEvent(@PathVariable(value="eventId") int eventId, HttpServletRequest request) {
         eventService.hideEvent(eventId);
         return "redirect:" + request.getHeader("Referer");
     }
 
-    @GetMapping("/events/{eventId}/cancel")
+    @GetMapping("/events/cancel/{eventId}")
     public String cancelEvent(@PathVariable(value = "eventId") int eventId,
                               HttpServletRequest request,
                               Model model) {
@@ -108,7 +108,7 @@ public class EventsController {
         return "cancel-event";
     }
 
-    @PostMapping("/events/{eventId}/cancel")
+    @PostMapping("/events/cancel/{eventId}")
     public String cancelEventPost(@PathVariable(value = "eventId") int eventId,
                                   @RequestParam String message,
                                   @RequestParam String request) {

@@ -25,7 +25,7 @@
 
         <div class="col-md-3 text-end">
             <div sec:authorize="isAuthenticated()">
-                <a th:href="@{/logout}" class="btn btn-outline-danger" role="button">Log out</a>
+                <a th:href="@{/logout}" name="logout" class="btn btn-outline-danger" role="button">Log out</a>
             </div>
             <div sec:authorize="isAnonymous()">
                 <a href = "/login"  class="btn btn-outline-primary me-2" role="button">Login</a>
@@ -39,7 +39,7 @@
         <div class="col p-3" >
             <h3 th:text="'Events for ' + ${patientName}"/>
             <div class="text-end">
-                <a  class="btn btn-outline-danger" href = /events/ role="button">Back</a>
+                <a  class="btn btn-outline-danger" onclick="history.back()" role="button">Back</a>
             </div>
         </div> &nbsp;
     </div>
@@ -128,13 +128,12 @@
                 <span sec:authorize="hasAnyAuthority('ADMIN','NURSE')" >
                 <span th:if="${el.eventStatus == T(com.example.rehab.models.enums.EventStatus).PLANNED}">
                 <a  class="btn btn-success btn-sm" onClick="return confirm('Are you sure you want to complete the event?')"
-                    th:href=" '/events/' + ${el.id} + '/complete'" role="button">Complete</a>
-                <a  class="btn btn-danger btn-sm"  th:href=" '/events/' + ${el.id} + '/cancel'" role="button">Cancel</a>
+                    th:href="'/events/complete/' + ${el.id}" role="button">Complete</a>
+                <a  class="btn btn-danger btn-sm"  th:href="'/events/cancel/' + ${el.id}" role="button">Cancel</a>
                 </span>
                 <span th:if="${el.eventStatus == T(com.example.rehab.models.enums.EventStatus).COMPLETED OR
                 el.eventStatus == T(com.example.rehab.models.enums.EventStatus).CANCELED}">
-                <a  class="btn btn-success btn-sm" onClick="return confirm('Are you sure you want to hide the event?')"
-                    th:href=" '/events/' + ${el.id} + '/hide'" role="button">Hide</a>
+                <a  class="btn btn-success btn-sm" th:href="'/events/hide/' + ${el.id}" role="button">Hide</a>
                 </span>
                 </span>
             </div>

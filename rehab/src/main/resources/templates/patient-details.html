@@ -25,7 +25,7 @@
 
         <div class="col-md-3 text-end">
             <div sec:authorize="isAuthenticated()">
-                <a th:href="@{/logout}" class="btn btn-outline-danger" role="button">Log out</a>
+                <a th:href="@{/logout}" name="logout" class="btn btn-outline-danger" role="button">Log out</a>
             </div>
             <div sec:authorize="isAnonymous()">
                 <a href = "/login"  class="btn btn-outline-primary me-2" role="button">Login</a>
@@ -93,14 +93,14 @@
                 <h4>Appointments</h4>
                 <span th:if="${#authentication.getPrincipal().getUsername()==doctor}">
                 <div class="text-end">
-                    <a  class="btn btn-primary" th:href = " '/patients/' + ${el.id} + '/add-procedure'" role="button">Add procedure</a>
-                    <a  class="btn btn-primary" th:href = " '/patients/' + ${el.id} + '/add-cure'" role="button">Add cure</a>
+                    <a  class="btn btn-primary" name="add-procedure" th:href = " '/patients/' + ${el.id} + '/add-procedure'" role="button">Add procedure</a>
+                    <a  class="btn btn-primary" name="add-cure" th:href = " '/patients/' + ${el.id} + '/add-cure'" role="button">Add cure</a>
                 </div>
                 </span>
                 <span sec:authorize="hasAnyAuthority('ADMIN')" >
                 <div class="text-end">
-                    <a  class="btn btn-primary" th:href = " '/patients/' + ${el.id} + '/add-procedure'" role="button">Add procedure</a>
-                    <a  class="btn btn-primary" th:href = " '/patients/' + ${el.id} + '/add-cure'" role="button">Add cure</a>
+                    <a  class="btn btn-primary" name="add-procedure" th:href = " '/patients/' + ${el.id} + '/add-procedure'" role="button">Add procedure</a>
+                    <a  class="btn btn-primary" name="add-cure" th:href = " '/patients/' + ${el.id} + '/add-cure'" role="button">Add cure</a>
                 </div>
                 </span>
             </div>
@@ -129,7 +129,7 @@
                     <div class="p-3">
                         <p class="text-success fw-bold" style="font-size: 120%">
                             Completed
-                            <span th:if="${el.canceledEvents > 0}" th:text="${'(canceled events: ' + el.canceledEvents+')'}"/>
+                            <span th:if="${el.canceledEvents > 0}" style="color:red" th:text="${'(canceled events: ' + el.canceledEvents+')'}"/>
                         </p>
                     </div>
                 </div>
@@ -148,7 +148,7 @@
                 </span>
                 <span th:if="${el.isCompleted}">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a  class="btn btn-success" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/hide'" role="button">Hide</a>
+                     <a  class="btn btn-danger btn-sm" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/hide'" role="button">Hide</a>
                 </span>
                 </span>
                 <span sec:authorize="hasAnyAuthority('ADMIN')" >
@@ -159,7 +159,7 @@
                 </span>
                 <span th:if="${el.isCompleted}">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a  class="btn btn-success" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/hide'" role="button">Hide</a>
+                    <a  class="btn btn-danger btn-sm" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/hide'" role="button">Hide</a>
                 </span>
                 </span>
 
@@ -171,11 +171,22 @@
     <div class = "border border-success border-2">
         <div class="row">
             <div class="col">
-                <div class="p-3"><p class="fw-bold" style="font-size: 120%"  th:text="${el.value}"/></div>
+                <div class="p-3">
+                      <a style="text-decoration: none; color:black; font-weight: bold"
+                         onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'"
+                         th:href=" '/events/appointment/' + ${el.id}">
+                    <p class="fw-bold" style="font-size: 120%" th:text="${el.value}"/>
+                      </a>
+                </div>
             </div>
              <span th:if="${el.isCompleted}">
                 <div class="col">
-                    <div class="p-3"><p class="text-success fw-bold" style="font-size: 120%">Completed</p></div>
+                    <div class="p-3">
+                        <p class="text-success fw-bold" style="font-size: 120%">
+                            Completed
+                            <span th:if="${el.canceledEvents > 0}" style="color:red" th:text="${'(canceled events: ' + el.canceledEvents+')'}"/>
+                        </p>
+                    </div>
                 </div>
             </span>
         </div>
@@ -199,7 +210,7 @@
                 </span>
                 <span th:if="${el.isCompleted}">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a  class="btn btn-success" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/hide'" role="button">Hide</a>
+                    <a  class="btn btn-danger btn-sm" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/hide'" role="button">Hide</a>
                 </span>
                 </span>
                 <span sec:authorize="hasAnyAuthority('ADMIN')" >
@@ -210,7 +221,7 @@
                 </span>
                 <span th:if="${el.isCompleted}">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a  class="btn btn-success" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/hide'" role="button">Hide</a>
+                     <a  class="btn btn-danger btn-sm" th:href=" '/patients/' + ${patientId} + '/' + ${el.id} + '/hide'" role="button">Hide</a>
                 </span>
                 </span>
             </div>

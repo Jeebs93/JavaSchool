@@ -43,7 +43,7 @@ public class AdminController {
 
     @ExceptionHandler(IllegalStateException.class)
     public String handleIllegalStateException(IllegalStateException e, Model model) {
-        log.warn("Item with this name already exists");
+        log.warn("Item already exists");
         String message = "Item with this name already exists";
         model.addAttribute("message",message);
         model.addAttribute("path","/admin");

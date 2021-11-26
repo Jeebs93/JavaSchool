@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.MappingException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,7 +33,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final EventRepository eventRepository;
     private final DispatcherService dispatcherService;
 
-    public long createAppointment(long patientId, String procedure, String[] weekdays, String[] time,
+    public long createAppointment(long patientId, String value, String[] weekdays, String[] time,
                                   String period, String dose, TypeOfAppointment typeOfAppointment) throws MappingException {
         try {
             Integer.parseInt(dose);
@@ -46,12 +45,12 @@ public class AppointmentServiceImpl implements AppointmentService {
         List<String> timeList = Arrays.asList(time);
         List<String> resultTime = timeList.stream().filter(i -> !i.equals("")).collect(Collectors.toList());
         String timePattern = getTimePatternView(weekdays,resultTime,period);
-        AppointmentDTO appointmentDTO = new AppointmentDTO(patientId, procedure, resultWeekDays,
+        AppointmentDTO appointmentDTO = new AppointmentDTO(patientId, value, resultWeekDays,
                 resultTime, Integer.parseInt(period), dose, typeOfAppointment,timePattern);
         Appointment appointment = mapper.convertAppointmentToEntity(appointmentDTO);
         appointmentRepository.save(appointment);
-        log.info("Appointment has been created");
         long appointmentId = appointment.getId();
+        log.info(String.format("Appointment with id %s has been created",appointmentId));
         eventService.createEvents(appointmentDTO, appointmentId,0);
         dispatcherService.sendMessage(dispatcherService.getMessage());
         return appointmentId;
@@ -141,7 +140,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     public void deleteAppointment(long id) {
         appointmentRepository.deleteById(id);
-        log.info("Appointment has been deleted");
+        log.info(String.format("Appointment with id %s has been deleted",id));
     }
 
     public void hideAppointment(long id) {
@@ -149,6 +148,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setActive(false);
         eventService.hideEvents(id);
         appointmentRepository.save(appointment);
+        log.info(String.format("Appointment with id %s has been hidden",id));
     }
 
     public void checkAppointmentsStatus(List<AppointmentDTO> appointments) {
@@ -175,7 +175,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             Appointment appointment = appointmentRepository.getAppointmentById(id);
             appointment.setCompleted(true);
             appointmentRepository.save(appointment);
-            log.info("Appointment has been completed");
+            log.info(String.format("Appointment with id %s has been completed",id));
     }
 
 }

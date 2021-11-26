@@ -92,7 +92,7 @@ public class PatientsController {
        return "patient-details";
     }
 
-    @GetMapping("/patients/{id}/discharge")
+    @GetMapping("/patients/discharge/{id}")
     public String dischargePatient(@PathVariable(value = "id") long id) {
         if (patientService.hasUnfinishedAppointments(id)){
             return "redirect:/patients/unfinished-appointments/" + id;
@@ -124,7 +124,7 @@ public class PatientsController {
         return "discharged-patients";
     }
 
-    @GetMapping("/patients/{id}/return")
+    @GetMapping("/patients/return/{id}")
     public String returnPatient(@PathVariable(value = "id") long id) {
         patientService.returnPatient(id);
         return "redirect:/patients/discharged";

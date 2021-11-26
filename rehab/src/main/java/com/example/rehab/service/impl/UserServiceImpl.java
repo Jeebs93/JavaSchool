@@ -7,6 +7,7 @@ import com.example.rehab.repo.UserRepository;
 import com.example.rehab.service.UserService;
 import com.example.rehab.service.mapper.Mapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -30,6 +32,9 @@ public class UserServiceImpl implements UserService {
             user.setUserRoles(Collections.singleton(UserRole.DOCTOR));
         } else user.setUserRoles(Collections.singleton(UserRole.NURSE));
         userRepository.save(user);
+        long userID = user.getId();
+        log.info(String.format("User with id %d has been created",userID));
+
     }
 
     public boolean userExists(UserDTO userDTO) {

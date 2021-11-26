@@ -3,6 +3,7 @@ package com.example.rehab.service.impl;
 import com.example.rehab.models.Appointment;
 import com.example.rehab.models.Patient;
 import com.example.rehab.models.dto.AppointmentDTO;
+import com.example.rehab.models.dto.EventDTO;
 import com.example.rehab.models.dto.PatientDTO;
 import com.example.rehab.models.enums.PatientStatus;
 import com.example.rehab.repo.AppointmentRepository;
@@ -14,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.aspectj.AspectJAdviceParameterNameDiscoverer;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,6 +33,7 @@ public class PatientServiceImpl implements PatientService {
     public List<PatientDTO> findAll() {
         return patientRepository.findAll().stream()
                 .map(mapper::convertPatientToDTO)
+                .sorted(Comparator.comparing(PatientDTO::getName))
                 .collect(Collectors.toList());
     }
 
@@ -80,7 +84,7 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientRepository.getPatientById(id);
         patient.setPatientStatus(PatientStatus.DISCHARGED);
         patientRepository.save(patient);
-        log.info("Patient has been discharged");
+        log.info(String.format("Patient with id %d has been discharged",id));
         List<Appointment> appointments = appointmentRepository.findAllByPatient(patient);
         for (Appointment appointment:appointments) {
             if (appointment.isActive() && !appointment.isCompleted()) {
@@ -106,12 +110,12 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientRepository.getPatientById(id);
         patient.setPatientStatus(PatientStatus.ON_TREATMENT);
         patientRepository.save(patient);
-        log.info("Patient has been returned to treatment");
+        log.info(String.format("Patient with id %d has been returned to treatment",id));
     }
 
     public void deletePatient(long id) {
         patientRepository.deleteById(id);
-        log.info("Patient has been deleted");
+        log.info(String.format("Patient with id %d has been deleted",id));
     }
 
 
