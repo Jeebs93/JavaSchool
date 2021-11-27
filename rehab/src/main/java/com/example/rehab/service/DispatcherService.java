@@ -35,11 +35,19 @@ public class DispatcherService {
   String jmsQueue;
 
 
+    /**
+     * Sends message to queue
+     * @author Dmitriy Zhiburtovich
+     */
   public void sendMessage(String message) {
       jmsTemplate.convertAndSend(jmsQueue,message);
-      log.info("Message has been send");
+      log.info("Message with event list has been send");
   }
 
+    /**
+     * Builds message to receive, which is today events list parsed to json
+     * @author Dmitriy Zhiurtovich
+     */
   public String getMessage() {
       List<EventDTO> eventsToday = eventService.findAllToday()
               .stream()

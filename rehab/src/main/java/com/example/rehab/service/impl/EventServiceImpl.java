@@ -241,7 +241,7 @@ public class EventServiceImpl implements EventService {
     }
 
     private static List<LocalDateTime> generateDateList(List<String> weekDays, int period) {
-        LocalDateTime date = LocalDateTime.now().plusDays(1);
+        LocalDateTime date = LocalDateTime.now();
         List<LocalDateTime> resultList = new ArrayList<>();
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         int dayOfWeekIntValue = dayOfWeek.getValue();

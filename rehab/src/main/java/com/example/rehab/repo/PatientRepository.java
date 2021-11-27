@@ -7,7 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-public interface PatientRepository extends CrudRepository<Patient, Long>, PagingAndSortingRepository<Patient, Long> {
+public interface PatientRepository extends CrudRepository<Patient, Long> {
 
     List<Patient> findAll();
     Patient getPatientById(long id);

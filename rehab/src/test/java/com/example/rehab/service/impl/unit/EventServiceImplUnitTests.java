@@ -27,6 +27,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
@@ -226,6 +228,7 @@ class EventServiceImplUnitTests {
         eventService.createEvents(appointmentDTO, appointmentDTO.getId(), 0);
         assertEquals(3,events.size());
     }
+
 
 
 }

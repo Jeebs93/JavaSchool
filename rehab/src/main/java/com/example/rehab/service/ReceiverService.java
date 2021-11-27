@@ -15,6 +15,10 @@ public class ReceiverService {
 
     private final DispatcherService dispatcherService;
 
+    /**
+     * Receives message from the queue and sends event list
+     * @author Dmitriy Zhiburtovich
+     */
     @JmsListener(destination="TestQueue")
     public void receiveMessage(String message) {
         dispatcherService.sendMessage(dispatcherService.getMessage());

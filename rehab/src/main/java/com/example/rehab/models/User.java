@@ -2,6 +2,7 @@ package com.example.rehab.models;
 
 
 import com.example.rehab.models.enums.UserRole;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Data
 @RequiredArgsConstructor
 @Entity
+@AllArgsConstructor
 public class User{
 
     @Id

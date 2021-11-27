@@ -35,20 +35,56 @@ public interface AppointmentService {
     void updateAppointment(long appointmentId, String[] weekdays,
                                   String[] time, String period, String dose);
 
+    /**
+     * Cancel appointments and invoke delete events method, that delete all planned events.
+     * @param appointmentId - id of appointment that being canceled
+     * @author Dmitriy Zhiburtovich
+     */
     void cancelAppointment(long appointmentId);
 
 
+    /**
+     * Find all active appointments that belong to patient
+     * @param patientDTO - patient whose appointments returns method
+     * @return list of appointments mapped to dto
+     * @author Dmitriy Zhiburtovich
+     */
     List<AppointmentDTO> findAllByPatient(PatientDTO patientDTO);
 
 
+    /**
+     *
+     * @param id - appointment's id
+     * @return dto of appointment
+     * @author Dmitriy Zhiburtovich
+     */
     AppointmentDTO findAppointmentById(long id);
 
+    /**
+     * Deletes appointment by id
+     * @param id - id of appointment
+     * @author Dmitriy Zhiburtovich
+     */
     void deleteAppointment(long id);
 
+    /**
+     * Set appointment's boolean variable 'isCompleted' to true
+     * @param id - appointment id
+     * @author Dmitriy Zhiburtovich
+     */
     void completeAppointment(long id);
 
+    /**
+     * Checks if there is no more planned events and complete appointment
+     * @param appointments - list of appointment dtos that belong to patient
+     * @author Dmitriy Zhiburtovich
+     */
     void checkAppointmentsStatus(List<AppointmentDTO> appointments);
 
+    /**
+     * Set boolean active to false. After that appointment is no longer visible to the user
+     * @param id - appointment id
+     */
     void hideAppointment(long id);
 
 }

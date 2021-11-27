@@ -56,7 +56,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentId;
     }
 
-    public static String getTimePatternView(String[] weekDays, List<String> time, String period) {
+    private static String getTimePatternView(String[] weekDays, List<String> time, String period) {
 
         List<String> listWeekdays = new ArrayList<>();
 
