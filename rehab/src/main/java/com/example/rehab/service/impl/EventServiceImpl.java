@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +29,7 @@ import static com.example.rehab.models.enums.EventStatus.*;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 

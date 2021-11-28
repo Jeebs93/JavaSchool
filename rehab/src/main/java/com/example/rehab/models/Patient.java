@@ -29,10 +29,10 @@ public class Patient {
 
     private String doctor;
 
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "patient", cascade=CascadeType.ALL,orphanRemoval = true)
     private List<Appointment> appointmentList;
 
-    @OneToMany
+    @OneToMany(mappedBy = "patient", cascade=CascadeType.ALL,orphanRemoval = true)
     private List<Event> eventList;
 
     public Patient(String name, Long insuranceNumber, String doctor, PatientStatus patientStatus) {

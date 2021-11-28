@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.MappingException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,7 @@ import static com.example.rehab.models.enums.EventStatus.PLANNED;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AppointmentServiceImpl implements AppointmentService {
 

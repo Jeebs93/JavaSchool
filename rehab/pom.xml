@@ -19,6 +19,10 @@
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+		<sonar.coverage.exclusions>src/main/java/com/example/rehab/controllers/**,
+									src/main/java/com/example/rehab/config/**,
+									src/main/java/com/example/rehab/models/**,
+									src/main/java/com/example/rehab/repo/**</sonar.coverage.exclusions>
 		<sonar.language>java</sonar.language>
 	</properties>
 	<repositories>

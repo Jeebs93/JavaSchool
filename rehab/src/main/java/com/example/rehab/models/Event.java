@@ -22,9 +22,11 @@ public class Event {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name="patient_id", nullable = false)
     private Patient patient;
 
     @ManyToOne
+    @JoinColumn(name="appointment_id", nullable = false)
     private Appointment appointment;
 
     private LocalDateTime date;
