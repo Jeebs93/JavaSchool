@@ -16,25 +16,15 @@ import com.example.rehab.service.DispatcherService;
 import com.example.rehab.service.EventService;
 import com.example.rehab.service.impl.EventServiceImpl;
 import com.example.rehab.service.mapper.Mapper;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -63,7 +53,7 @@ class EventServiceImplUnitTests {
             TypeOfAppointment.CURE, "Vitamin C", "On Monday at 13:30 for three weeks",
             3, 30, 0, true, false,false);
 
-    private final List<Event> testEventList = Arrays.asList(
+    private List<Event> testEventList = Arrays.asList(
             new Event(2L,testPatient,testAppointment,LocalDateTime.now(),
                     EventStatus.PLANNED, TypeOfAppointment.CURE, true,""),
             new Event(3L,testPatient,testAppointment,LocalDateTime.now().plusDays(7),
@@ -77,6 +67,18 @@ class EventServiceImplUnitTests {
     void setUp() {
         testPatient.setId(5L);
         testAppointment.setEventList(testEventList);
+    }
+
+    @BeforeEach
+    void setEach() {
+        testEventList = Arrays.asList(
+                new Event(2L,testPatient,testAppointment,LocalDateTime.now(),
+                        EventStatus.PLANNED, TypeOfAppointment.CURE, true,""),
+                new Event(3L,testPatient,testAppointment,LocalDateTime.now().plusDays(7),
+                        EventStatus.PLANNED, TypeOfAppointment.CURE, true,""),
+                new Event(4L,testPatient,testAppointment,LocalDateTime.now().plusDays(14),
+                        EventStatus.PLANNED, TypeOfAppointment.CURE, true,"")
+        );
     }
 
     @Test

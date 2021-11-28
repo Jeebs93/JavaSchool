@@ -13,11 +13,8 @@ import com.example.rehab.service.DispatcherService;
 import com.example.rehab.service.impl.AppointmentServiceImpl;
 import com.example.rehab.service.impl.EventServiceImpl;
 import com.example.rehab.service.mapper.Mapper;
-import org.hibernate.MappingException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
@@ -25,10 +22,8 @@ import org.modelmapper.ModelMapper;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.rehab.models.enums.EventStatus.COMPLETED;
-import static com.example.rehab.models.enums.EventStatus.PLANNED;
 import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.*;
 

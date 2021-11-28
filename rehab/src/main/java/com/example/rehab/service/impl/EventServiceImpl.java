@@ -4,29 +4,21 @@ import com.example.rehab.models.Appointment;
 import com.example.rehab.models.Event;
 import com.example.rehab.models.dto.AppointmentDTO;
 import com.example.rehab.models.dto.EventDTO;
-import com.example.rehab.models.enums.EventStatus;
 import com.example.rehab.repo.AppointmentRepository;
 import com.example.rehab.repo.EventRepository;
 import com.example.rehab.repo.PatientRepository;
-import com.example.rehab.service.AppointmentService;
 import com.example.rehab.service.DispatcherService;
 import com.example.rehab.service.EventService;
 import com.example.rehab.service.mapper.Mapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.print.DocFlavor;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -91,7 +83,7 @@ public class EventServiceImpl implements EventService {
     public List<EventDTO> findByPatient(long id) {
         List<EventDTO> events = findAll();
         List<EventDTO> result = new ArrayList<>();
-        if (events.size() > 0) {
+        if (!events.isEmpty()) {
             for (EventDTO event : events) {
                 if (event.getPatient().getId().equals(id)) {
                     result.add(event);

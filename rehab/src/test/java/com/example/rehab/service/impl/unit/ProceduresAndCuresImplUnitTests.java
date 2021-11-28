@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ProceduresAndCuresImplUnitTests {
+class ProceduresAndCuresImplUnitTests {
 
     List<ProceduresAndCures> proceduresList = Arrays.asList(
             new ProceduresAndCures(1L,"Procedure1", TypeOfAppointment.PROCEDURE),
@@ -66,7 +66,7 @@ public class ProceduresAndCuresImplUnitTests {
             return null;
         }).when(proceduresAndCuresRepository).save(any(ProceduresAndCures.class));
         proceduresAndCuresService.addValue("procedure","TestProcedure");
-        
+
         Mockito.doAnswer(invocationOnMock -> {
             ProceduresAndCures item = invocationOnMock.getArgument(0);
             assertEquals(CURE,item.getTypeOfAppointment());

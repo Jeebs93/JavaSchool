@@ -1,9 +1,7 @@
 package com.example.rehab.repo;
 
-import com.example.rehab.models.Appointment;
 import com.example.rehab.models.Patient;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 

@@ -1,11 +1,8 @@
 package com.example.rehab.service.impl;
 
 import com.example.rehab.models.ProceduresAndCures;
-import com.example.rehab.models.dto.EventDTO;
-import com.example.rehab.models.enums.TypeOfAppointment;
 import com.example.rehab.repo.ProceduresAndCuresRepository;
 import com.example.rehab.service.ProceduresAndCuresService;
-import jdk.jfr.Registered;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

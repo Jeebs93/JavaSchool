@@ -12,10 +12,8 @@ import com.example.rehab.service.PatientService;
 import com.example.rehab.service.mapper.Mapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.aop.aspectj.AspectJAdviceParameterNameDiscoverer;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;

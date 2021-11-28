@@ -114,7 +114,6 @@ public class SeleniumTest {
         password.sendKeys("nurse123");
         seleniumObject.getConfig().getDriver().findElement(By.name("login")).click();
         assertNotNull(seleniumObject.getConfig().getDriver().findElement(By.name("complete")));
-        assertNotNull(seleniumObject.getConfig().getDriver().findElement(By.name("hide")));
         assertNotNull(seleniumObject.getConfig().getDriver().findElement(By.name("cancel")));
         seleniumObject.logOut();
     }

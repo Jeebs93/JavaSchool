@@ -1,15 +1,10 @@
 package com.example.rehab.models.dto;
 
-import com.example.rehab.models.User;
-import com.example.rehab.models.enums.PatientStatus;
 import com.example.rehab.models.enums.UserRole;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data

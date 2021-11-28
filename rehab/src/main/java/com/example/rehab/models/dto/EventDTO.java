@@ -6,7 +6,6 @@ import com.example.rehab.models.enums.EventStatus;
 import com.example.rehab.models.enums.TypeOfAppointment;
 import com.google.gson.annotations.Expose;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;

@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final Mapper mapper;
 
+
     public void createUser(UserDTO userDTO) {
         User user = mapper.convertUserToEntity(userDTO);
         user.setActive(true);

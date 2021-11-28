@@ -1,14 +1,9 @@
 package com.example.rehab.config;
 
 import lombok.Data;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -33,7 +28,7 @@ public class SeleniumConfig {
     }
 
     private static String findFile(String filename) {
-        String paths[] = {"", "bin/", "target/classes"};
+        String[] paths = {"", "bin/", "target/classes"};
         for (String path : paths) {
             if (new File(path + filename).exists())
                 return path + filename;

@@ -8,16 +8,11 @@ import com.example.rehab.models.dto.AppointmentDTO;
 import com.example.rehab.models.dto.EventDTO;
 import com.example.rehab.models.dto.PatientDTO;
 import com.example.rehab.models.dto.UserDTO;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.MappingException;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+
 
 import java.time.format.DateTimeFormatter;
 

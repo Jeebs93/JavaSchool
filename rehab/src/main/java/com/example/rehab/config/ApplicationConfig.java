@@ -5,7 +5,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
-
 import javax.jms.ConnectionFactory;
 
 @Configuration
@@ -27,6 +26,7 @@ public class ApplicationConfig {
         template.setPubSubDomain(false); // false for a Queue, true for a Topic
         return template;
     }
+
 
 
 }

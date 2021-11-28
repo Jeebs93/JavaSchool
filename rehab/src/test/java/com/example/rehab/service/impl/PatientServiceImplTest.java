@@ -1,20 +1,13 @@
 package com.example.rehab.service.impl;
 
-import com.example.rehab.models.Patient;
 import com.example.rehab.models.dto.PatientDTO;
 import com.example.rehab.models.enums.PatientStatus;
-import com.example.rehab.repo.AppointmentRepository;
-import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.service.DispatcherService;
-import com.example.rehab.service.mapper.Mapper;
 import org.junit.jupiter.api.*;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
 
 import javax.jms.ConnectionFactory;
 import java.util.List;

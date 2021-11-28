@@ -1,24 +1,14 @@
 package com.example.rehab.service.impl;
 
-import com.example.rehab.models.Event;
 import com.example.rehab.models.dto.AppointmentDTO;
 import com.example.rehab.models.dto.EventDTO;
 import com.example.rehab.models.dto.PatientDTO;
-import com.example.rehab.models.enums.EventStatus;
 import com.example.rehab.models.enums.TypeOfAppointment;
-import com.example.rehab.repo.AppointmentRepository;
 import com.example.rehab.repo.EventRepository;
-import com.example.rehab.repo.PatientRepository;
 import com.example.rehab.service.AppointmentService;
 import com.example.rehab.service.DispatcherService;
 import com.example.rehab.service.mapper.Mapper;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,9 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import javax.jms.ConnectionFactory;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.example.rehab.models.enums.EventStatus.CANCELED;

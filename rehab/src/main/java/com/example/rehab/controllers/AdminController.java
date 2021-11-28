@@ -2,18 +2,13 @@ package com.example.rehab.controllers;
 
 
 import com.example.rehab.models.ProceduresAndCures;
-import com.example.rehab.models.dto.PatientDTO;
-import com.example.rehab.models.dto.UserDTO;
 import com.example.rehab.service.ProceduresAndCuresService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.List;
 
 @Slf4j
 @Controller

@@ -4,7 +4,6 @@ import com.example.rehab.models.enums.PatientStatus;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Entity
