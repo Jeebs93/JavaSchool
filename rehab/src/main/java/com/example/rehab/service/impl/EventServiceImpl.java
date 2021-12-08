@@ -224,6 +224,7 @@ public class EventServiceImpl implements EventService {
             }
         }
         eventRepository.saveAll(events);
+        dispatcherService.sendMessage(dispatcherService.getMessage());
         log.info(String.format("Events for appointment with id %d have been created",appointmentId));
     }
 
@@ -235,7 +236,7 @@ public class EventServiceImpl implements EventService {
     }
 
     private static List<LocalDateTime> generateDateList(List<String> weekDays, int period) {
-        LocalDateTime date = LocalDateTime.now();
+        LocalDateTime date = LocalDateTime.now().plusDays(1);
         List<LocalDateTime> resultList = new ArrayList<>();
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         int dayOfWeekIntValue = dayOfWeek.getValue();

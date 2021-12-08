@@ -26,6 +26,8 @@
 
         <div class="col-md-3 text-end">
             <div sec:authorize="isAuthenticated()">
+                <span style="color:blue;vertical-align: bottom" th:text="${#authentication.getPrincipal().getUsername()}"></span>
+                &nbsp;
                 <a th:href="@{/logout}" name="logout" class="btn btn-outline-danger" role="button">Log out</a>
             </div>
             <div sec:authorize="isAnonymous()">
@@ -35,15 +37,6 @@
     </header>
 </div>
 </p>
-<div style="font-size: 90%; text-align: center;" class="text-primary" sec:authorize="isAuthenticated()">
-    <span th:text="'Greetings, ' + ${#authentication.getPrincipal().getUsername()}"></span>
-    <div sec:authorize="hasAuthority('ADMIN')" >You signed as ADMIN</div>
-    <div sec:authorize="hasAuthority('USER')" >You signed as USER</div>
-    <div sec:authorize="hasAuthority('DOCTOR')" >You signed as DOCTOR</div>
-    <div sec:authorize="hasAuthority('NURSE')" >You signed as NURSE</div>
-
-
-</div>
 <div style="text-align: center;"><img th:src="@{/images/homepage.jpg}"/></div>
 
 
