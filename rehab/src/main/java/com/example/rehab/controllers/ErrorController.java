@@ -11,7 +11,7 @@ public class ErrorController {
     @GetMapping("/403")
     public String accessDenied() {
         log.warn("Access denied");
-        return "403";
+        return "error/403";
     }
 
 
